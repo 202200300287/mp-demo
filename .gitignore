@@ -1,8 +1,58 @@
-#忽略所有.svn目录
-.svn/
-#忽略所有target目录
+# ignore these folders
 target/
-#忽略所有.idea目录
 .idea/
-#忽略所有.iml文件
+.settings/
+.vscode/
+bin/
+out/
+
+# ignore these files
+.classpath
+.project
+.settings
+.idea
+
+# filter databfile、sln file
+*.mdb
+*.ldb
+*.sln
+
+# class file
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# compression file
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.via
+*.tmp
+*.err
+*.log
 *.iml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+.factorypath
+.mvn/
+mvnw.cmd
+mvnw
+
+# Files or folders need to be retained
+# ...
