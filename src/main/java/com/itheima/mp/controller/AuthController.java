@@ -32,12 +32,6 @@ public class AuthController {
         return userService.login(loginRequest);
     }
 
-    @PostMapping("/login2")
-    public DataResponse login2(@RequestBody LoginRequest loginRequest) {
-
-        return userService.login(loginRequest);
-    }
-
 
 
 
