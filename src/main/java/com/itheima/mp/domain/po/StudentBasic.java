@@ -1,5 +1,7 @@
-package com.itheima.mp.domain.info.studentInfo;
+package com.itheima.mp.domain.po;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +21,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BasicInfo {
+@TableName(value = "student_basic")
+public class StudentBasic {
+
+    @TableId(value = "student_basic_id")
+    private Integer student_basic_id;
+
     @ApiModelProperty("性别")
     private Integer gender;
 

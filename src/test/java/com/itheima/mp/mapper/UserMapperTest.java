@@ -3,15 +3,14 @@ package com.itheima.mp.mapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
 import com.itheima.mp.domain.po.Student;
+import com.itheima.mp.domain.po.StudentAdvanced;
 import com.itheima.mp.domain.po.User;
-import com.itheima.mp.domain.info.studentInfo.BasicInfo;
-import com.itheima.mp.enmus.Major;
+import com.itheima.mp.domain.po.StudentBasic;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +22,11 @@ class UserMapperTest {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private StudentAdvancedMapper studentAdvancedMapper;
+    @Autowired
+    private StudentBasicMapper studentBasicMapper;
     @Test
     void testInsert() {
         User user = new User();
@@ -54,32 +58,38 @@ class UserMapperTest {
 
     @Test
     void updateStudent(){
-
+        Integer studentId=1;
         Gson gson=new Gson();
         QueryWrapper<Student> wrapper = new QueryWrapper<Student>()
                 .select("*")
-                .eq("student_id", 3);
+                .eq("student_id", studentId);
+
+        QueryWrapper<StudentAdvanced> studentAdvancedQueryWrapper=new QueryWrapper<StudentAdvanced>()
+                .select("*")
+                .eq("student_advanced_id",studentId);
+        QueryWrapper<StudentBasic> studentBasicQueryWrapper=new QueryWrapper<StudentBasic>()
+                .select("*")
+                .eq("student_basic_id",studentId);
+
+
         Student student=new Student();
-        BasicInfo basicInfo=new BasicInfo(2,"1","1","1","1",123,"666");
+        StudentBasic studentBasic=new StudentBasic(studentId,2,"1","1","1","1",123,"666");
+        StudentAdvanced studentAdvanced=new StudentAdvanced(studentId,"1","1","1","1","1","1");
 
-        System.out.println(gson.toJson(basicInfo));
-        String s=gson.toJson(basicInfo);
-        student.setBasicInfo(s);
+        studentBasicMapper.insert(studentBasic);
+        studentAdvancedMapper.insert(studentAdvanced);
         studentMapper.update(student,wrapper);
-        //student.setBasicInfo(gson.toJson(basicInfo));
-        //AdvancedInfo advancedInfo=new AdvancedInfo("1","1","1","1","1","1");
 
-        String s1 = StringEscapeUtils.unescapeJava(studentMapper.selectById(3).getBasicInfo());
-        System.out.println(s1);
 
-        System.out.println(studentMapper.selectById(3).getBasicInfo());
+
+
         //studentMapper.update(student,wrapper);
 
     }
 
     @Test
     void testQueryInfo(){
-        QueryWrapper<BasicInfo> wrapper=new QueryWrapper<BasicInfo>()
+        QueryWrapper<StudentBasic> wrapper=new QueryWrapper<StudentBasic>()
                 .select("*")
                 .eq("name","ming");
 
