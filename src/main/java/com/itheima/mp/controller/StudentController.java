@@ -11,6 +11,8 @@ import com.itheima.mp.util.JsonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -23,24 +25,32 @@ public class StudentController {
     @Autowired
     private StudentCourseService studentCourseService;
 
-/*
+
     @PostMapping("/getStudentVOById")
     public DataResponse getStudentVOById(@RequestBody Integer studentId){
-        Student student=studentService.getById(studentId);
-
-        String basicInfoString = JsonMethod.removeBackslash(student.getBasicInfo());
-        System.out.println(basicInfoString);
-
-        //Gson gson=new Gson();
-        //BasicInfo basicInfo=gson.fromJson(basicInfoString,BasicInfo.class);
-
-        StudentVO studentVO=new StudentVO(student.getStudentId(),student.getUserId(),student.getMajor(), basicInfoString,studentCourseService.getCourseListByStudentId(student.getStudentId()) );
-
-
-        return CommomMethod.getReturnData(studentVO);
+        StudentVO studentVO=studentService.getStudentVOById(studentId);
+        if(studentVO == null)
+            return CommomMethod.getReturnMessageError("不存在该学生");
+        return CommomMethod.getReturnData(studentId);
     }
 
- */
+    @PostMapping("/getStudentVOAll")
+    public DataResponse getStudentVOAll(){
+        List<StudentVO> studentVOList=studentService.getStudentVOAll();
+        if(studentVOList.isEmpty())return CommomMethod.getReturnMessageError("不存在该学生");
+        return CommomMethod.getReturnData(studentVOList);
+    }
+
+    @PostMapping("/getStudentById")
+    public DataResponse getStudentById(@RequestBody Integer studentId){
+
+        Student student=studentService.getStudentById(studentId);
+        return CommomMethod.getReturnData(student);
+    }
+
+
+
+
 
 
 

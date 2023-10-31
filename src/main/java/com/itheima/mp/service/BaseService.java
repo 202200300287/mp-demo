@@ -1,16 +1,12 @@
-package com.itheima.mp.service.impl;
+package com.itheima.mp.service;
+
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.Course;
-import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.po.StudentCourse;
 import com.itheima.mp.mapper.CourseMapper;
 import com.itheima.mp.mapper.StudentCourseMapper;
 import com.itheima.mp.mapper.StudentMapper;
-import com.itheima.mp.service.iservice.IStudentCourseService;
-import com.itheima.mp.service.iservice.IStudentService;
-import com.itheima.mp.util.CommomMethod;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,35 +19,12 @@ import java.util.List;
 @Service
 @Configuration
 @ComponentScan(basePackages = "com.itheima.mp")
-public class StudentCourseService extends ServiceImpl<StudentCourseMapper, StudentCourse> implements IStudentCourseService {
-
+public class BaseService {
     @Autowired
     private StudentCourseMapper studentCourseMapper;
-    @Autowired
-    private StudentMapper studentMapper;
+
     @Autowired
     private CourseMapper courseMapper;
-
-
-
-
-    @ApiOperation(value = "用课程id查询学生列表")
-    public List<Student> getStudentListByCourseId(Integer courseId){
-
-        QueryWrapper<StudentCourse> studentCourseQueryWrapper=new QueryWrapper<StudentCourse>()
-                .select("student_id")
-                .eq("course_id",courseId);
-
-        List<StudentCourse> studentCourseList=studentCourseMapper.selectList(studentCourseQueryWrapper);
-
-
-
-        List<Student> studentList = new ArrayList<>();
-        for (StudentCourse sc : studentCourseList) {
-            studentList.add(studentMapper.selectById(sc.getStudentId()));
-        }
-        return studentList;
-    }
 
     public List<StudentCourse> getStudentCourseListByStudentId(Integer studentId){
         QueryWrapper<StudentCourse> studentCourseQueryWrapper=new QueryWrapper<StudentCourse>()

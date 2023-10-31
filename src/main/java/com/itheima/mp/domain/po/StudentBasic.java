@@ -2,6 +2,7 @@ package com.itheima.mp.domain.po;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.itheima.mp.enmus.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class StudentBasic {
     private Integer student_basic_id;
 
     @ApiModelProperty("性别")
-    private Integer gender;
+    private Gender gender;
 
     @ApiModelProperty("生日")
     private String birthday;

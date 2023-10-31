@@ -1,6 +1,8 @@
 package com.itheima.mp.domain.vo;
 
 import com.itheima.mp.domain.po.Course;
+import com.itheima.mp.domain.po.StudentAdvanced;
+import com.itheima.mp.domain.po.StudentBasic;
 import com.itheima.mp.enmus.Major;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,9 +21,21 @@ public class StudentVO {
 
     private Major major;
 
-    private String basicInfo;
+    private double gpa;
 
-    private List<Course> courseList;
+    private Integer rankClass;
+
+    private Integer rankCollege;
+
+    private StudentBasic studentBasic;
+
+    private StudentAdvanced studentAdvanced;
+
+    private List<CourseVO> courseVOList;
+
+
+
+
 
 
 }

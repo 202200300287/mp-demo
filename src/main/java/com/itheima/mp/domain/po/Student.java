@@ -52,4 +52,12 @@ public class Student {
     @TableField(typeHandler = EnumTypeHandler.class)
     private Major major;
 
+    private double gpa;
+
+    @TableField(value = "rank_class")
+    private Integer rankClass;
+
+    @TableField(value = "rank_college")
+    private Integer rankCollege;
+
 }
