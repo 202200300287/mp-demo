@@ -1,12 +1,16 @@
 package com.itheima.mp.domain.po;
 
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.itheima.mp.enmus.ScoreStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.EnumTypeHandler;
 
 @Data
 @NoArgsConstructor
@@ -23,4 +27,9 @@ public class StudentCourse {
     private Integer rankClass;
     @ApiModelProperty("单科学院成绩排名")
     private Integer rankCollege;
+
+    @ApiModelProperty("学生成绩状态")
+    @EnumValue
+    @TableField(typeHandler = EnumTypeHandler.class)
+    private ScoreStatus scoreStatus;
 }

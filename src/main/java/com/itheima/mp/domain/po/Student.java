@@ -4,12 +4,10 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.itheima.mp.enmus.Major;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.type.EnumTypeHandler;
 
 
@@ -48,11 +46,16 @@ public class Student {
 
     private int userId;
 
+    private String name;
+
     @EnumValue
     @TableField(typeHandler = EnumTypeHandler.class)
     private Major major;
 
     private double gpa;
+
+    private Integer studentClass;
+
 
     @TableField(value = "rank_class")
     private Integer rankClass;

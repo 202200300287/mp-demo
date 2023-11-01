@@ -31,7 +31,7 @@ public class StudentController {
         StudentVO studentVO=studentService.getStudentVOById(studentId);
         if(studentVO == null)
             return CommomMethod.getReturnMessageError("不存在该学生");
-        return CommomMethod.getReturnData(studentId);
+        return CommomMethod.getReturnData(studentVO);
     }
 
     @PostMapping("/getStudentVOAll")

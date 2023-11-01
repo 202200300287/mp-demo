@@ -1,5 +1,6 @@
 package com.itheima.mp.domain.po;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.itheima.mp.enmus.Gender;
@@ -29,6 +30,7 @@ public class StudentBasic {
     private Integer student_basic_id;
 
     @ApiModelProperty("性别")
+    @EnumValue
     private Gender gender;
 
     @ApiModelProperty("生日")

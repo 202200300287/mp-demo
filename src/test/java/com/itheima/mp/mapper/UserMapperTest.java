@@ -2,10 +2,8 @@ package com.itheima.mp.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
-import com.itheima.mp.domain.po.Student;
-import com.itheima.mp.domain.po.StudentAdvanced;
-import com.itheima.mp.domain.po.User;
-import com.itheima.mp.domain.po.StudentBasic;
+import com.itheima.mp.domain.po.*;
+import com.itheima.mp.enmus.Gender;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +56,7 @@ class UserMapperTest {
 
     @Test
     void updateStudent(){
-        Integer studentId=1;
+        Integer studentId=2;
         Gson gson=new Gson();
         QueryWrapper<Student> wrapper = new QueryWrapper<Student>()
                 .select("*")
@@ -72,20 +70,36 @@ class UserMapperTest {
                 .eq("student_basic_id",studentId);
 
 
-        Student student=new Student();
-        StudentBasic studentBasic=new StudentBasic(studentId,2,"1","1","1","1",123,"666");
-        StudentAdvanced studentAdvanced=new StudentAdvanced(studentId,"1","1","1","1","1","1");
-
-        studentBasicMapper.insert(studentBasic);
-        studentAdvancedMapper.insert(studentAdvanced);
-        studentMapper.update(student,wrapper);
+        Student student=studentMapper.selectById(studentId);
 
 
+        //StudentBasic studentBasic=new StudentBasic(studentId, Gender.Female,"1","1","1","1",123,"666");
+        //StudentAdvanced studentAdvanced=new StudentAdvanced(studentId,"1","1","1","1","1","1");
 
+        //studentBasicMapper.insert(studentBasic);
+        //studentAdvancedMapper.insert(studentAdvanced);
+        System.out.println(student.getMajor().getType());
 
         //studentMapper.update(student,wrapper);
-
     }
+
+
+
+    @Autowired
+    private TeacherMapper teacherMapper;
+    @Test
+    void updateTeacher(){
+        Integer teacherId=2;
+        QueryWrapper<Teacher> teacherQueryWrapper=new QueryWrapper<Teacher>()
+                .select("*")
+                .eq("teacher_id",teacherId);
+        Teacher teacher=new Teacher(teacherId,6,"大牛",Gender.Female,"教授","博士","软件学院","","无",LocalDateTime.now(),"大牛");
+        teacherMapper.insert(teacher);
+    }
+
+
+
+
 
     @Test
     void testQueryInfo(){
@@ -100,6 +114,7 @@ class UserMapperTest {
         Student s=studentMapper.selectById(1);
         System.out.println(s);
     }
+
 
 
 

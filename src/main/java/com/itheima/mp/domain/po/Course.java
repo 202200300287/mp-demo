@@ -1,10 +1,14 @@
 package com.itheima.mp.domain.po;
 
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.itheima.mp.enmus.CourseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.EnumTypeHandler;
 
 @Data
 @NoArgsConstructor
@@ -15,5 +19,9 @@ public class Course {
     private String num;
     private String name;
     private Integer credit;
+
+    @EnumValue
+    @TableField(typeHandler = EnumTypeHandler.class)
+    private CourseStatus courseStatus;
 
 }
