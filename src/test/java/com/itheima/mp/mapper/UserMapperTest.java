@@ -1,15 +1,30 @@
 package com.itheima.mp.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.google.gson.Gson;
 import com.itheima.mp.domain.po.*;
 import com.itheima.mp.enmus.Gender;
+import com.itheima.mp.enmus.UserType;
+import com.itheima.mp.util.ImageMethod;
+import com.mysql.cj.conf.PropertyDefinitions;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.imageio.ImageIO;
+import javax.print.attribute.standard.Compression;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -89,11 +104,11 @@ class UserMapperTest {
     private TeacherMapper teacherMapper;
     @Test
     void updateTeacher(){
-        Integer teacherId=2;
+        Integer teacherId=3;
         QueryWrapper<Teacher> teacherQueryWrapper=new QueryWrapper<Teacher>()
                 .select("*")
                 .eq("teacher_id",teacherId);
-        Teacher teacher=new Teacher(teacherId,6,"大牛",Gender.Female,"教授","博士","软件学院","","无",LocalDateTime.now(),"大牛");
+        Teacher teacher=new Teacher(teacherId,7,"大牛",Gender.Male,"教授","博士","软件学院","","无",LocalDateTime.now(),"大牛");
         teacherMapper.insert(teacher);
     }
 
@@ -115,7 +130,34 @@ class UserMapperTest {
         System.out.println(s);
     }
 
+    @SneakyThrows
+    @Test
+    void testImage(){
+
+        QueryWrapper<User> userQueryWrapper=new QueryWrapper<User>()
+            .eq("user_id",1L);
+        String imagePath="D://photo//xiaoma.png";
+        BufferedImage bufferedImage= ImageIO.read(new FileInputStream(imagePath));
+       bufferedImage=ImageMethod.reduceImageQuality(bufferedImage,0.1f);
+
+        //System.out.println(imageByte.length/1024);
+        UpdateWrapper<User> userUpdateWrapper=new UpdateWrapper<User>()
+                .eq(true,"user_id",1L)
+                .set(true,"photo",ImageMethod.getBlobByByteArray(ImageMethod.getByteArrayFromBufferedImage(bufferedImage)));
+
+        userMapper.update(null,userUpdateWrapper);
+        //System.out.println(Arrays.toString(imageByte));
 
 
+    }
+    @SneakyThrows
+    @Test
+    void testImageOut() {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<User>()
+                .eq("user_id", 1L);
+        User user = userMapper.selectOne(userQueryWrapper);
+        BufferedImage bufferedImage = ImageMethod.getBufferedFromByteArray(ImageMethod.getByteArrayByBlob(user.getPhoto()));
 
+
+    }
 }

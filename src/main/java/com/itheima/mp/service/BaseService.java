@@ -53,7 +53,7 @@ public class BaseService {
     }
 
     public DataResponse sendEmail(){
-        String to="3192024219@qq.com";
+        String to="2776959538@qq.com";
         String title="标题：简单的文本发送测试";
         String content="<html><body><h1>欢迎来到 Spring boot 的世界</h1></body></html>";
         mailService.sendSimpleText(to,title,content);
