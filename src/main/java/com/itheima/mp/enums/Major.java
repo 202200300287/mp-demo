@@ -1,4 +1,4 @@
-package com.itheima.mp.enmus;
+package com.itheima.mp.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,8 +30,8 @@ public enum Major {
      * @return 枚举对象
      */
     @JsonCreator
-    public static UserType getByCode(@JsonProperty("code") int code) {
-        return Arrays.stream(UserType.values()).filter(item -> item.getCode() == code).findFirst().get();
+    public static Major getByCode(@JsonProperty("code") int code) {
+        return Arrays.stream(Major.values()).filter(item -> item.getCode() == code).findFirst().get();
     }
 
     }

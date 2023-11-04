@@ -1,31 +1,26 @@
 package com.itheima.mp.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.gson.Gson;
 import com.itheima.mp.domain.po.*;
-import com.itheima.mp.enmus.Gender;
-import com.itheima.mp.enmus.UserType;
+import com.itheima.mp.enums.Gender;
 import com.itheima.mp.util.ImageMethod;
-import com.mysql.cj.conf.PropertyDefinitions;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.imageio.ImageIO;
-import javax.print.attribute.standard.Compression;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class UserMapperTest {
@@ -143,21 +138,21 @@ class UserMapperTest {
         //System.out.println(imageByte.length/1024);
         UpdateWrapper<User> userUpdateWrapper=new UpdateWrapper<User>()
                 .eq(true,"user_id",1L)
-                .set(true,"photo",ImageMethod.getBlobByByteArray(ImageMethod.getByteArrayFromBufferedImage(bufferedImage)));
+                .set(true,"photo", "");
 
         userMapper.update(null,userUpdateWrapper);
         //System.out.println(Arrays.toString(imageByte));
 
 
     }
-    @SneakyThrows
+
     @Test
     void testImageOut() {
-        QueryWrapper<User> userQueryWrapper = new QueryWrapper<User>()
-                .eq("user_id", 1L);
-        User user = userMapper.selectOne(userQueryWrapper);
-        BufferedImage bufferedImage = ImageMethod.getBufferedFromByteArray(ImageMethod.getByteArrayByBlob(user.getPhoto()));
 
+        Map<String,Integer> map=new HashMap<>();
+        map.put("1",1);
+        map.put("2",2);
+        System.out.println(map.get("3"));
 
     }
 }

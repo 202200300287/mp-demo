@@ -1,4 +1,5 @@
-package com.itheima.mp.enmus;
+package com.itheima.mp.enums;
+
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -11,29 +12,24 @@ import java.util.Arrays;
 
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum UserType {
-    ADMIN(1,"ADMIN"),
-    STUDENT(2,"STUDENT"),
-    TEACHER(3,"TEACHER");
+public enum ScoreStatus {
+    ExamUnfinished(1,"未进行考试"),
+    ExamFinished(2,"已经考试未打分"),
+    ScoreMarked(3,"打出分数但学生不可见"),
+    ScoreVisible(4,"学生可见分数");
 
     @EnumValue
     private Integer code;
     @JsonValue
     private String type;
 
-    UserType(Integer code, String type){
+    ScoreStatus(Integer code,String type){
         this.code=code;
         this.type=type;
     }
 
-    /**
-     * 反序列化
-     * @param code 数据库对应的值
-     * @return 枚举对象
-     */
     @JsonCreator
-    public static UserType getByCode(@JsonProperty("code") int code) {
-        return Arrays.stream(UserType.values()).filter(item -> item.code == code).findFirst().get();
+    public static ScoreStatus getByCode(@JsonProperty("code") int code) {
+        return Arrays.stream(ScoreStatus.values()).filter(item -> item.getCode() == code).findFirst().get();
     }
-
 }

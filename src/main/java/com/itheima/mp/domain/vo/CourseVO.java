@@ -11,7 +11,7 @@ public class CourseVO {
     private Integer courseId;
     private String num;
     private String name;
-    private Integer credit;
+    private double credit;
 
     private double score;
     private Integer rankClass;

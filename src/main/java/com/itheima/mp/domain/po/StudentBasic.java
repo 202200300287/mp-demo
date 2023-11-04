@@ -1,9 +1,10 @@
 package com.itheima.mp.domain.po;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.itheima.mp.enmus.Gender;
+import com.itheima.mp.enums.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @TableName(value = "student_basic")
 public class StudentBasic {
 
-    @TableId(value = "student_basic_id")
+    @TableId(type = IdType.AUTO,value = "student_basic_id")
     private Integer student_basic_id;
 
     @ApiModelProperty("性别")
@@ -46,7 +47,7 @@ public class StudentBasic {
     private String address;
 
     @ApiModelProperty("电话")
-    private Integer phone;
+    private String phone;
 
     @ApiModelProperty("邮箱")
     private String email;

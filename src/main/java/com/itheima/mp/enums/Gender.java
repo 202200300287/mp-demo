@@ -1,4 +1,4 @@
-package com.itheima.mp.enmus;
+package com.itheima.mp.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,6 +24,11 @@ public enum Gender {
     Gender(Integer code, String gender){
         this.code=code;
         this.gender=gender;
+    }
+
+    @JsonCreator
+    public static Gender getByCode(@JsonProperty("code") int code) {
+        return Arrays.stream(Gender.values()).filter(item -> item.getCode() == code).findFirst().get();
     }
 
 

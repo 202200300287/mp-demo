@@ -1,18 +1,22 @@
 package com.itheima.mp.domain.po;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentAdvanced {
 
-    @TableId(value = "student_advanced_id")
+    @TableId(type = IdType.AUTO,value = "student_advanced_id")
+    @NotBlank
     private Integer student_advanced_id;
 
     @ApiModelProperty("个人荣誉")

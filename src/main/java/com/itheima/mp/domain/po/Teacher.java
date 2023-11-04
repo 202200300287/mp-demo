@@ -1,23 +1,23 @@
 package com.itheima.mp.domain.po;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.itheima.mp.enmus.Gender;
+import com.itheima.mp.enums.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "teacher")
 public class Teacher {
-    @TableId(value = "teacher_id")
+    @TableId(type = IdType.AUTO,value = "teacher_id")
     private Integer teacherId;
 
     private int userId;

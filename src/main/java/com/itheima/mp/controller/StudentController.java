@@ -3,6 +3,7 @@ package com.itheima.mp.controller;
 
 import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.vo.StudentVO;
+import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.impl.StudentCourseService;
 import com.itheima.mp.service.impl.StudentService;
@@ -47,6 +48,13 @@ public class StudentController {
         Student student=studentService.getStudentById(studentId);
         return CommomMethod.getReturnData(student);
     }
+
+    @PostMapping("/insertStudent")
+    public DataResponse editStudent(@RequestBody DataRequest dataRequest){
+        return studentService.insertStudent(dataRequest);
+    }
+
+
 
 
 

@@ -1,14 +1,14 @@
 package com.itheima.mp.domain.po;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.itheima.mp.enmus.Major;
+import com.baomidou.mybatisplus.annotation.*;
+import com.itheima.mp.enums.Grade;
+import com.itheima.mp.enums.Major;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.EnumTypeHandler;
+
+import javax.validation.constraints.NotBlank;
 
 
 /*
@@ -41,7 +41,8 @@ import org.apache.ibatis.type.EnumTypeHandler;
 @AllArgsConstructor
 @TableName(value = "student")
 public class Student {
-    @TableId(value = "student_id")
+    @TableId(type = IdType.AUTO,value = "student_id")
+    @NotBlank
     private Integer studentId;
 
     private int userId;
@@ -51,6 +52,8 @@ public class Student {
     @EnumValue
     @TableField(typeHandler = EnumTypeHandler.class)
     private Major major;
+
+    private Grade grade;
 
     private double gpa;
 

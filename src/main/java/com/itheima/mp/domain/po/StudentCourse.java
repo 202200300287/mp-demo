@@ -2,21 +2,24 @@ package com.itheima.mp.domain.po;
 
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.itheima.mp.enmus.ScoreStatus;
-import io.swagger.annotations.Api;
+import com.itheima.mp.enums.ScoreStatus;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.EnumTypeHandler;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentCourse {
-    @TableId
+    @TableId(type = IdType.AUTO)
+    @NotBlank
     private Integer studentCourseId;
     private Integer studentId;
     private Integer courseId;

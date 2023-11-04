@@ -1,9 +1,8 @@
 package com.itheima.mp.domain.vo;
 
-import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.po.StudentAdvanced;
 import com.itheima.mp.domain.po.StudentBasic;
-import com.itheima.mp.enmus.Major;
+import com.itheima.mp.enums.Major;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
