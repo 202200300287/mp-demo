@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,12 +19,18 @@ import java.time.LocalDateTime;
 @TableName(value = "teacher")
 public class Teacher {
     @TableId(type = IdType.AUTO,value = "teacher_id")
+    @NotBlank
     private Integer teacherId;
+
 
     private int userId;
 
 
     private String name;
+
+    private String phone;
+
+    private String email;
 
     @EnumValue
     private Gender gender;
@@ -43,7 +50,6 @@ public class Teacher {
     @ApiModelProperty("论文著作")
     private String paper;
 
-    private LocalDateTime entryDate;
 
     @ApiModelProperty("个人简历")
     private String resume;

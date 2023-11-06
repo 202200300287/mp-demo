@@ -15,12 +15,14 @@ import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.BaseService;
 import com.itheima.mp.service.iservice.IStudentService;
 import com.itheima.mp.util.CommomMethod;
+import com.itheima.mp.util.FormatMethod;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +61,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         return s;
     }
 
+    /*
     public StudentVO getStudentVOById(Integer studentId){
         Student student=getStudentById(studentId);
 
@@ -97,95 +100,118 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     }
 
 
+     */
+
+    @ApiModelProperty("添加一个学生，对其中username，姓名，班级，年级，邮箱格式进行判断")
     public DataResponse insertStudent(DataRequest dataRequest){
+        Map map=dataRequest.getData();
         Integer userId=getNewUserId();
-        Map userMap=dataRequest.getMap("user");
-        if(userMap.isEmpty())
-            return CommomMethod.getReturnMessageError("数据传输格式错误");
+        Integer studentId =getNewStudentId();
+        User user=getUserFromMap(CommomMethod.getMap(map,"user"),userId);
+        Student student=getStudentFromMap(CommomMethod.getMap(map,"student"),studentId);
+        StudentBasic studentBasic=getStudentBasicFromMap(CommomMethod.getMap(map,"studentBasic"),studentId);
+        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(CommomMethod.getMap(map,"studentAdvanced"),studentId);
 
-        User user=new User();
-        user.setUserId(userId);
+        DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
+        if(dataResponse.getCode()==1)return dataResponse;
 
-        String username=CommomMethod.getString(userMap,"username");
-        if(!judgeNewUsername(username)){
-            return CommomMethod.getReturnMessageError("新学号已经存在");
-        }
-
-        user.setUsername(username);
-        user.setUserType(UserType.STUDENT);
-
-        String password=CommomMethod.getString(userMap,"password");
-        if(password.equals("")||password==null){
-            password="123456";
-        }
-        user.setPassword(password);
         userMapper.insert(user);
-
-
-        Integer studentId=getNewStudentId();
-        Map studentMap=dataRequest.getMap("student");
-        if(studentMap.isEmpty()) {
-            return CommomMethod.getReturnMessageError("数据传输格式错误");
-        }
-
-        Student student=new Student();
-        student.setStudentId(studentId);
-        student.setUserId(userId);
-
-        String name=CommomMethod.getString(studentMap,"name");
-        Integer studentClass=CommomMethod.getInteger(studentMap,"student_class");
-        if(name.equals("") ||name==null||studentClass==null){
-            return CommomMethod.getReturnMessageError("必须输入学生姓名与班级");
-        }
-        student.setName(name);
-        student.setStudentClass(studentClass);
-
-        student.setMajor(Major.getByCode(CommomMethod.getInteger0(studentMap,"major")));
-        student.setGrade(Grade.getByCode(CommomMethod.getInteger0(studentMap,"grade")));
-
         studentMapper.insert(student);
-
-        Map studentBasicMap=dataRequest.getMap("student_basic");
-        Map studentAdvancedMap=dataRequest.getMap("student_advanced");
-
-        if(studentBasicMap.isEmpty()){
-            StudentBasic studentBasic=new StudentBasic();
-            studentBasic.setStudent_basic_id(studentId);
-            studentBasicMapper.insert(studentBasic);
-        }else{
-            StudentBasic studentBasic=getStudentBasicFrom(studentBasicMap,studentId);
-            studentBasicMapper.insert(studentBasic);
-        }
-        if(studentAdvancedMap.isEmpty()){
-            StudentAdvanced studentAdvanced=new StudentAdvanced();
-            studentAdvanced.setStudent_advanced_id(studentId);
-            studentAdvancedMapper.insert(studentAdvanced);
-        }else{
-            StudentAdvanced studentAdvanced=getStudentAdvancedFrom(studentAdvancedMap,studentId);
-            studentAdvancedMapper.insert(studentAdvanced);
-        }
-
-        return CommomMethod.getReturnMessageOK("正确增加了一名学生");
+        studentBasicMapper.insert(studentBasic);
+        studentAdvancedMapper.insert(studentAdvanced);
+        return CommomMethod.getReturnMessageOK("成功添加了一名学生");
     }
 
+    public DataResponse updateStudent(DataRequest dataRequest){
+        Integer studentId=dataRequest.getInteger("studentId");
+        if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
+
+        if(studentMapper.checkStudentId(studentId)==0){
+            return CommomMethod.getReturnMessageError("该学生不存在");
+        }
+
+        Student student=getStudentFromMap(dataRequest.getMap("student"),studentId);
+        Integer userId=student.getUserId();
+        User user=getUserFromMap(dataRequest.getMap("user"),userId);
+        StudentBasic studentBasic=getStudentBasicFromMap(dataRequest.getMap("studentBasic"),studentId);
+        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(dataRequest.getMap("studentAdvanced"),studentId);
+        DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
+        if(dataResponse.getCode()==1)return dataResponse;
+
+        userMapper.updateById(user);
+        studentMapper.updateById(student);
+        studentBasicMapper.updateById(studentBasic);
+        studentAdvancedMapper.updateById(studentAdvanced);
 
 
+        return CommomMethod.getReturnMessageOK("成功修改了学生信息");
+    }
 
-    public Student getStudentFromMap(Map studentMap,Integer studentId){
+    public DataResponse deleteStudent(DataRequest dataRequest){
+        Integer studentId = dataRequest.getInteger("student_id");
+
+        if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
+
+        if(studentMapper.checkStudentId(studentId)==0){
+            return CommomMethod.getReturnMessageError("该学生不存在");
+        }
+        Student student=studentMapper.selectById(studentId);
+        User user=userMapper.selectById(student.getUserId());
+        userMapper.deleteById(user);
+        studentBasicMapper.deleteById(studentId);
+        studentAdvancedMapper.deleteById(studentId);
+        studentMapper.deleteById(studentId);
+        return CommomMethod.getReturnMessageOK("正确删除了一名学生");
+    }
+
+    public DataResponse selectStudent(DataRequest dataRequest){
+        Integer studentId = dataRequest.getInteger("studentId");
+
+        if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
+
+        if(studentMapper.checkStudentId(studentId)==0){
+            return CommomMethod.getReturnMessageError("该学生不存在");
+        }
+
+        Student student=studentMapper.selectById(studentId);
+        User user=userMapper.selectById(student.getUserId());
+        StudentVO studentVO=new StudentVO(studentId,user,student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId));
+        return CommomMethod.getReturnData(studentVO);
+    }
+
+    public User getUserFromMap(Map map){
+        User user=new User();
+        user.setUsername(CommomMethod.getString(map,"username"));
+        user.setPassword(CommomMethod.getString(map,"password"));
+        user.setPhoto(CommomMethod.getString(map,"photo"));
+        user.setUserType(UserType.STUDENT);
+        user.setCreateTime(LocalDateTime.now());
+        return user;
+    }
+
+    public User getUserFromMap(Map map,Integer userId){
+        User user=getUserFromMap(map);
+        user.setUserId(userId);
+        return user;
+    }
+
+    public Student getStudentFromMap(Map map){
         Student student=new Student();
-        student.setStudentId(studentId);
-        //student.setUserId(CommomMethod.getInteger0(studentMap,"user_id"));
-        student.setName(CommomMethod.getString(studentMap,"name"));
-        student.setMajor(Major.getByCode(CommomMethod.getInteger0(studentMap,"major")));
-        student.setGrade(Grade.getByCode(CommomMethod.getInteger0(studentMap,"grade")));
-        student.setStudentClass(CommomMethod.getInteger(studentMap,"student_class"));
+        student.setName(CommomMethod.getString(map,"name"));
+        student.setMajor(Major.getByCode(CommomMethod.getInteger0(map,"major")));
+        student.setGrade(Grade.getByCode(CommomMethod.getInteger0(map,"grade")));
+        student.setStudentClass(CommomMethod.getInteger0(map,"studentClass"));
         return student;
-
     }
 
-    public StudentBasic getStudentBasicFrom(Map map,Integer studentId){
+    public Student getStudentFromMap(Map map,Integer studentId){
+        Student student=getStudentFromMap(map);
+        student.setStudentId(studentId);
+        return student;
+    }
+
+    public StudentBasic getStudentBasicFromMap(Map map){
         StudentBasic s=new StudentBasic();
-        s.setStudent_basic_id(studentId);
         s.setGender(Gender.getByCode(CommomMethod.getInteger0(map,"gender")));
         s.setBirthday(CommomMethod.getString(map,"birthday"));
         s.setEthnicity(CommomMethod.getString(map,"ethnicity"));
@@ -196,9 +222,15 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         return s;
     }
 
-    public StudentAdvanced getStudentAdvancedFrom(Map map,Integer studentId){
+    public StudentBasic getStudentBasicFromMap(Map map,Integer studentBasicId){
+        StudentBasic studentBasic=getStudentBasicFromMap(map);
+        studentBasic.setStudent_basic_id(studentBasicId);
+        return studentBasic;
+    }
+
+
+    public StudentAdvanced getStudentAdvancedFromMap(Map map){
         StudentAdvanced s=new StudentAdvanced();
-        s.setStudent_advanced_id(studentId);
         s.setHonors(CommomMethod.getString(map,"honors"));
         s.setCompetitions(CommomMethod.getString(map,"competitions"));
         s.setDisciplinary(CommomMethod.getString(map,"disciplinary"));
@@ -206,6 +238,12 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         s.setVolunteer(CommomMethod.getString(map,"volunteer"));
         s.setInternship(CommomMethod.getString(map,"internship"));
         return s;
+    }
+
+    public StudentAdvanced getStudentAdvancedFromMap(Map map,Integer studentAdvancedId){
+        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(map);
+        studentAdvanced.setStudent_advanced_id(studentAdvancedId);
+        return studentAdvanced;
     }
 
     public Integer getNewStudentId(){
@@ -216,9 +254,5 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         return userMapper.findMaxUserId()+1;
     }
 
-    @ApiModelProperty("判断是否已存在所给学号，不存在返回true")
-    public boolean judgeNewUsername(String username){
-        List<String> usernames=userMapper.findAllUsername();
-        return !usernames.contains(username);
-    }
+
 }

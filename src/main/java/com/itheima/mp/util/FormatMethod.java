@@ -8,4 +8,5 @@ public class FormatMethod {
         return email.matches(EMAIL_REGEX);
     }
 
+
 }

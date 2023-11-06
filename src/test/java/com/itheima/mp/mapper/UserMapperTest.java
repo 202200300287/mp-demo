@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.gson.Gson;
 import com.itheima.mp.domain.po.*;
 import com.itheima.mp.enums.Gender;
+import com.itheima.mp.util.FormatMethod;
 import com.itheima.mp.util.ImageMethod;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -103,8 +104,8 @@ class UserMapperTest {
         QueryWrapper<Teacher> teacherQueryWrapper=new QueryWrapper<Teacher>()
                 .select("*")
                 .eq("teacher_id",teacherId);
-        Teacher teacher=new Teacher(teacherId,7,"大牛",Gender.Male,"教授","博士","软件学院","","无",LocalDateTime.now(),"大牛");
-        teacherMapper.insert(teacher);
+        //Teacher teacher=new Teacher(teacherId,7,"大牛",Gender.Male,"教授","博士","软件学院","","无",LocalDateTime.now(),"大牛");
+        //teacherMapper.insert(teacher);
     }
 
 
@@ -148,11 +149,10 @@ class UserMapperTest {
 
     @Test
     void testImageOut() {
+        Integer n=666;
+        Student student=studentMapper.selectById(n);
+        studentMapper.deleteById(student);
 
-        Map<String,Integer> map=new HashMap<>();
-        map.put("1",1);
-        map.put("2",2);
-        System.out.println(map.get("3"));
 
     }
 }

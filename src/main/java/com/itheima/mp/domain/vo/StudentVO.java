@@ -1,8 +1,9 @@
 package com.itheima.mp.domain.vo;
 
+import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.po.StudentAdvanced;
 import com.itheima.mp.domain.po.StudentBasic;
-import com.itheima.mp.enums.Major;
+import com.itheima.mp.domain.po.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,21 +17,15 @@ import java.util.List;
 public class StudentVO {
     private Integer studentId;
 
-    private int userId;
+    private User user;
 
-    private Major major;
-
-    private double gpa;
-
-    private Integer rankClass;
-
-    private Integer rankCollege;
+    private Student student;
 
     private StudentBasic studentBasic;
 
     private StudentAdvanced studentAdvanced;
 
-    private List<CourseVO> courseVOList;
+    //private List<CourseVO> courseVOList;
 
 
 

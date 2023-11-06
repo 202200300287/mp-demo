@@ -23,38 +23,27 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @Autowired
-    private StudentCourseService studentCourseService;
 
 
-    @PostMapping("/getStudentVOById")
-    public DataResponse getStudentVOById(@RequestBody Integer studentId){
-        StudentVO studentVO=studentService.getStudentVOById(studentId);
-        if(studentVO == null)
-            return CommomMethod.getReturnMessageError("不存在该学生");
-        return CommomMethod.getReturnData(studentVO);
-    }
 
-    @PostMapping("/getStudentVOAll")
-    public DataResponse getStudentVOAll(){
-        List<StudentVO> studentVOList=studentService.getStudentVOAll();
-        if(studentVOList.isEmpty())return CommomMethod.getReturnMessageError("不存在该学生");
-        return CommomMethod.getReturnData(studentVOList);
-    }
 
-    @PostMapping("/getStudentById")
-    public DataResponse getStudentById(@RequestBody Integer studentId){
-
-        Student student=studentService.getStudentById(studentId);
-        return CommomMethod.getReturnData(student);
-    }
 
     @PostMapping("/insertStudent")
     public DataResponse editStudent(@RequestBody DataRequest dataRequest){
         return studentService.insertStudent(dataRequest);
     }
-
-
+    @PostMapping("/updateStudent")
+    public DataResponse upDateStudent(@RequestBody DataRequest dataRequest){
+        return studentService.updateStudent(dataRequest);
+    }
+    @PostMapping("/deleteStudent")
+    public DataResponse deleteStudent(@RequestBody DataRequest dataRequest){
+        return studentService.deleteStudent(dataRequest);
+    }
+    @PostMapping("/selecctStudent")
+    public DataResponse selectStudent(@RequestBody DataRequest dataRequest){
+        return studentService.selectStudent(dataRequest);
+    }
 
 
 

@@ -2,14 +2,17 @@ package com.itheima.mp.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.itheima.mp.domain.po.Course;
-import com.itheima.mp.domain.po.StudentCourse;
+import com.itheima.mp.domain.po.*;
+import com.itheima.mp.enums.Grade;
 import com.itheima.mp.mapper.CourseMapper;
 import com.itheima.mp.mapper.StudentCourseMapper;
 import com.itheima.mp.mapper.StudentMapper;
+import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.iservice.MailService;
 import com.itheima.mp.util.CommomMethod;
+import com.itheima.mp.util.FormatMethod;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,6 +32,9 @@ public class BaseService {
 
     @Autowired
     private CourseMapper courseMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired(required = false)
     private MailService mailService;
@@ -59,4 +65,31 @@ public class BaseService {
         mailService.sendSimpleText(to,title,content);
         return CommomMethod.getReturnMessageOK("成功发送邮件！");
     }
+
+    @ApiModelProperty("判断是否已存在所给学号，不存在返回true")
+    public boolean judgeNewUsername(String username){
+        List<String> usernames=userMapper.findAllUsername();
+        return !usernames.contains(username);
+    }
+
+    public DataResponse judgeStudentData(User user, Student student, StudentBasic studentBasic){
+        String username = user.getUsername();
+        String password = user.getPassword();
+        String name=student.getName();
+        Grade grade =student.getGrade();
+        Integer studentClass=student.getStudentClass();
+        String email=studentBasic.getEmail();
+        if(username.isBlank()||password.isBlank()||name.isBlank()||grade.getCode()<1||studentClass<1|| email.isBlank()){
+            return CommomMethod.getReturnMessageError("用户名，密码，姓名，年级班级，邮箱不可为空");
+        }
+        if(!judgeNewUsername(username))return CommomMethod.getReturnMessageError("学号已存在");
+
+        if(!FormatMethod.validateEmail(email))return CommomMethod.getReturnMessageError("邮箱格式错误");
+
+
+        //if()
+        return CommomMethod.getReturnMessageOK();
+    }
+
+
 }
