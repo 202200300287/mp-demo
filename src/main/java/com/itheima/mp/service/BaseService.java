@@ -67,8 +67,8 @@ public class BaseService {
     }
 
     @ApiModelProperty("判断是否已存在所给学号，不存在返回true")
-    public boolean judgeNewUsername(String username){
-        List<String> usernames=userMapper.findAllUsername();
+    public boolean judgeNewUsername(String username) {
+        List<String> usernames = userMapper.findAllUsername();
         return !usernames.contains(username);
     }
 
@@ -88,6 +88,19 @@ public class BaseService {
 
 
         //if()
+        return CommomMethod.getReturnMessageOK();
+    }
+
+    public DataResponse judgeTeacherData(User user,Teacher teacher){
+        String username=user.getUsername();
+        String password=user.getPassword();
+        String name=teacher.getName();
+        String email=teacher.getEmail();
+        if(username.isBlank()||password.isBlank()||name.isBlank()||email.isBlank()){
+            return CommomMethod.getReturnMessageError("用户名、密码、姓名、邮箱不可为空");
+        }
+        if(!judgeNewUsername(username))return CommomMethod.getReturnMessageError("学号已存在");
+        if(!FormatMethod.validateEmail(email))return CommomMethod.getReturnMessageError("邮箱格式错误");
         return CommomMethod.getReturnMessageOK();
     }
 

@@ -3,7 +3,7 @@ package com.itheima.mp.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.*;
-import com.itheima.mp.domain.vo.CourseVO;
+
 import com.itheima.mp.domain.vo.StudentVO;
 import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.Grade;
@@ -15,21 +15,17 @@ import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.BaseService;
 import com.itheima.mp.service.iservice.IStudentService;
 import com.itheima.mp.util.CommomMethod;
-import com.itheima.mp.util.FormatMethod;
+import com.itheima.mp.util.UpdateUtil;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
-import static com.itheima.mp.util.CommomMethod.getInteger;
+
+
 
 
 @Service
@@ -47,6 +43,9 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     private StudentAdvancedMapper studentAdvancedMapper;
 
     @Autowired
+    private StudentCourseMapper studentCourseMapper;
+
+    @Autowired
     private BaseService baseService;
 
     @Autowired
@@ -61,46 +60,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         return s;
     }
 
-    /*
-    public StudentVO getStudentVOById(Integer studentId){
-        Student student=getStudentById(studentId);
-
-        if(student==null){
-            return null;
-        }
-
-        StudentBasic studentBasic=studentBasicMapper.selectById(studentId);
-        StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
-        List<Course> courseList=baseService.getCourseListByStudentId(studentId);
-        List<StudentCourse> studentCourseList=baseService.getStudentCourseListByStudentId(studentId);
-        List<CourseVO> courseVOList=new ArrayList<CourseVO>();
-        for(int i=0;i<courseList.size();i++){
-            Course course=courseList.get(i);
-            StudentCourse studentCourse=studentCourseList.get(i);
-            CourseVO courseVO=new CourseVO(course.getCourseId(),course.getNum(),course.getName(),course.getCredit(),studentCourse.getScore(),studentCourse.getRankClass(),studentCourse.getRankCollege());
-            courseVOList.add(courseVO);
-        }
-        return new StudentVO(studentId,student.getUserId(),student.getMajor(),student.getGpa(),student.getRankClass(),student.getRankCollege(),studentBasic,studentAdvanced,courseVOList);
-    }
-
-    public List<StudentVO> getStudentVOAll(){
-        QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<Student>()
-                .select("*");
-        List<Student> studentList=studentMapper.selectList(studentQueryWrapper);
-
-        if(studentList.isEmpty()){
-            return null;
-        }
-
-        List<StudentVO> studentVOList=new ArrayList<StudentVO>();
-        for (Student student : studentList) {
-            studentVOList.add(getStudentVOById(student.getStudentId()));
-        }
-        return studentVOList;
-    }
-
-
-     */
 
     @ApiModelProperty("添加一个学生，对其中username，姓名，班级，年级，邮箱格式进行判断")
     public DataResponse insertStudent(DataRequest dataRequest){
@@ -108,7 +67,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         Integer userId=getNewUserId();
         Integer studentId =getNewStudentId();
         User user=getUserFromMap(CommomMethod.getMap(map,"user"),userId);
-        Student student=getStudentFromMap(CommomMethod.getMap(map,"student"),studentId);
+        Student student=getStudentFromMap(CommomMethod.getMap(map,"student"),studentId,userId);
         StudentBasic studentBasic=getStudentBasicFromMap(CommomMethod.getMap(map,"studentBasic"),studentId);
         StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(CommomMethod.getMap(map,"studentAdvanced"),studentId);
 
@@ -130,11 +89,22 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
             return CommomMethod.getReturnMessageError("该学生不存在");
         }
 
-        Student student=getStudentFromMap(dataRequest.getMap("student"),studentId);
+
+        Student student=studentMapper.selectById(studentId);
+        StudentBasic studentBasic=studentBasicMapper.selectById(studentId);
+        StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
         Integer userId=student.getUserId();
-        User user=getUserFromMap(dataRequest.getMap("user"),userId);
-        StudentBasic studentBasic=getStudentBasicFromMap(dataRequest.getMap("studentBasic"),studentId);
-        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(dataRequest.getMap("studentAdvanced"),studentId);
+        User user=userMapper.selectById(userId);
+        Student studentSource=getStudentFromMap(dataRequest.getMap("student"));
+        User userSource=getUserFromMap(dataRequest.getMap("user"));
+        StudentBasic studentBasicSource=getStudentBasicFromMap(dataRequest.getMap("studentBasic"),studentId);
+        StudentAdvanced studentAdvancedSource=getStudentAdvancedFromMap(dataRequest.getMap("studentAdvanced"),studentId);
+
+        UpdateUtil.copyNullProperties(studentSource,student);
+        UpdateUtil.copyNullProperties(userSource,user);
+        UpdateUtil.copyNullProperties(studentAdvancedSource,studentAdvanced);
+        UpdateUtil.copyNullProperties(studentBasicSource,studentBasic);
+
         DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
         if(dataResponse.getCode()==1)return dataResponse;
 
@@ -148,15 +118,21 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     }
 
     public DataResponse deleteStudent(DataRequest dataRequest){
-        Integer studentId = dataRequest.getInteger("student_id");
-
+        Integer studentId = dataRequest.getInteger("studentId");
         if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
 
         if(studentMapper.checkStudentId(studentId)==0){
             return CommomMethod.getReturnMessageError("该学生不存在");
         }
+
+        QueryWrapper<StudentCourse> studentCourseQueryWrapper=new QueryWrapper<StudentCourse>()
+                .select("*")
+                .eq("student_id",studentId);
+        studentCourseMapper.delete(studentCourseQueryWrapper);
+
         Student student=studentMapper.selectById(studentId);
         User user=userMapper.selectById(student.getUserId());
+
         userMapper.deleteById(user);
         studentBasicMapper.deleteById(studentId);
         studentAdvancedMapper.deleteById(studentId);
@@ -204,11 +180,13 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         return student;
     }
 
-    public Student getStudentFromMap(Map map,Integer studentId){
+    public Student getStudentFromMap(Map map,Integer studentId,Integer userId){
         Student student=getStudentFromMap(map);
+        student.setUserId(userId);
         student.setStudentId(studentId);
         return student;
     }
+
 
     public StudentBasic getStudentBasicFromMap(Map map){
         StudentBasic s=new StudentBasic();
@@ -228,7 +206,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         return studentBasic;
     }
 
-
     public StudentAdvanced getStudentAdvancedFromMap(Map map){
         StudentAdvanced s=new StudentAdvanced();
         s.setHonors(CommomMethod.getString(map,"honors"));
@@ -246,6 +223,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         return studentAdvanced;
     }
 
+
     public Integer getNewStudentId(){
        return studentMapper.findMaxStudentId()+1;
     }
@@ -253,6 +231,4 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     public Integer getNewUserId(){
         return userMapper.findMaxUserId()+1;
     }
-
-
 }

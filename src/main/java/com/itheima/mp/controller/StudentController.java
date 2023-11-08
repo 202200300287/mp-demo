@@ -45,10 +45,4 @@ public class StudentController {
         return studentService.selectStudent(dataRequest);
     }
 
-
-
-
-
-
-
 }

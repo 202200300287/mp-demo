@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.gson.Gson;
 import com.itheima.mp.domain.po.*;
 import com.itheima.mp.enums.Gender;
+import com.itheima.mp.enums.Grade;
 import com.itheima.mp.util.FormatMethod;
 import com.itheima.mp.util.ImageMethod;
+import com.itheima.mp.util.UpdateUtil;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,9 +151,14 @@ class UserMapperTest {
 
     @Test
     void testImageOut() {
-        Integer n=666;
-        Student student=studentMapper.selectById(n);
-        studentMapper.deleteById(student);
+        Student student=new Student();
+        student.setUserId(2);
+        student.setStudentId(1);
+        student.setName("1");
+        Student s=new Student();
+        s.setGrade(Grade.getByCode(1));
+        UpdateUtil.copyNullProperties(s,student);
+        System.out.println(student);
 
 
     }

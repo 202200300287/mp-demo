@@ -41,6 +41,13 @@ mybatis-plus:
     db-config:
       id-type: auto #可以设置id的自增
 
+# 陈兰鑫牛逼 牛逼plus 牛逼闪闪
+token:
+  privateKey: 'fdasfgdsagaxgsregdfdjyghjfhebfdgwe45ygrfbsdfshfdsag'
+  youngToken: 3600000
+  oldToken: 36000000
+
+
 knife4j:
   enable: true
   openapi:
@@ -56,5 +63,3 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.itheima.mp.controller
-
-

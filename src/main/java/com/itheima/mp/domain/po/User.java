@@ -20,7 +20,6 @@ public class User {
     @NotBlank
     private Integer userId;
 
-
     private String username;
 
     private String password;
@@ -34,8 +33,4 @@ public class User {
     LocalDateTime createTime;
 
     private LocalDateTime updateTime;
-
-
-
-
 }

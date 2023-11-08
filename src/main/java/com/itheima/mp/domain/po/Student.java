@@ -45,7 +45,7 @@ public class Student {
     @NotBlank
     private Integer studentId;
 
-    private int userId;
+    private Integer userId;
 
     private String name;
 

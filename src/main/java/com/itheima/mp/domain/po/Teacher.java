@@ -23,7 +23,7 @@ public class Teacher {
     private Integer teacherId;
 
 
-    private int userId;
+    private Integer userId;
 
 
     private String name;
