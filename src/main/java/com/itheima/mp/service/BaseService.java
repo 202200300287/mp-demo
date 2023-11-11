@@ -3,6 +3,7 @@ package com.itheima.mp.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itheima.mp.domain.po.*;
+import com.itheima.mp.enums.CourseType;
 import com.itheima.mp.enums.Grade;
 import com.itheima.mp.mapper.CourseMapper;
 import com.itheima.mp.mapper.StudentCourseMapper;
@@ -103,6 +104,40 @@ public class BaseService {
         if(!FormatMethod.validateEmail(email))return CommomMethod.getReturnMessageError("邮箱格式错误");
         return CommomMethod.getReturnMessageOK();
     }
+
+    public DataResponse judgeCourseData(Course course){
+        String num =course.getNum();
+        String name =course.getName();
+        Double credit = course.getCredit();
+        Grade grade=course.getGrade();
+        CourseType courseType=course.getCourseType();
+        if(num.isBlank()||name.isBlank()||credit==0||courseType.getCode()<1){
+            return CommomMethod.getReturnMessageOK("课序号，课程名，学分，年级，课程类型不可为空");
+        }
+        if(grade.getCode()>4)return CommomMethod.getReturnMessageError("年级有误");
+        if(courseType.getCode()>4)return CommomMethod.getReturnMessageOK("课程类型错误");
+        return CommomMethod.getReturnMessageOK();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

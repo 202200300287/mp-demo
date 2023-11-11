@@ -55,7 +55,7 @@ public class Student {
 
     private Grade grade;
 
-    private double gpa;
+    private Double gpa;
 
     private Integer studentClass;
 

@@ -16,7 +16,7 @@ public class TeacherCourse {
 
     @TableId(type = IdType.AUTO)
     @NotBlank
-    private Integer TeacherCourseId;
+    private Integer teacherCourseId;
 
     private Integer teacherId;
     private Integer courseId;

@@ -37,12 +37,29 @@ public class UpdateUtil {
             for (PropertyDescriptor p : propertyDescriptors) {
                 String name = p.getName();
                 Object value = beanWrapper.getPropertyValue(name);
-                if (Objects.isNull(value)) {
+                if (judgeValue(value)) {
                     notNullFieldSet.add(name);
                 }
             }
         }
         String[] notNullField = new String[notNullFieldSet.size()];
         return notNullFieldSet.toArray(notNullField);
+    }
+
+
+    public static boolean judgeValue(Object value){
+        if(Objects.isNull(value))return true;
+        if(value instanceof String) {
+            String re=(String) value;
+            return re.isBlank()||re.isEmpty();
+        } else if (value instanceof Integer) {
+            Integer re=(Integer) value;
+            return re == 0;
+        } else if (value instanceof  Double) {
+            Double re=(Double) value;
+            return re == 0;
+        }else {
+            return false;
+        }
     }
 }

@@ -25,9 +25,6 @@ public class StudentController {
 
 
 
-
-
-
     @PostMapping("/insertStudent")
     public DataResponse editStudent(@RequestBody DataRequest dataRequest){
         return studentService.insertStudent(dataRequest);

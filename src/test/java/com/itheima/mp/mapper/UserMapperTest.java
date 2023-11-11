@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.gson.Gson;
 import com.itheima.mp.domain.po.*;
+import com.itheima.mp.enums.CourseStatus;
 import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.Grade;
 import com.itheima.mp.util.FormatMethod;
@@ -149,17 +150,28 @@ class UserMapperTest {
 
     }
 
+    @Autowired
+    private TeacherCourseMapper teacherCourseMapper;
     @Test
     void testImageOut() {
+        System.out.println(teacherCourseMapper.findByCourseId(1));
+        System.out.println(teacherCourseMapper.findByCourseId(2));
+        System.out.println(teacherCourseMapper.findByStudentClass(2));
+        System.out.println(teacherCourseMapper.findTeacherIdByCourseIdAndStudentClass(3,2));
+        System.out.println(teacherCourseMapper.findCourseIdByTeacherId(2));
+    }
+
+    @Test
+    void test1(){
         Student student=new Student();
-        student.setUserId(2);
         student.setStudentId(1);
-        student.setName("1");
-        Student s=new Student();
-        s.setGrade(Grade.getByCode(1));
-        UpdateUtil.copyNullProperties(s,student);
+        student.setName("666");
+        student.setGrade(Grade.Four1);
+        Student student1=new Student();
+        student1.setName("");
+        student1.setStudentId(2);
+        student1.setGpa(0.0);
+        UpdateUtil.copyNullProperties(student1,student);
         System.out.println(student);
-
-
     }
 }

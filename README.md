@@ -4,7 +4,10 @@
 ****** 
  MyBatis-Plus (opens new window)（简称 MP）是一个 MyBatis (opens new window)的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
 
-突出特点为以Wrapper为“组先类”的数据库查询方法类
+***突出特点为***<br/>
+1. 以Wrapper为“组先类”的数据库查询方法类<br/>
+2. 数据库名与实体类名、数据库列名与类属性以规范命名<br/>
+3. 
 
  
 ### 数据库mysql
@@ -71,7 +74,7 @@ mp-demo
   pom.xml    
 ```
 
-### 每个文件的作用
+### 配置类文件
 **application.yaml**
 *****
 ```yaml
@@ -134,6 +137,7 @@ knife4j:
 ******
 配置依赖的的地方
 
+### 最基本的CRUD实现逻辑
 **service包、mapper包、po包间的联系**
 *****
 以***Student***为例：
@@ -147,31 +151,250 @@ PO(Persistent Object)持久化对象，与数据库表对应
 @Mapper
 public interface StudentMapper extends BaseMapper<Student> {}
 ```
-继承了BaseMapper，可使用其中已经定义好的CRUD方法，与StudentRepository类似
+在这里面可自定义mysql的select语句实现某些方法
+
+继承了BaseMapper，可使用其中已经定义好的**CRUD**方法，与StudentRepository类似
 
 BaseMapper尖括号中就是定义好的持久化对象
 
-- service.service包
+- service.iservice包
 ```java
-public interface IStudentService extends IService<Student> { }
+public interface IStudentService extends IService<Student> {}
 ```
-继承 IService类
+继承 IService类，仅充当接口作用
 - service.impl包
 ```java
 public class StudentService extends ServiceImpl<StudentMapper, Student> implements IStudentService {}
 ```
 继承ServiceImpl类以IStudentService接口(其实规范的命名为StudentServiceImpl)
+
+**业务逻辑大多都在此处**
 >以上就是一个数据库表所对应的配套的类，符合MybatisPlus规范，每增加一个表就需要增加相应的类
 
+**domain.po详解**
+*****
+已经介绍了po为实体类，下面以Student.java为例
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@TableName(value = "student")
+public class Student {
+    @TableId(type = IdType.AUTO, value = "student_id")
+    @NotBlank
+    private Integer studentId;
 
-  
+    private Integer userId;
 
+    private String name;
 
+    @EnumValue
+    @TableField(typeHandler = EnumTypeHandler.class)
+    private Major major;
 
+    private Grade grade;
 
+    private Double gpa;
 
+    private Integer studentClass;
 
+    @TableField(value = "rank_class")
+    private Integer rankClass;
 
+    @TableField(value = "rank_college")
+    private Integer rankCollege;
+}
+```
+- 注解
+>@Data Lombok注解，用于生成所有所有属性的get、set方法
+>
+> @NoArgsConstructor @AllArgsConstructor 分别用于生成空参和带参数的构造方法
+> 
+> @TableName(value = "student") 标明对应的数据库表(若命名规范可以不加)
+> 
+> @TableId 标明主键名，必须有，因为studentMapper中的各种"ById"方法需要识别主键id，如果主键不命名为"id"，是识别不出来的<br/>
+> @NotBlank 属性非空，也可以在数据库中直接设置<br/>
+> @EnumValue @TableField(typeHandler = EnumTypeHandler.class) 枚举类型属性必备注解，后面枚举类型详细介绍
+
+- 属性名与student表列名
+
+studentId与数据库中student_id相对应<br/>
+这是mybatisPlus的特性之一：属性名小驼峰，类名与标明均下划线命名
+
+- 属性类型<br/>
+  - 主键，最好是Integer类型(Don't ask why)
+  - 其他的最好就是对象类型 比如Integer,String,Double\
+  - 枚举属性，例如Major，在数据库中是int类型
+
+**do.vo包**
+*****
+以StudentVO为例
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class StudentVO {
+    private Integer studentId;
+    private User user;
+    private Student student;
+    private StudentBasic studentBasic;
+    private StudentAdvanced studentAdvanced;
+}
+```
+>VO(Value Object) 用于返回给前端的数据实体类
+
+**enums与相关数据字典实现**
+*****
+>枚举类型在项目中的作用主要就是数据字典的实现，很规范，突出语义特性
+以UserType为例
+```java
+@Getter
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum UserType {
+    ADMIN(1,"ADMIN"),
+    STUDENT(2,"STUDENT"),
+    TEACHER(3,"TEACHER");
+    
+    @EnumValue
+    private Integer code;
+    @JsonValue
+    private String type;
+
+    UserType(Integer code, String type){
+        this.code=code;
+        this.type=type;
+    }
+
+    @JsonCreator
+    public static UserType getByCode(@JsonProperty("code") int code) {
+        return Arrays.stream(UserType.values()).filter(item -> item.code == code).findFirst().get();
+    }
+}
+```
+新起的枚举类型实现，其实就是加了带参数的构造方法，而对象就是诸如ADMIN,STUDENT...<br/>
+- @EnumValue<br/>
+   用于标明该枚举类型定义的属性在数据库中的存储类型，在实体类定义中同样需要
+```
+@EnumValue
+@TableField(typeHandler = EnumTypeHandler.class)
+private Major major;
+```
+- @JsonValue<br/>
+   用于标明返回给前端的类型
+- getByCode方法，顾名思义，通过code属性返回UserType类型  
+
+**mapper详解**
+*****
+又以StudentMapper为例
+```java
+@Mapper
+public interface StudentMapper extends BaseMapper<Student> {
+    //查询最大id
+    @Select("SELECT MAX(student_id) FROM student")
+    Integer findMaxStudentId();
+    //寻找所给id位置，若没有，返回0
+    @Select("SELECT COUNT(*) FROM student WHERE student_id = #{studentId}")
+    int checkStudentId(Integer studentId);
+}
+```
+- @Mapper 标明是一个Mapper
+- @Select 标明是mysql的select语法的自定义语句
+
+**impl详解**
+*****
+>值得庆幸的是，您在将以上说明阅读完毕后，已经足够理解相应的业务逻辑,
+>下面请出我们的老朋友StudentService<br/>
+
+```java
+@Service
+@Configuration
+@ComponentScan(basePackages = "com.itheima.mp")
+public class StudentService extends ServiceImpl<StudentMapper, Student> implements IStudentService{}
+```
+- 类的头部，三个注解***缺一不可***
+  - @Service标记为实现业务逻辑的类
+  - @Configuration有这个注解才可以使用@Autowired注解实现接口等Bean的注入
+  - @ComponentScan指定Spring在那个包下识别组件
+
+```
+@Autowired
+private StudentMapper studentMapper;
+```
+- Service实现需要许多这样注入
+
+```
+@ApiModelProperty("添加一个学生，对其中username，姓名，班级，年级，邮箱格式进行判断")
+    public DataResponse insertStudent(DataRequest dataRequest){
+        Map map=dataRequest.getData();
+        Integer userId=getNewUserId();
+        Integer studentId =getNewStudentId();
+        
+        User user=getUserFromMap(CommomMethod.getMap(map,"user"),userId);
+        Student student=getStudentFromMap(CommomMethod.getMap(map,"student"),studentId,userId);
+        StudentBasic studentBasic=getStudentBasicFromMap(CommomMethod.getMap(map,"studentBasic"),studentId);
+        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(CommomMethod.getMap(map,"studentAdvanced"),studentId);
+
+        DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
+        if(dataResponse.getCode()==1)return dataResponse;
+
+        userMapper.insert(user);
+        studentMapper.insert(student);
+        studentBasicMapper.insert(studentBasic);
+        studentAdvancedMapper.insert(studentAdvanced);
+        return CommomMethod.getReturnMessageOK("成功添加了一名学生");
+    }
+```
+
+- 重要的方法，用于新增一个学生
+>  1. 获取新的studentId,userId;
+>  2. 通过诸如getUserFromMap方法将map转化为实体类型
+>  3. 通过定义好的baseService.judgeStudentData方法判断数据格式是否符合规定
+>  4. userMapper.insert(user);通过insert方法将新的行插入数据库
+      
+(有些方法类的细节先不赘述)
+
+```
+public DataResponse updateStudent(DataRequest dataRequest){
+        //对学生是否存在的判断
+        Integer studentId=dataRequest.getInteger("studentId");
+        if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
+        if(studentMapper.checkStudentId(studentId)==0){
+            return CommomMethod.getReturnMessageError("该学生不存在");
+        }
+        //将数据库中的相应行取出存为实体类
+        Student student=studentMapper.selectById(studentId);
+        StudentBasic studentBasic=studentBasicMapper.selectById(studentId);
+        StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
+        Integer userId=student.getUserId();
+        User user=userMapper.selectById(userId);
+        //将前端所给的需要更新的数据存为实体类
+        Student studentSource=getStudentFromMap(dataRequest.getMap("student"));
+        User userSource=getUserFromMap(dataRequest.getMap("user"));
+        StudentBasic studentBasicSource=getStudentBasicFromMap(dataRequest.getMap("studentBasic"),studentId);
+        StudentAdvanced studentAdvancedSource=getStudentAdvancedFromMap(dataRequest.getMap("studentAdvanced"),studentId);
+        //核心方法copyNullProperties，对于不为null或blank的属性更新到实体类中
+        UpdateUtil.copyNullProperties(studentSource,student);//目标为student
+        UpdateUtil.copyNullProperties(userSource,user);
+        UpdateUtil.copyNullProperties(studentAdvancedSource,studentAdvanced);
+        UpdateUtil.copyNullProperties(studentBasicSource,studentBasic);
+        //定义好的格式判断
+        DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
+        if(dataResponse.getCode()==1)return dataResponse;
+        //存入
+        userMapper.updateById(user);
+        studentMapper.updateById(student);
+        studentBasicMapper.updateById(studentBasic);
+        studentAdvancedMapper.updateById(studentAdvanced);
+        
+        return CommomMethod.getReturnMessageOK("成功修改了学生信息");
+    }
+```
+- 目前来说实现最复杂的业务逻辑方法，更新一个学生的有关数据
+>对于更新学生信息的效率思考<br/>
+>>我们知道，从数据库中存取数据是最耗时的，而UpdateWrapper提供了对于指定属性的数据更新方法，但是一个一个属性进行存储虽然代码可能会
+>>稍显简洁，但无疑使降低了运行的效率，因此我们选择对每个数据库表只进行一次存取
+> 
+> 重要的方法UpdateUtil.copyNullProperties(Object source,Object target)
 
 
 

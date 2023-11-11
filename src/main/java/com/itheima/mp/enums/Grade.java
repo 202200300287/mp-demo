@@ -14,10 +14,10 @@ import java.util.Arrays;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Grade {
     All(0,"所有时间可选"),
-    One(1,"大一上"),
-    Two1(2,"大二上"),
-    Three1(3,"大三上"),
-    Four1(4,"大四上");
+    One(1,"大一"),
+    Two(2,"大二"),
+    Three(3,"大三"),
+    Four(4,"大四");
 
     @EnumValue
     private Integer code;

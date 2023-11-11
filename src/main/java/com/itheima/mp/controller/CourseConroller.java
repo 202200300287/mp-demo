@@ -3,9 +3,11 @@ package com.itheima.mp.controller;
 
 import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.po.Student;
+import com.itheima.mp.mapper.TeacherCourseMapper;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.impl.CourseService;
 import com.itheima.mp.service.impl.StudentCourseService;
+import com.itheima.mp.service.impl.TeacherCourseService;
 import com.itheima.mp.util.CommomMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,9 @@ public class CourseConroller {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private TeacherCourseService teacherCourseService;
 
     @PostMapping("/getStudentListByCourseId")
     public DataResponse getStudentListByCourseId(@RequestBody Integer courseId) {

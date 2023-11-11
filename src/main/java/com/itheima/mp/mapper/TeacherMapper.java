@@ -11,5 +11,5 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
 
     //寻找所给id位置，若没有，返回0
     @Select("SELECT COUNT(*) FROM teacher WHERE teacher_id = #{teacherId}")
-    int checkTeacherId(Integer teacher);
+    int checkTeacherId(Integer teacherId);
 }

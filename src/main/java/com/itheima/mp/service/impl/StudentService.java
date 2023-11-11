@@ -82,40 +82,40 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     }
 
     public DataResponse updateStudent(DataRequest dataRequest){
+        //对学生是否存在的判断
         Integer studentId=dataRequest.getInteger("studentId");
         if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
-
         if(studentMapper.checkStudentId(studentId)==0){
             return CommomMethod.getReturnMessageError("该学生不存在");
         }
-
-
+        //将数据库中的相应行取出存为实体类
         Student student=studentMapper.selectById(studentId);
         StudentBasic studentBasic=studentBasicMapper.selectById(studentId);
         StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
         Integer userId=student.getUserId();
         User user=userMapper.selectById(userId);
+        //将前端所给的需要更新的数据存为实体类
         Student studentSource=getStudentFromMap(dataRequest.getMap("student"));
         User userSource=getUserFromMap(dataRequest.getMap("user"));
         StudentBasic studentBasicSource=getStudentBasicFromMap(dataRequest.getMap("studentBasic"),studentId);
         StudentAdvanced studentAdvancedSource=getStudentAdvancedFromMap(dataRequest.getMap("studentAdvanced"),studentId);
-
-        UpdateUtil.copyNullProperties(studentSource,student);
+        //核心方法copyNullProperties，对于不为null或blank的属性更新到实体类中
+        UpdateUtil.copyNullProperties(studentSource,student);//目标为student
         UpdateUtil.copyNullProperties(userSource,user);
         UpdateUtil.copyNullProperties(studentAdvancedSource,studentAdvanced);
         UpdateUtil.copyNullProperties(studentBasicSource,studentBasic);
-
+        //定义好的格式判断
         DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
         if(dataResponse.getCode()==1)return dataResponse;
-
+        //存入
         userMapper.updateById(user);
         studentMapper.updateById(student);
         studentBasicMapper.updateById(studentBasic);
         studentAdvancedMapper.updateById(studentAdvanced);
 
-
         return CommomMethod.getReturnMessageOK("成功修改了学生信息");
     }
+
 
     public DataResponse deleteStudent(DataRequest dataRequest){
         Integer studentId = dataRequest.getInteger("studentId");
