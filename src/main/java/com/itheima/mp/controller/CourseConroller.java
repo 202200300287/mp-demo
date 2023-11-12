@@ -4,6 +4,7 @@ package com.itheima.mp.controller;
 import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.mapper.TeacherCourseMapper;
+import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.impl.CourseService;
 import com.itheima.mp.service.impl.StudentCourseService;
@@ -45,6 +46,24 @@ public class CourseConroller {
         return courseService.getCourseList();
 
     }
+
+    @PostMapping("/insertCourse")
+    public DataResponse insertCourse(@RequestBody DataRequest dataRequest){
+        return courseService.insertCourse(dataRequest);
+    }
+    @PostMapping("/updateCourse")
+    public DataResponse updateCourse(@RequestBody DataRequest dataRequest){
+        return courseService.updateCourse(dataRequest);
+    }
+    @PostMapping("/deleteCourse")
+    public DataResponse deleteCourse(@RequestBody DataRequest dataRequest){
+        return courseService.deleteCourse(dataRequest);
+    }
+    @PostMapping("/selectCourse")
+    public DataResponse selectCourse(@RequestBody DataRequest dataRequest){
+        return courseService.selectCourse(dataRequest);
+    }
+
 
 
 }

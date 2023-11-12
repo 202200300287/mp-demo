@@ -41,5 +41,9 @@ public class StudentController {
     public DataResponse selectStudent(@RequestBody DataRequest dataRequest){
         return studentService.selectStudent(dataRequest);
     }
+    @PostMapping("/selectStudentByUsernameOrName")
+    public DataResponse selectStudentVOByUsernameOrName(@RequestBody DataRequest dataRequest){
+        return studentService.selectStudentByNameOrNum(dataRequest.getString("name"),dataRequest.getString("username"));
+    }
 
 }

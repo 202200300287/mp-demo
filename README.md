@@ -132,6 +132,7 @@ knife4j:
           - com.itheima.mp.controller
 ```
 - 方便的接口测试依赖
+>将项目(MpDemoApplication)运行后,可以在<http://localhost:8080/doc.html#/home>中快速测试接口
 
 **pom.xml**
 ******
@@ -350,6 +351,7 @@ private StudentMapper studentMapper;
 >  2. 通过诸如getUserFromMap方法将map转化为实体类型
 >  3. 通过定义好的baseService.judgeStudentData方法判断数据格式是否符合规定
 >  4. userMapper.insert(user);通过insert方法将新的行插入数据库
+>>其他的实体类对应的service也都采取了这种模式
       
 (有些方法类的细节先不赘述)
 
@@ -395,15 +397,97 @@ public DataResponse updateStudent(DataRequest dataRequest){
 >>稍显简洁，但无疑使降低了运行的效率，因此我们选择对每个数据库表只进行一次存取
 > 
 > 重要的方法UpdateUtil.copyNullProperties(Object source,Object target)
+```
+    public DataResponse deleteStudent(DataRequest dataRequest)
+    public DataResponse selectStudent(DataRequest dataRequest)
+```
+- 删除和查询学生的方法
+
+### util包
+>用于定义一些实用的util方法
+>
+
+**CommomMethod.java**
+*****
+
+**FormatMethod**
+*****
+```java
+public class FormatMethod {
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    public static boolean validateEmail(String email) {
+        return email.matches(EMAIL_REGEX);
+    }
+}
+```
+- 定义一些格式判断的方法，例如邮箱格式判断
+
+**ImageMethod**
+*****
+
+**UpdateUtil**
+*****
+```java
+public class UpdateUtil {
+    //所有为空值的属性都不copy
+    public static void copyNullProperties(Object source, Object target);
+    //获取属性中为空的字段
+    private static String[] getNullField(Object target);
+    public static boolean judgeValue(Object value);
+}
+```
+>copyNullProperties方法用于copy对象，但要保证属性一一对应
+
+### controller
+
+以StudentController为例
+```java
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController
+@RequestMapping("/student")
+public class StudentController {
+    @Autowired
+    private StudentService studentService;
+    @PostMapping("/insertStudent")
+    public DataResponse editStudent(@RequestBody DataRequest dataRequest) {
+        return studentService.insertStudent(dataRequest);
+    }
+    //.....省略其他接口
+}
+```
+我评价是，没什么可说的......
+
+### payload.response
+
+**DataResponse**
+*****
+```java
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class DataResponse {
+    private Integer code;
+    private Object data;
+    private String msg;
+}
+```
+>标准的DataResponse
 
 
+### 数据库设计
 
 
-
-
-
-
-
+### 代码细节
+**List类型**
+```
+List<StudentVO> studentVOList = new ArrayList<StudentVO>();
+```
+***yes***
+```
+List<StudentVO> studentVOList = null;
+```
+***no***
+>会出现空指针异常的问题
 
 
 

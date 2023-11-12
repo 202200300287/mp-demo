@@ -44,8 +44,6 @@ public class StudentCourseService extends ServiceImpl<StudentCourseMapper, Stude
 
         List<StudentCourse> studentCourseList=studentCourseMapper.selectList(studentCourseQueryWrapper);
 
-
-
         List<Student> studentList = new ArrayList<>();
         for (StudentCourse sc : studentCourseList) {
             studentList.add(studentMapper.selectById(sc.getStudentId()));
@@ -60,7 +58,6 @@ public class StudentCourseService extends ServiceImpl<StudentCourseMapper, Stude
 
         return studentCourseMapper.selectList(studentCourseQueryWrapper);
     }
-
 
 
     @ApiOperation(value = "用学生id查询课程列表")

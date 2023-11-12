@@ -22,6 +22,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -51,15 +53,21 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     @Autowired
     private UserMapper userMapper;
 
+    public DataResponse selectStudentByNameOrNum(String name,String username){
 
-    public Student getStudentById(Integer studentId){
-        QueryWrapper<Student> queryWrapper=new QueryWrapper<Student>()
-                .select("*")
-                .eq("student_id",studentId);
-        Student s=studentMapper.selectOne(queryWrapper);
-        return s;
+        List<Integer> userIdList=userMapper.getUserIdListLikeUsername(username);
+        List<Student> studentList=studentMapper.getStudentListLikeName(name);
+        List<StudentVO> studentVOList = new ArrayList<StudentVO>();
+        for (Student student:studentList){
+            Integer studentId=student.getStudentId();
+            if(userIdList.contains(student.getUserId())) {
+                User user = userMapper.selectById(student.getUserId());
+                StudentVO studentVO=new StudentVO(studentId,user,student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId));
+                studentVOList.add(studentVO);
+            }
+        }
+        return CommomMethod.getReturnData(studentVOList);
     }
-
 
     @ApiModelProperty("添加一个学生，对其中username，姓名，班级，年级，邮箱格式进行判断")
     public DataResponse insertStudent(DataRequest dataRequest){
@@ -142,7 +150,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
 
     public DataResponse selectStudent(DataRequest dataRequest){
         Integer studentId = dataRequest.getInteger("studentId");
-
         if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
 
         if(studentMapper.checkStudentId(studentId)==0){

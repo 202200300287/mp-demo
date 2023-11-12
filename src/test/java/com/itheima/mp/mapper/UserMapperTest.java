@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.gson.Gson;
 import com.itheima.mp.domain.po.*;
 import com.itheima.mp.enums.CourseStatus;
+import com.itheima.mp.enums.CourseType;
 import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.Grade;
+import com.itheima.mp.service.impl.StudentService;
 import com.itheima.mp.util.FormatMethod;
 import com.itheima.mp.util.ImageMethod;
 import com.itheima.mp.util.UpdateUtil;
@@ -161,17 +163,10 @@ class UserMapperTest {
         System.out.println(teacherCourseMapper.findCourseIdByTeacherId(2));
     }
 
+    @Autowired
+    private StudentService studentService;
     @Test
     void test1(){
-        Student student=new Student();
-        student.setStudentId(1);
-        student.setName("666");
-        student.setGrade(Grade.Four1);
-        Student student1=new Student();
-        student1.setName("");
-        student1.setStudentId(2);
-        student1.setGpa(0.0);
-        UpdateUtil.copyNullProperties(student1,student);
-        System.out.println(student);
+        System.out.println(studentService.selectStudentByNameOrNum("小","2022"));
     }
 }

@@ -14,9 +14,8 @@ import java.util.Arrays;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum CourseStatus {
     Unavailable(1,"无效课程"),
-    Available(2,"有效课程"),
-    Unselected(3,"不可选课程"),
-    Selected(4,"可选课程");
+    AvailableUnselectable(2,"有效但不可选课程"),
+    Selectable(3,"可选课程");
     @EnumValue
     private Integer code;
     @JsonValue

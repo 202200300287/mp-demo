@@ -5,6 +5,8 @@ import com.itheima.mp.domain.po.Student;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface StudentMapper extends BaseMapper<Student> {
 
@@ -15,4 +17,10 @@ public interface StudentMapper extends BaseMapper<Student> {
     //寻找所给id位置，若没有，返回0
     @Select("SELECT COUNT(*) FROM student WHERE student_id = #{studentId}")
     int checkStudentId(Integer studentId);
+
+    @Select("SELECT student_id FROM student WHERE name LIKE CONCAT('%', #{name}, '%')")
+    List<Integer> getStudentIdListLikeName(String name);
+
+    @Select("SELECT * FROM student WHERE name LIKE CONCAT('%', #{name}, '%')")
+    List<Student> getStudentListLikeName(String name);
 }

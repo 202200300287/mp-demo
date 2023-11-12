@@ -1,6 +1,7 @@
 package com.itheima.mp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.vo.CourseVO;
@@ -56,7 +57,7 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
         course.setNum(CommomMethod.getString(map,"num"));
         course.setName(CommomMethod.getString(map,"name"));
         course.setCredit(CommomMethod.getDouble(map,"credit"));
-        course.setCourseStatus(CourseStatus.Available);
+        course.setCourseStatus(CourseStatus.AvailableUnselectable);
         course.setGrade(Grade.getByCode(CommomMethod.getInteger0(map,"grade")));
         course.setCourseType(CourseType.getByCode(CommomMethod.getInteger0(map,"courseType")));
         return null;
@@ -90,7 +91,9 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
         Integer courseId=dataRequest.getInteger("courseId");
         if(courseMapper.checkCourseId(courseId)==0)
             return CommomMethod.getReturnMessageError("没有该课程");
-        courseMapper.deleteById(courseId);
+        UpdateWrapper<Course> courseUpdateWrapper=new UpdateWrapper<Course>()
+                .eq("course_id",courseId)
+                .set("course_status",1);
         return CommomMethod.getReturnMessageOK("成功删除了课程");
     }
 
