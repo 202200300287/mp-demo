@@ -5,9 +5,9 @@
  MyBatis-Plus (opens new window)（简称 MP）是一个 MyBatis (opens new window)的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
 
 ***突出特点为***<br/>
-1. 以Wrapper为“组先类”的数据库查询方法类<br/>
+1. 以Wrapper为“组先类”的数据库查询方法类(和sql语句相比各有优劣罢了)<br/>
 2. 数据库名与实体类名、数据库列名与类属性以规范命名<br/>
-3. 
+3. 有很多使用插件(但本项目用的少)
 
  
 ### 数据库mysql
@@ -40,10 +40,11 @@ spring:
     username: root
     password: 123456
 ```
-**只需** 将username与password变成你电脑上的mysql的用户名与密码
+**只需** 将username与password变成你电脑上的mysql的用户名与密码<br/>
+**端口**设置也在此处，但是需要配置额外依赖，在这里就是默认的***8080***端口
 
 
-## 开发指南
+## 开发指北
 ### 项目结构(精简版)
 ```
 mp-demo
@@ -474,11 +475,12 @@ public class DataResponse {
 >标准的DataResponse
 
 
-### 数据库设计
+## 数据库设计
 
 
-### 代码细节
-**List类型**
+## 代码细节
+### List类型与Map类型
+- ***list***
 ```
 List<StudentVO> studentVOList = new ArrayList<StudentVO>();
 ```
@@ -488,7 +490,6 @@ List<StudentVO> studentVOList = null;
 ```
 ***no***
 >会出现空指针异常的问题
-
 
 
 
