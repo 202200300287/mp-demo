@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itheima.mp.domain.po.*;
 import com.itheima.mp.enums.CourseType;
 import com.itheima.mp.enums.Grade;
-import com.itheima.mp.mapper.CourseMapper;
-import com.itheima.mp.mapper.StudentCourseMapper;
-import com.itheima.mp.mapper.StudentMapper;
-import com.itheima.mp.mapper.UserMapper;
+import com.itheima.mp.mapper.*;
+import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.iservice.MailService;
 import com.itheima.mp.util.CommomMethod;
@@ -36,6 +34,8 @@ public class BaseService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private TeacherCourseMapper teacherCourseMapper;
 
     @Autowired(required = false)
     private MailService mailService;
@@ -73,7 +73,15 @@ public class BaseService {
         return !usernames.contains(username);
     }
 
-    public DataResponse judgeStudentData(User user, Student student, StudentBasic studentBasic){
+    public boolean judgeNewUserNameExcept(String usernameNew,String usernameOld){
+        List<String> usernameList=userMapper.findAllUsername();
+        usernameList.remove(usernameOld);
+        return !usernameList.contains(usernameNew);
+    }
+
+
+
+    public DataResponse judgeStudentDataInsert(User user, Student student, StudentBasic studentBasic){
         String username = user.getUsername();
         String password = user.getPassword();
         String name=student.getName();
@@ -91,8 +99,24 @@ public class BaseService {
         //if()
         return CommomMethod.getReturnMessageOK();
     }
+    public DataResponse judgeStudentDataUpdate(User user, Student student, StudentBasic studentBasic,String usernameOld){
+        String usernameNew = user.getUsername();
+        String password = user.getPassword();
+        String name=student.getName();
+        Grade grade =student.getGrade();
+        Integer studentClass=student.getStudentClass();
+        String email=studentBasic.getEmail();
+        if(usernameNew.isBlank()||password.isBlank()||name.isBlank()||grade.getCode()<1||studentClass<1|| email.isBlank()){
+            return CommomMethod.getReturnMessageError("用户名，密码，姓名，年级班级，邮箱不可为空");
+        }
+        if(!FormatMethod.validateEmail(email))return CommomMethod.getReturnMessageError("邮箱格式错误");
+        if(!judgeNewUserNameExcept(usernameNew,usernameOld))return CommomMethod.getReturnMessageError("学号冲突");
+        //if()
+        return CommomMethod.getReturnMessageOK();
+    }
 
-    public DataResponse judgeTeacherData(User user,Teacher teacher){
+
+    public DataResponse judgeTeacherDataInsert(User user,Teacher teacher){
         String username=user.getUsername();
         String password=user.getPassword();
         String name=teacher.getName();
@@ -100,7 +124,20 @@ public class BaseService {
         if(username.isBlank()||password.isBlank()||name.isBlank()||email.isBlank()){
             return CommomMethod.getReturnMessageError("用户名、密码、姓名、邮箱不可为空");
         }
-        if(!judgeNewUsername(username))return CommomMethod.getReturnMessageError("学号已存在");
+        if(!judgeNewUsername(username))return CommomMethod.getReturnMessageError("工号已存在");
+        if(!FormatMethod.validateEmail(email))return CommomMethod.getReturnMessageError("邮箱格式错误");
+        return CommomMethod.getReturnMessageOK();
+    }
+
+    public DataResponse judgeTeacherDataUpdate(User user,Teacher teacher,String usernameOld){
+        String usernameNew=user.getUsername();
+        String password=user.getPassword();
+        String name=teacher.getName();
+        String email=teacher.getEmail();
+        if(usernameNew.isBlank()||password.isBlank()||name.isBlank()||email.isBlank()){
+            return CommomMethod.getReturnMessageError("用户名、密码、姓名、邮箱不可为空");
+        }
+        if(!judgeNewUserNameExcept(usernameNew,usernameOld))return CommomMethod.getReturnMessageError("与其他工号重复");
         if(!FormatMethod.validateEmail(email))return CommomMethod.getReturnMessageError("邮箱格式错误");
         return CommomMethod.getReturnMessageOK();
     }

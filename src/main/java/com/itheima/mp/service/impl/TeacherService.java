@@ -61,7 +61,7 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         Teacher teacher=getTeacherFromMap(teacherMap,teacherId,userId);
         User user=getUserFromMap(map,userId);
 
-        DataResponse dataResponse=baseService.judgeTeacherData(user,teacher);
+        DataResponse dataResponse=baseService.judgeTeacherDataInsert(user,teacher);
 
         if(dataResponse.getCode()==1)return dataResponse;
         teacherMapper.insert(teacher);
@@ -74,11 +74,12 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         Integer teacherId=dataRequest.getInteger("teacherId");
         Teacher teacher=teacherMapper.selectById(teacherId);
         User user=userMapper.selectById(teacher.getUserId());
+        String usernameOld=user.getUsername();
         Teacher teacherSource=getTeacherFromMap(dataRequest.getMap("teacher"));
         User userSource=getUserFromMap(dataRequest.getMap("user"));
         UpdateUtil.copyNullProperties(teacherSource,teacher);
         UpdateUtil.copyNullProperties(userSource,user);
-        DataResponse dataResponse=baseService.judgeTeacherData(user,teacher);
+        DataResponse dataResponse=baseService.judgeTeacherDataUpdate(user,teacher,usernameOld);
         if(dataResponse.getCode()==1)return dataResponse;
         teacherMapper.insert(teacher);
         userMapper.insert(user);

@@ -16,6 +16,9 @@
 >> Ver 8.0.32 for Win64 on x86_64 (MySQL Community Server - GPL)
 
 推荐使用 ***DataGrip或IntelliJ IDEA Ultimate***打开**mp.sql**文件
+### 接口管理
+使用ApiFox PC端(与we端同步)，***遥遥领先！！！***<br/>
+**传送门**  <https://app.apifox.com/project/3552035> 
 
 ## getStart
 
@@ -247,6 +250,7 @@ public class StudentVO {
 
 **enums与相关数据字典实现**
 *****
+***要完全按照下面的写法来***  别问为什么，问就是被折磨过
 >枚举类型在项目中的作用主要就是数据字典的实现，很规范，突出语义特性
 以UserType为例
 ```java

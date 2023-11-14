@@ -50,7 +50,7 @@ public class Student {
     private String name;
 
     @EnumValue
-    @TableField(typeHandler = EnumTypeHandler.class)
+    //@TableField(typeHandler = EnumTypeHandler.class)
     private Major major;
 
     private Grade grade;

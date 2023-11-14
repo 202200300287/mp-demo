@@ -1,23 +1,17 @@
 package com.itheima.mp.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.gson.Gson;
 import com.itheima.mp.domain.po.*;
 import com.itheima.mp.enums.CourseStatus;
 import com.itheima.mp.enums.CourseType;
-import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.Grade;
+import com.itheima.mp.enums.UserType;
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.service.impl.CourseService;
-import com.itheima.mp.service.impl.StudentCourseService;
-import com.itheima.mp.service.impl.StudentService;
-import com.itheima.mp.util.FormatMethod;
+import com.itheima.mp.service.impl.TeacherCourseService;
 import com.itheima.mp.util.ImageMethod;
-import com.itheima.mp.util.UpdateUtil;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,8 +164,22 @@ class UserMapperTest {
     private CourseService courseService;
     @Autowired
     private StudentCourseMapper studentCourseMapper;
+    @Autowired
+    private TeacherCourseService teacherCourseService;
+    @Autowired
+    private CourseMapper courseMapper;
     @Test
     void test1(){
-        System.out.println(teacherCourseMapper.findCourseIdByTeacherId(1));
+        Course course=new Course(99,"1111","6",2.2, CourseStatus.AvailableUnselectable, Grade.One, CourseType.Required);
+        courseMapper.insert(course);
+    }
+    @Test
+    void Test2(){
+        User user=new User();
+        user.setUserId(80);
+        user.setUsername("1");
+        user.setPassword("12313");
+        user.setUserType(UserType.ADMIN);
+        userMapper.insert(user);
     }
 }

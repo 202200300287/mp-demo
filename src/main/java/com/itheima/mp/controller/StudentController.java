@@ -30,7 +30,7 @@ public class StudentController {
         return studentService.insertStudent(dataRequest);
     }
     @PostMapping("/updateStudent")
-    public DataResponse upDateStudent(@RequestBody DataRequest dataRequest){
+    public DataResponse updateStudent(@RequestBody DataRequest dataRequest){
         return studentService.updateStudent(dataRequest);
     }
     @PostMapping("/deleteStudent")
@@ -43,7 +43,7 @@ public class StudentController {
     }
     @PostMapping("/selectStudentByUsernameOrName")
     public DataResponse selectStudentVOByUsernameOrName(@RequestBody DataRequest dataRequest){
-        return studentService.selectStudentByNameOrNum(dataRequest.getString("name"),dataRequest.getString("username"));
+        return studentService.selectStudentByNameOrNum(dataRequest.getString("string"));
     }
 
 }

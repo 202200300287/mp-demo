@@ -24,11 +24,9 @@ public class CourseArrange {
     private Integer courseId;
 
     @EnumValue
-    @TableField(typeHandler = EnumTypeHandler.class)
     private ArrangeDaily arrangeDaily;
 
     @EnumValue
-    @TableField(typeHandler = EnumTypeHandler.class)
     private ArrangeWeekly arrangeWeekly;
 
     private Integer studentClass;

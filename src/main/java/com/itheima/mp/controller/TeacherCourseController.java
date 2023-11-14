@@ -17,6 +17,7 @@ public class TeacherCourseController {
     @Autowired
     private TeacherCourseService teacherCourseService;
 
+
     @PostMapping("/selectCourseByTeacher")
     public DataResponse selectCourseByTeacher(DataRequest dataRequest){
         return teacherCourseService.selectCourseByTeacher(dataRequest);

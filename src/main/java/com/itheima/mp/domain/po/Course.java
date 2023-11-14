@@ -27,15 +27,12 @@ public class Course {
     private Double credit;
 
     @EnumValue
-    @TableField(typeHandler = EnumTypeHandler.class)
     private CourseStatus courseStatus;
 
     @EnumValue
-    @TableField(typeHandler = EnumTypeHandler.class)
     private Grade grade;
 
     @EnumValue
-    @TableField(typeHandler = EnumTypeHandler.class)
     private CourseType courseType;
 
 

@@ -31,5 +31,4 @@ public enum Gender {
         return Arrays.stream(Gender.values()).filter(item -> item.getCode() == code).findFirst().get();
     }
 
-
 }

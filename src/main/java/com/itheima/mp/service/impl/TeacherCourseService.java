@@ -1,10 +1,13 @@
 package com.itheima.mp.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.po.TeacherCourse;
 import com.itheima.mp.mapper.CourseMapper;
+import com.itheima.mp.mapper.StudentMapper;
 import com.itheima.mp.mapper.TeacherCourseMapper;
+import com.itheima.mp.mapper.TeacherMapper;
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.iservice.ITeacherCourseService;
@@ -25,6 +28,10 @@ public class TeacherCourseService extends ServiceImpl<TeacherCourseMapper, Teach
     @Autowired
     private TeacherCourseMapper teacherCourseMapper;
 
+
+    @Autowired
+    private TeacherMapper teacherMapper;
+
     @Autowired
     private CourseMapper courseMapper;
 
@@ -35,4 +42,43 @@ public class TeacherCourseService extends ServiceImpl<TeacherCourseMapper, Teach
         List<Course> courseList=courseMapper.selectBatchIds(courseIdList);
         return CommomMethod.getReturnData(courseList);
     }
+
+
+    public DataResponse insertTeacherCourse(DataRequest dataRequest){
+        Integer teacherId=dataRequest.getInteger("teacherId");
+        Integer courseId=dataRequest.getInteger("courseId");
+        Integer  studentClass=dataRequest.getInteger("studentClass");
+        QueryWrapper<TeacherCourse> teacherCourseQueryWrapper=new QueryWrapper<TeacherCourse>()
+                .eq("teacher_id",teacherId)
+                .eq("course_id",courseId)
+                .eq("student_class",studentClass);
+        List<TeacherCourse> teacherCourseList=teacherCourseMapper.selectList(teacherCourseQueryWrapper);
+        if(teacherMapper.checkTeacherId(teacherId)==0)return CommomMethod.getReturnMessageError("不存在该老师");
+        if (courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("不存在这门课程");
+        if(!teacherCourseList.isEmpty())return CommomMethod.getReturnMessageError("老师已经教授了"+studentClass+"班的"+courseMapper.selectById(courseId).getName()+"课程");
+        TeacherCourse teacherCourse=new TeacherCourse(getNewTeacherCourseId(),teacherId,courseId,studentClass);
+        teacherCourseMapper.insert(teacherCourse);
+        return CommomMethod.getReturnMessageOK("成功添加了老师的课程");
+    }
+
+    public DataResponse deleteTeacherCourse(DataRequest dataRequest){
+        Integer teacherId=dataRequest.getInteger("teacherId");
+        Integer courseId=dataRequest.getInteger("courseId");
+        Integer  studentClass=dataRequest.getInteger("studentClass");
+        QueryWrapper<TeacherCourse> teacherCourseQueryWrapper=new QueryWrapper<TeacherCourse>()
+                .eq("teacher_id",teacherId)
+                .eq("course_id",courseId)
+                .eq("student_class",studentClass);
+        List<TeacherCourse> teacherCourseList=teacherCourseMapper.selectList(teacherCourseQueryWrapper);
+        if(teacherMapper.checkTeacherId(teacherId)==0)return CommomMethod.getReturnMessageError("不存在该老师");
+        if (courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("不存在这门课程");
+        if(teacherCourseList.isEmpty())return CommomMethod.getReturnMessageError("老师不负责"+studentClass+"班的"+courseMapper.selectById(courseId).getName()+"课程");
+        teacherCourseMapper.deleteBatchIds(teacherCourseList);
+        return CommomMethod.getReturnMessageOK("成功删除了老师的课程");
+    }
+    public Integer getNewTeacherCourseId(){
+        return teacherCourseMapper.findMaxTeacherCourseId()+1;
+    }
+
+
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.po.StudentCourse;
+import com.itheima.mp.domain.po.TeacherCourse;
 import com.itheima.mp.domain.vo.CourseVO;
 import com.itheima.mp.enums.CourseStatus;
 import com.itheima.mp.enums.CourseType;
@@ -58,15 +59,15 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
         return courseMapper.findMaxCourseId()+1;
     }
 
-    public Course getCourseFrom(Map map){
-        Course course=new Course();
-        course.setNum(CommomMethod.getString(map,"num"));
-        course.setName(CommomMethod.getString(map,"name"));
-        course.setCredit(CommomMethod.getDouble(map,"credit"));
+    public Course getCourseFrom(Map map) {
+        Course course = new Course();
+        course.setNum(CommomMethod.getString(map, "num"));
+        course.setName(CommomMethod.getString(map, "name"));
+        course.setCredit(CommomMethod.getDouble(map, "credit"));
         course.setCourseStatus(CourseStatus.AvailableUnselectable);
-        course.setGrade(Grade.getByCode(CommomMethod.getInteger0(map,"grade")));
-        course.setCourseType(CourseType.getByCode(CommomMethod.getInteger0(map,"courseType")));
-        return null;
+        course.setGrade(Grade.getByCode(CommomMethod.getInteger0(map, "grade")));
+        course.setCourseType(CourseType.getByCode(CommomMethod.getInteger0(map, "courseType")));
+        return course;
     }
 
     public DataResponse insertCourse(DataRequest dataRequest){
@@ -111,6 +112,8 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
         return CommomMethod.getReturnData(course);
     }
 
+
+
     @ApiModelProperty("通过学生id查询可选且未选的课程")
     public DataResponse selectCourseSelectableByStudent(DataRequest dataRequest){
         Integer studentId=dataRequest.getInteger("studentId");
@@ -127,6 +130,19 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
         return CommomMethod.getReturnData(courseList);
     }
 
+
+    //通过老师id查询可选且未选的课程
+    public DataResponse selectCourseSelectableByTeacher(DataRequest dataRequest){
+        Integer teacherId=dataRequest.getInteger("teacherId");
+        List<Integer> courseIdList=teacherCourseMapper.findCourseIdByTeacherId(teacherId);
+        List<Course> courseListSelected=courseMapper.selectBatchIds(courseIdList);
+        QueryWrapper<Course> courseQueryWrapper=new QueryWrapper<Course>()
+                .select("*")
+                .eq("course_status",3);
+        List<Course> courseList=courseMapper.selectList(courseQueryWrapper);
+        courseList.removeIf(courseListSelected::contains);
+        return CommomMethod.getReturnData(courseList);
+    }
 
 }
 

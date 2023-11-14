@@ -53,10 +53,11 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     @Autowired
     private UserMapper userMapper;
 
-    public DataResponse selectStudentByNameOrNum(String name,String username){
+    public DataResponse selectStudentByNameOrNum(String string){
 
-        List<Integer> userIdList=userMapper.getUserIdListLikeUsername(username);
-        List<Student> studentList=studentMapper.getStudentListLikeName(name);
+        List<Integer> userIdList=userMapper.getUserIdListLikeUsername(string);
+        List<Integer> studentIdList=studentMapper.getStudentIdListLikeName(string);
+        List<Student> studentList=studentMapper.getStudentListLikeName(string);
         List<StudentVO> studentVOList = new ArrayList<StudentVO>();
         for (Student student:studentList){
             Integer studentId=student.getStudentId();
@@ -79,7 +80,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         StudentBasic studentBasic=getStudentBasicFromMap(CommomMethod.getMap(map,"studentBasic"),studentId);
         StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(CommomMethod.getMap(map,"studentAdvanced"),studentId);
 
-        DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
+        DataResponse dataResponse=baseService.judgeStudentDataInsert(user,student,studentBasic);
         if(dataResponse.getCode()==1)return dataResponse;
 
         userMapper.insert(user);
@@ -102,6 +103,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
         Integer userId=student.getUserId();
         User user=userMapper.selectById(userId);
+        String usernameOld=user.getUsername();
         //将前端所给的需要更新的数据存为实体类
         Student studentSource=getStudentFromMap(dataRequest.getMap("student"));
         User userSource=getUserFromMap(dataRequest.getMap("user"));
@@ -113,7 +115,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         UpdateUtil.copyNullProperties(studentAdvancedSource,studentAdvanced);
         UpdateUtil.copyNullProperties(studentBasicSource,studentBasic);
         //定义好的格式判断
-        DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
+        DataResponse dataResponse=baseService.judgeStudentDataUpdate(user,student,studentBasic,usernameOld);
         if(dataResponse.getCode()==1)return dataResponse;
         //存入
         userMapper.updateById(user);
