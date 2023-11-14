@@ -4,11 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.Course;
+import com.itheima.mp.domain.po.Student;
+import com.itheima.mp.domain.po.StudentCourse;
 import com.itheima.mp.domain.vo.CourseVO;
 import com.itheima.mp.enums.CourseStatus;
 import com.itheima.mp.enums.CourseType;
 import com.itheima.mp.enums.Grade;
 import com.itheima.mp.mapper.CourseMapper;
+import com.itheima.mp.mapper.StudentMapper;
 import com.itheima.mp.mapper.TeacherCourseMapper;
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
@@ -16,6 +19,7 @@ import com.itheima.mp.service.BaseService;
 import com.itheima.mp.service.iservice.ICourseService;
 import com.itheima.mp.util.CommomMethod;
 import com.itheima.mp.util.UpdateUtil;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +37,8 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
     private CourseMapper courseMapper;
     @Autowired
     private BaseService baseService;
+    @Autowired
+    private StudentMapper studentMapper;
 
     @Autowired
     private TeacherCourseMapper teacherCourseMapper;
@@ -105,6 +111,21 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
         return CommomMethod.getReturnData(course);
     }
 
+    @ApiModelProperty("通过学生id查询可选且未选的课程")
+    public DataResponse selectCourseSelectableByStudent(DataRequest dataRequest){
+        Integer studentId=dataRequest.getInteger("studentId");
+        Student student=studentMapper.selectById(studentId);
+        Grade grade=student.getGrade();
+        QueryWrapper<Course> courseQueryWrapper=new QueryWrapper<Course>()
+                .select("*")
+                .eq("course_status",3)
+                .eq("grade",grade.getCode());
+        List<Course> courseList=courseMapper.selectList(courseQueryWrapper);
+        List<Course> courseListSelected=baseService.getCourseListByStudentId(studentId);
+        courseList.removeIf(courseListSelected::contains);
+
+        return CommomMethod.getReturnData(courseList);
+    }
 
 
 }

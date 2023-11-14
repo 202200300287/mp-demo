@@ -30,17 +30,17 @@ public class CourseConroller {
     private TeacherCourseService teacherCourseService;
 
     @PostMapping("/getStudentListByCourseId")
-    public DataResponse getStudentListByCourseId(@RequestBody Integer courseId) {
+    public DataResponse getStudentListByCourseId(@RequestBody DataRequest dataRequest) {
+        Integer courseId=dataRequest.getInteger("courseId");
         return CommomMethod.getReturnData(studentCourseService.getStudentListByCourseId(courseId));
 
     }
 
-    @PostMapping("/getCourseListByStudentId")
-    public List<Course> getCourseListByStudentId(@RequestBody Integer studentId) {
+    @PostMapping("/getCourseSelectedByStudentId")
+    public List<Course> getCourseSelectByStudentId(@RequestBody DataRequest dataRequest) {
+        Integer studentId=dataRequest.getInteger("studentId");
         return studentCourseService.getCourseListByStudentId(studentId);
-
     }
-
     @PostMapping("/getCourseListAll")
     public DataResponse getCourseListAll() {
         return courseService.getCourseList();
@@ -64,6 +64,10 @@ public class CourseConroller {
         return courseService.selectCourse(dataRequest);
     }
 
+    @PostMapping("/selectCourseSelectableByStudent")
+    public DataResponse selectCourseSelectableByStudent(@RequestBody DataRequest dataRequest){
+        return courseService.selectCourseSelectableByStudent(dataRequest);
+    }
 
 
 }

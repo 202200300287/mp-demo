@@ -11,6 +11,9 @@ import com.itheima.mp.enums.CourseStatus;
 import com.itheima.mp.enums.CourseType;
 import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.Grade;
+import com.itheima.mp.payload.request.DataRequest;
+import com.itheima.mp.service.impl.CourseService;
+import com.itheima.mp.service.impl.StudentCourseService;
 import com.itheima.mp.service.impl.StudentService;
 import com.itheima.mp.util.FormatMethod;
 import com.itheima.mp.util.ImageMethod;
@@ -164,9 +167,11 @@ class UserMapperTest {
     }
 
     @Autowired
-    private StudentService studentService;
+    private CourseService courseService;
+    @Autowired
+    private StudentCourseMapper studentCourseMapper;
     @Test
     void test1(){
-        System.out.println(studentService.selectStudentByNameOrNum("小","2022"));
+        System.out.println(teacherCourseMapper.findCourseIdByTeacherId(1));
     }
 }

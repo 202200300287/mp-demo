@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.po.StudentCourse;
+import com.itheima.mp.enums.CourseStatus;
 import com.itheima.mp.mapper.CourseMapper;
 import com.itheima.mp.mapper.StudentCourseMapper;
 import com.itheima.mp.mapper.StudentMapper;
+import com.itheima.mp.payload.request.DataRequest;
+import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.iservice.IStudentCourseService;
 import com.itheima.mp.service.iservice.IStudentService;
 import com.itheima.mp.util.CommomMethod;
@@ -51,6 +54,7 @@ public class StudentCourseService extends ServiceImpl<StudentCourseMapper, Stude
         return studentList;
     }
 
+    //学生id查选的课程
     public List<StudentCourse> getStudentCourseListByStudentId(Integer studentId){
         QueryWrapper<StudentCourse> studentCourseQueryWrapper=new QueryWrapper<StudentCourse>()
                 .select("*")
@@ -71,4 +75,49 @@ public class StudentCourseService extends ServiceImpl<StudentCourseMapper, Stude
         }
         return courseList;
     }
+
+    //获取关系表的新主键
+    public Integer getNewStudentCourseId(){
+        return studentCourseMapper.findMaxStudentCourseId()+1;
+    }
+
+    //通过学生id，课程id选ke
+    //年级符合，课程有效，且未选才可以选择，judgeInsertCourseByStudent实现判断
+    public DataResponse insertCourseByStudent(DataRequest dataRequest){
+        Integer studentId=dataRequest.getInteger("studentId");
+        Integer courseId=dataRequest.getInteger("courseId");
+        Student student=studentMapper.selectById(studentId);
+        Course course=courseMapper.selectById(courseId);
+        DataResponse dataResponse=judgeInsertCourseByStudent(student,course);
+        if(dataResponse.getCode()==1)return dataResponse;
+        Integer studentCourseId=getNewStudentCourseId();
+        StudentCourse studentCourse=new StudentCourse();
+        studentCourse.setStudentCourseId(studentCourseId);
+        studentCourse.setCourseId(courseId);
+        studentCourse.setStudentId(studentId);
+        studentCourseMapper.insert(studentCourse);
+        return CommomMethod.getReturnMessageOK("成功选择了一门课程");
+    }
+
+    //学生退课方法
+    public DataResponse deleteStudentCourseByStudent(DataRequest dataRequest){
+        Integer studentId=dataRequest.getInteger("studentId");
+        Integer courseId=dataRequest.getInteger("courseId");
+        QueryWrapper<StudentCourse> studentCourseQueryWrapper=new QueryWrapper<StudentCourse>()
+                .eq("student_id",studentId)
+                .eq("course_id",courseId);
+        List<StudentCourse> studentCourseList=studentCourseMapper.selectList(studentCourseQueryWrapper);
+        if (studentCourseList.isEmpty())return CommomMethod.getReturnMessageError("学生未选择这门课程");
+        studentCourseMapper.deleteBatchIds(studentCourseList);
+        String courseName=courseMapper.selectById(courseId).getName();
+        return CommomMethod.getReturnMessageOK("您退选了"+courseName+"这门课");
+    }
+
+    public DataResponse judgeInsertCourseByStudent(Student student,Course course){
+        if(studentCourseMapper.getCountByStudentIdAndCourseId(student.getStudentId(),course.getCourseId())>0)return CommomMethod.getReturnMessageError("已经选择该课程");
+        if(course.getCourseStatus().getCode()<=2)return CommomMethod.getReturnMessageError("课程处于不可选状态");
+        if(course.getGrade()!=student.getGrade())return CommomMethod.getReturnMessageError("您的年级与课程不匹配");
+        return CommomMethod.getReturnMessageOK();
+    }
+
 }
