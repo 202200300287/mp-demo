@@ -11,8 +11,10 @@ import com.itheima.mp.enums.UserType;
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.service.impl.CourseService;
 import com.itheima.mp.service.impl.TeacherCourseService;
+import com.itheima.mp.util.CommomMethod;
 import com.itheima.mp.util.ImageMethod;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +23,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,11 +178,14 @@ class UserMapperTest {
     }
     @Test
     void Test2(){
-        User user=new User();
-        user.setUserId(80);
-        user.setUsername("1");
-        user.setPassword("12313");
-        user.setUserType(UserType.ADMIN);
-        userMapper.insert(user);
+        List<Integer> list=new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        DataRequest dataRequest=new DataRequest();
+        Map map=new HashMap<>();
+        map.put("list",list);
+        dataRequest.setData(map);
+        List<Integer> l= dataRequest.getList("list");
+        System.out.println(l);
     }
 }

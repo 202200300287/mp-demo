@@ -46,20 +46,15 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         return userMapper.findMaxUserId() + 1;
     }
 
-    /**
-     * 从请求参数中获取Teacher😆😆❤️❤️
-     * @param map 请求体对象
-     * @return Teacher
-     */
 
     public DataResponse insertTeacher(DataRequest dataRequest){
         Map map=dataRequest.getData();
         Integer userId=getNewUserId();
         Integer teacherId=getNewTeacherId();
-        Map teacherMap=dataRequest.getMap("teacher");
-        Map userMap=dataRequest.getMap("user");
+        Map teacherMap=CommomMethod.getMap(map,"teacher");
+        Map userMap=CommomMethod.getMap(map,"user");
         Teacher teacher=getTeacherFromMap(teacherMap,teacherId,userId);
-        User user=getUserFromMap(map,userId);
+        User user=getUserFromMap(userMap,userId);
 
         DataResponse dataResponse=baseService.judgeTeacherDataInsert(user,teacher);
 
@@ -72,6 +67,7 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
 
     public DataResponse updateTeacher(DataRequest dataRequest){
         Integer teacherId=dataRequest.getInteger("teacherId");
+        if(teacherMapper.checkTeacherId(teacherId)==0)return CommomMethod.getReturnMessageError("没有该老师");
         Teacher teacher=teacherMapper.selectById(teacherId);
         User user=userMapper.selectById(teacher.getUserId());
         String usernameOld=user.getUsername();
@@ -81,8 +77,8 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         UpdateUtil.copyNullProperties(userSource,user);
         DataResponse dataResponse=baseService.judgeTeacherDataUpdate(user,teacher,usernameOld);
         if(dataResponse.getCode()==1)return dataResponse;
-        teacherMapper.insert(teacher);
-        userMapper.insert(user);
+        teacherMapper.updateById(teacher);
+        userMapper.updateById(user);
         return CommomMethod.getReturnMessageOK("成功修改了教师信息");
     }
 
@@ -103,6 +99,7 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
 
     public DataResponse selectTeacher(DataRequest dataRequest){
         Integer teacherId=dataRequest.getInteger("teacherId");
+        if(teacherMapper.checkTeacherId(teacherId)==0)return CommomMethod.getReturnMessageError("不存在该老师");
         return CommomMethod.getReturnData(teacherMapper.selectById(teacherId));
     }
 

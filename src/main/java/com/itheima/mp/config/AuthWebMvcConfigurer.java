@@ -12,11 +12,11 @@ public class AuthWebMvcConfigurer implements WebMvcConfigurer {
     @Autowired
     AuthHandlerInterceptor authHandlerInterceptor;
 
-    @Override
-    public void addInterceptors (InterceptorRegistry registry) {
-        registry.addInterceptor(authHandlerInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login")
-                .excludePathPatterns("/create");
-    }
+//    @Override
+//    public void addInterceptors (InterceptorRegistry registry) {
+//        registry.addInterceptor(authHandlerInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/login")
+//                .excludePathPatterns("/create");
+//    }
 }

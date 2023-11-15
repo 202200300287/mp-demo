@@ -103,6 +103,7 @@ public class StudentCourseService extends ServiceImpl<StudentCourseMapper, Stude
     public DataResponse deleteStudentCourseByStudent(DataRequest dataRequest){
         Integer studentId=dataRequest.getInteger("studentId");
         Integer courseId=dataRequest.getInteger("courseId");
+        if(studentMapper.checkStudentId(studentId)==0)return CommomMethod.getReturnMessageError("学生不存在");
         QueryWrapper<StudentCourse> studentCourseQueryWrapper=new QueryWrapper<StudentCourse>()
                 .eq("student_id",studentId)
                 .eq("course_id",courseId);
@@ -114,6 +115,8 @@ public class StudentCourseService extends ServiceImpl<StudentCourseMapper, Stude
     }
 
     public DataResponse judgeInsertCourseByStudent(Student student,Course course){
+        if(course==null)return CommomMethod.getReturnMessageError("没有该课程");
+        if(student==null)return CommomMethod.getReturnMessageError("没有该学生");
         if(studentCourseMapper.getCountByStudentIdAndCourseId(student.getStudentId(),course.getCourseId())>0)return CommomMethod.getReturnMessageError("已经选择该课程");
         if(course.getCourseStatus().getCode()<=2)return CommomMethod.getReturnMessageError("课程处于不可选状态");
         if(course.getGrade()!=student.getGrade())return CommomMethod.getReturnMessageError("您的年级与课程不匹配");

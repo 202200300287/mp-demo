@@ -5,10 +5,7 @@ import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.impl.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -19,22 +16,22 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping("/insertTeacher")
-    public DataResponse insertTeacher(DataRequest dataRequest){
+    public DataResponse insertTeacher(@RequestBody DataRequest dataRequest){
         return teacherService.insertTeacher(dataRequest);
     }
 
     @PostMapping("/updateStudent")
-    public DataResponse updateStudent(DataRequest dataRequest){
+    public DataResponse updateStudent(@RequestBody DataRequest dataRequest){
         return  teacherService.updateTeacher(dataRequest);
     }
 
     @PostMapping("/deleteTeacher")
-    public  DataResponse deleteTeacher(DataRequest dataRequest){
+    public  DataResponse deleteTeacher(@RequestBody DataRequest dataRequest){
         return teacherService.deleteTeacher(dataRequest);
     }
 
     @PostMapping("/selectTeacher")
-    public DataResponse selectTeacher(DataRequest dataRequest){
+    public DataResponse selectTeacher(@RequestBody DataRequest dataRequest){
         return teacherService.selectTeacher(dataRequest);
     }
 

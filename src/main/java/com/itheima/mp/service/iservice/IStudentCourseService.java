@@ -10,9 +10,9 @@ import java.util.List;
 
 @Service
 public interface IStudentCourseService extends IService<StudentCourse> {
-     List<Student> getStudentListByCourseId(Integer courseId);
+     //List<Student> getStudentListByCourseId(Integer courseId);
 
-     List<Course> getCourseListByStudentId(Integer studentId);
+     //List<Course> getCourseListByStudentId(Integer studentId);
 
 
     }

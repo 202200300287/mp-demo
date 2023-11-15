@@ -47,6 +47,8 @@ public class BaseService {
         return studentCourseMapper.selectList(studentCourseQueryWrapper);
     }
 
+
+
     @ApiOperation(value = "用学生id查询课程列表")
     public  List<Course> getCourseListByStudentId(Integer studentId){
 

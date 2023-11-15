@@ -1,14 +1,12 @@
 package com.itheima.mp.domain.po;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.itheima.mp.enums.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.EnumTypeHandler;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -22,9 +20,7 @@ public class Teacher {
     @NotBlank
     private Integer teacherId;
 
-
     private Integer userId;
-
 
     private String name;
 
@@ -33,6 +29,7 @@ public class Teacher {
     private String email;
 
     @EnumValue
+    //@TableField(typeHandler = EnumTypeHandler.class)
     private Gender gender;
 
     @ApiModelProperty("职务")

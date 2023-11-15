@@ -7,7 +7,6 @@ import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.po.StudentCourse;
 import com.itheima.mp.domain.po.TeacherCourse;
-import com.itheima.mp.domain.vo.CourseVO;
 import com.itheima.mp.enums.CourseStatus;
 import com.itheima.mp.enums.CourseType;
 import com.itheima.mp.enums.Grade;

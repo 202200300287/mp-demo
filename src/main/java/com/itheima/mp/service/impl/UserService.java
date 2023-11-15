@@ -9,11 +9,13 @@ import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.payload.response.LoginResponse;
 import com.itheima.mp.service.iservice.IUserService;
 import com.itheima.mp.util.CommomMethod;
+import com.itheima.mp.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -24,23 +26,24 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    TokenUtil tokenUtil;
+
+
     public DataResponse login(LoginRequest loginRequest){
         DataResponse dataResponse;
         String u=loginRequest.getUsername();
         String p=loginRequest.getPassword();
-
         QueryWrapper<User> wrapper=new QueryWrapper<User>()
                 .select("*")
                 .eq("username", u)
                 .eq("password", p);
-        List<User> userList=userMapper.selectList(wrapper);
-
-        if (userList.isEmpty()) {
-            return CommomMethod.getReturnMessageError("不存在该用户");
-        } else {
-            return CommomMethod.getReturnData(userList);
-
+        User user=userMapper.selectOne(wrapper);
+        if(user == null) {
+            return CommomMethod.getReturnMessageError("用户名或密码错误");
         }
+        String token = tokenUtil.getToken(user.getUserId(),user.getUsername(),user.getUserType().getCode());
+        return CommomMethod.getReturnData(token);
     }
 
 

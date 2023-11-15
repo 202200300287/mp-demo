@@ -1,6 +1,7 @@
 package com.itheima.mp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.*;
 
@@ -17,6 +18,7 @@ import com.itheima.mp.service.iservice.IStudentService;
 import com.itheima.mp.util.CommomMethod;
 import com.itheima.mp.util.UpdateUtil;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -53,19 +55,30 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     @Autowired
     private UserMapper userMapper;
 
+    public List<Student> getStudentListAll(){
+        QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<Student>()
+                .select("*");
+        return studentMapper.selectList(studentQueryWrapper);
+    }
+
+    public List<Student> getStudentListByUserIdList(List<Integer> userIdList){
+        String userIdListStr= StringUtils.join(userIdList,",");
+        return studentMapper.selectByUserIdList(userIdListStr);
+    }
+
     public DataResponse selectStudentByNameOrNum(String string){
 
         List<Integer> userIdList=userMapper.getUserIdListLikeUsername(string);
-        List<Integer> studentIdList=studentMapper.getStudentIdListLikeName(string);
         List<Student> studentList=studentMapper.getStudentListLikeName(string);
+        List<Student> studentListFromUserIdList=getStudentListByUserIdList(userIdList);
+        for(Student student: studentListFromUserIdList){
+            if(studentList.contains(student))studentList.add(student);
+        }
+        if(studentList.isEmpty())return CommomMethod.getReturnMessageError("这里空空如也");
         List<StudentVO> studentVOList = new ArrayList<StudentVO>();
-        for (Student student:studentList){
+        for(Student student:studentList){
             Integer studentId=student.getStudentId();
-            if(userIdList.contains(student.getUserId())) {
-                User user = userMapper.selectById(student.getUserId());
-                StudentVO studentVO=new StudentVO(studentId,user,student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId));
-                studentVOList.add(studentVO);
-            }
+            studentVOList.add(new StudentVO(studentId,userMapper.selectById(student.getUserId()),student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId)));
         }
         return CommomMethod.getReturnData(studentVOList);
     }

@@ -19,7 +19,7 @@ public class StudentCourseController {
     private StudentCourseService studentCourseService;
 
     @PostMapping("/insertStudentCourseByStudent")
-    public DataResponse insertCourseByStudent(DataRequest dataRequest){
+    public DataResponse insertStudentCourseByStudent(DataRequest dataRequest){
         return  studentCourseService.insertCourseByStudent(dataRequest);
     }
 

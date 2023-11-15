@@ -37,6 +37,7 @@ public class TeacherCourseService extends ServiceImpl<TeacherCourseMapper, Teach
 
     public DataResponse selectCourseByTeacher(DataRequest dataRequest){
         Integer teacherId=dataRequest.getInteger("teacherId");
+        if(teacherMapper.checkTeacherId(teacherId)==0)return CommomMethod.getReturnMessageError("不存在该老师");
         List<Integer> courseIdList=teacherCourseMapper.findCourseIdByTeacherId(teacherId);
         if (courseIdList.isEmpty())return CommomMethod.getReturnMessageError("老师没有教任何一门课");
         List<Course> courseList=courseMapper.selectBatchIds(courseIdList);
@@ -55,7 +56,7 @@ public class TeacherCourseService extends ServiceImpl<TeacherCourseMapper, Teach
         List<TeacherCourse> teacherCourseList=teacherCourseMapper.selectList(teacherCourseQueryWrapper);
         if(teacherMapper.checkTeacherId(teacherId)==0)return CommomMethod.getReturnMessageError("不存在该老师");
         if (courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("不存在这门课程");
-        if(!teacherCourseList.isEmpty())return CommomMethod.getReturnMessageError("老师已经教授了"+studentClass+"班的"+courseMapper.selectById(courseId).getName()+"课程");
+        if(!teacherCourseList.isEmpty())return CommomMethod.getReturnMessageError("有老师已经教授了"+studentClass+"班的"+courseMapper.selectById(courseId).getName()+"课程");
         TeacherCourse teacherCourse=new TeacherCourse(getNewTeacherCourseId(),teacherId,courseId,studentClass);
         teacherCourseMapper.insert(teacherCourse);
         return CommomMethod.getReturnMessageOK("成功添加了老师的课程");

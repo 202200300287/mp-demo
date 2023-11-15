@@ -12,10 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 public class CourseVO {
     private Integer courseId;
+    private Integer studentId;
     private String num;
     private String name;
     private double credit;
-    private List<Teacher> teacherList;
+    private Teacher teacher;
     private double score;
     private Integer rankClass;
     private Integer rankCollege;

@@ -3,6 +3,7 @@ package com.itheima.mp.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.itheima.mp.domain.po.Student;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -21,6 +22,15 @@ public interface StudentMapper extends BaseMapper<Student> {
     @Select("SELECT student_id FROM student WHERE name LIKE CONCAT('%', #{name}, '%')")
     List<Integer> getStudentIdListLikeName(String name);
 
+    @Select("SELECT student_id FROM student")
+    List<Integer> getStudentIdListAll();
+
     @Select("SELECT * FROM student WHERE name LIKE CONCAT('%', #{name}, '%')")
     List<Student> getStudentListLikeName(String name);
+
+    //@Select("SELECT * FROM student WHERE user_id IN #{userIdList}")
+    //List<Student> selectByUserIdList(@Param("userIdList") List<Integer> userIdList);
+
+    @Select("SELECT * FROM student WHERE user_id IN (${userIdList})")
+    List<Student> selectByUserIdList(@Param("userIdList") String userIdList);
 }

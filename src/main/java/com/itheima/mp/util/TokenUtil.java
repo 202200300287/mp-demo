@@ -41,18 +41,16 @@ public class TokenUtil {
 
 
     //解析Token工具方法
-    public Map<String,String> parseToken(String token) throws JWTVerificationException {
-        HashMap<String,String> map = new HashMap<>();
+    public Map<String,Object> parseToken(String token) throws JWTVerificationException {
+        HashMap<String,Object> map = new HashMap<>();
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(privateKey)).build();
         DecodedJWT decodedJWT = verifier.verify(token);
         Claim userId = decodedJWT.getClaim("userId");
         Claim username = decodedJWT.getClaim("username");
         Claim role = decodedJWT.getClaim("role");
-        Claim timeStamp = decodedJWT.getClaim("timeStamp");
-        map.put("userId",userId.asInt().toString());
+        map.put("userId",userId.asInt());
         map.put("username",username.asString());
-        map.put("role",role.asInt().toString());
-        map.put("timeStamp",timeStamp.asInt().toString());
+        map.put("role",role.asInt());
         return map;
     }
 
