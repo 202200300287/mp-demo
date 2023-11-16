@@ -1,9 +1,11 @@
 package com.itheima.mp.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.po.StudentCourse;
 import com.itheima.mp.domain.po.TeacherCourse;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -21,4 +23,7 @@ public interface StudentCourseMapper extends BaseMapper<StudentCourse> {
 
     @Select("SELECT * FROM student_course WHERE  course_id = #{courseId}")
     List<StudentCourse> findByCourseId(Integer courseId);
+
+    @Select("SELECT * FROM student_course WHERE student_id IN (${studentIdList}) AND course_id = #{courseId} ORDER BY score DESC")
+    List<StudentCourse> findByStudentIdListOrderByScoreDESC(@Param("studentIdList") String studentIdList,Integer courseId);
 }

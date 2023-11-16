@@ -33,6 +33,5 @@ public class StudentCourse {
 
     @ApiModelProperty("学生成绩状态")
     @EnumValue
-    @TableField(typeHandler = EnumTypeHandler.class)
     private ScoreStatus scoreStatus;
 }

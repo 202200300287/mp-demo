@@ -178,14 +178,6 @@ class UserMapperTest {
     }
     @Test
     void Test2(){
-        List<Integer> list=new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        DataRequest dataRequest=new DataRequest();
-        Map map=new HashMap<>();
-        map.put("list",list);
-        dataRequest.setData(map);
-        List<Integer> l= dataRequest.getList("list");
-        System.out.println(l);
+        System.out.println(studentMapper.findOrderByGPADESC());
     }
 }

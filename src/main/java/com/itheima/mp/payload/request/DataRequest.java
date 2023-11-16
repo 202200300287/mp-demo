@@ -66,8 +66,13 @@ public class DataRequest {
         if(data == null)
             return new HashMap();
         Object obj = data.get(key);
+
         if(obj == null)
             return new HashMap();
+
+        if(obj instanceof ArrayList)
+            return (arrayToMap((ArrayList<ArrayList<Integer>>) obj));
+
         if(obj instanceof Map)
             return (Map)obj;
         else
@@ -146,6 +151,14 @@ public class DataRequest {
             cPage = 0;
         return cPage;
 
+    }
+
+    public  Map<Integer, Integer> arrayToMap(ArrayList<ArrayList<Integer>> array) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(ArrayList<Integer> integerArrayList:array){
+            map.put(integerArrayList.get(0),integerArrayList.get(1));
+        }
+        return map;
     }
 
 }

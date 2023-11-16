@@ -8,5 +8,9 @@ public class FormatMethod {
         return email.matches(EMAIL_REGEX);
     }
 
-
+    public static Double GPAFormat(Double gpa){
+        String  str = String.format("%.2f",gpa);
+        gpa = Double.parseDouble(str);
+        return gpa;
+    }
 }

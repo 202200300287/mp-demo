@@ -14,6 +14,7 @@ import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.BaseService;
 import com.itheima.mp.service.iservice.IStudentCourseService;
 import com.itheima.mp.util.CommomMethod;
+import com.itheima.mp.util.FormatMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -72,6 +73,7 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
     //老师根据学生id与课程id修改成绩
     public DataResponse updateScore(DataRequest dataRequest){
         Integer courseId=dataRequest.getInteger("courseId");
+        if(dataRequest.getInteger("scoreStatus")<2||dataRequest.getInteger("scoreStatus")>3)return CommomMethod.getReturnMessageError("不存在该分数状态");
         ScoreStatus scoreStatus=ScoreStatus.getByCode(dataRequest.getInteger("scoreStatus"));
         if(courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("没有该课程");
         Integer studentId=dataRequest.getInteger("studentId");
@@ -79,7 +81,6 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
         Double score=dataRequest.getDouble("score");
         if(score<0||score>100)return CommomMethod.getReturnMessageError("分数超出范围");
         StudentCourse studentCourse=studentCourseMapper.findByStudentIdAndCourseId(studentId,courseId);
-        if(scoreStatus.getCode()<2||scoreStatus.getCode()>3)return CommomMethod.getReturnMessageError("不存在该分数状态");
         studentCourse.setScoreStatus(scoreStatus);
         studentCourse.setScore(score);
         studentCourseMapper.updateById(studentCourse);
@@ -88,8 +89,8 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
 
     //老师批量修改某一门课的学生成绩，并设置分数状态
     public DataResponse updateScoreOfStudentList(DataRequest dataRequest){
+        if(dataRequest.getInteger("scoreStatus")<2||dataRequest.getInteger("scoreStatus")>3)return CommomMethod.getReturnMessageError("分数状态有误");
         ScoreStatus scoreStatus =ScoreStatus.getByCode(dataRequest.getInteger("scoreStatus"));
-        if(scoreStatus.getCode()<2||scoreStatus.getCode()>3)return CommomMethod.getReturnMessageError("分数状态有误");
         Integer courseId = dataRequest.getInteger("courseId");
         if(courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("没有该课程");
         Map<Integer,Integer> studentIdAndScoreMap=dataRequest.getMap("studentIdAndScoreMap");
@@ -102,8 +103,10 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
             }
             if(!studentIdList.contains(studentId))return CommomMethod.getReturnMessageError("没有该学生");
             StudentCourse studentCourse=studentCourseMapper.findByStudentIdAndCourseId(studentId,courseId);
+            if(studentCourse==null)return CommomMethod.getReturnMessageError("有学生并未选择这门课程");
             studentCourse.setScore(score);
             studentCourse.setScoreStatus(scoreStatus);
+            studentCourseMapper.updateById(studentCourse);
         }
         return  CommomMethod.getReturnMessageOK("成功修改了一组学生成绩与成绩状态");
     }
@@ -126,17 +129,16 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
 
     //老师批量修改一门课的很多学生的成绩状态
     public DataResponse updateScoreStatusOfStudentList(DataRequest dataRequest){
+        if(dataRequest.getInteger("scoreStatus")<2||dataRequest.getInteger("scoreStatus")>3)return CommomMethod.getReturnMessageError("分数状态有误");
         Integer courseId=dataRequest.getInteger("courseId");
         if(courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("没有该课程");
         ScoreStatus scoreStatus=ScoreStatus.getByCode(dataRequest.getInteger("scoreStatus"));
         List<Integer> studentIdListAll=studentMapper.getStudentIdListAll();
-        if(scoreStatus.getCode()<3||scoreStatus.getCode()>4){
-            return CommomMethod.getReturnMessageError("分数状态有误");
-        }
         List<Integer> studentIdList=dataRequest.getList("studentIdList");
         for(Integer studentId: studentIdList){
             if(!studentIdListAll.contains(studentId))return CommomMethod.getReturnMessageError("没有该学生");
             StudentCourse studentCourse=studentCourseMapper.findByStudentIdAndCourseId(studentId,courseId);
+            if(studentCourse==null)return CommomMethod.getReturnMessageError("学生"+studentMapper.selectById(studentId).getName()+"并未选择该课程");
             studentCourse.setScoreStatus(scoreStatus);
         }
         return CommomMethod.getReturnMessageOK("成功修改了一组学生的"+courseMapper.selectById(courseId).getName()+"成绩状态");
@@ -235,7 +237,7 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
             Double singleGPA=entry.getKey()/20;
             gpa+=entry.getValue()/creditSum*singleGPA;
         }
-        return gpa;
+        return FormatMethod.GPAFormat(gpa);
     }
 
 
