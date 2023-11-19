@@ -4,6 +4,7 @@ package com.itheima.mp.controller;
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.impl.ScoreService;
+import com.itheima.mp.util.CommomMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class ScoreController {
     @Autowired
     private ScoreService scoreService;
+
+
 
     @PostMapping("/getCourseVOListByStudentId")
     public DataResponse getCourseVOListByStudentId(@RequestBody DataRequest dataRequest){
@@ -50,10 +53,18 @@ public class ScoreController {
     public DataResponse selectAllScoreVOListByCourseId(@RequestBody DataRequest dataRequest){
         return scoreService.selectAllScoreVOListByCourseId(dataRequest);
     }
+    @PostMapping("/updateGPAAll")
+    public DataResponse updateGPAAll(@RequestBody DataRequest dataRequest){
+        scoreService.updateGPAAll();
+        return CommomMethod.getReturnMessageOK();
+    }
     @PostMapping("/updateGPAByStudentId")
     public DataResponse updateGPAByStudentId(@RequestBody DataRequest dataRequest){
-        return scoreService.updateGPAByStudentId(dataRequest);
+        scoreService.updateGPAByStudentId(dataRequest.getInteger("studentId"));
+        return CommomMethod.getReturnMessageOK();
     }
+
+
 
 
 

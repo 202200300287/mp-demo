@@ -32,6 +32,11 @@ public class StudentController {
     @Autowired
     TokenUtil tokenUtil;
 
+    @PostMapping("/selectStudentVOList")
+    public DataResponse selectStudentVOList(@RequestBody DataRequest dataRequest){
+        return studentService.selectStudentVOList();
+    }
+
     @PostMapping("/insertStudent")
     public DataResponse insertStudent(@RequestBody DataRequest dataRequest){
         return studentService.insertStudent(dataRequest);

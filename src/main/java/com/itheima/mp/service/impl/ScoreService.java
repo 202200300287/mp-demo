@@ -207,13 +207,20 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
         return scoreVOList;
     }
 
-    public DataResponse updateGPAByStudentId(DataRequest dataRequest){
-        Integer studentId=dataRequest.getInteger("studentId");
+    public void updateGPAByStudentId(Integer studentId){
+        List<Integer> studentIdList=studentMapper.getStudentIdListAll();
+        if(!studentIdList.contains(studentId))return;
         Double gpa=getGPA(studentId);
         Student student=studentMapper.selectById(studentId);
         student.setGpa(gpa);
         studentMapper.updateById(student);
-        return CommomMethod.getReturnMessageOK("成功更新了学生GPA");
+    }
+
+    public void updateGPAAll(){
+        List<Integer> studentIdList=studentMapper.getStudentIdListAll();
+        for(Integer studentId:studentIdList){
+            updateGPAByStudentId(studentId);
+        }
     }
 
     public Double getGPA(Integer studentId){

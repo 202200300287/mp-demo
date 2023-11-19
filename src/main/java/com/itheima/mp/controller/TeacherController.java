@@ -15,6 +15,11 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
+    @PostMapping("/selectTeacherVOList")
+    public DataResponse selectTeacherVOList(@RequestBody DataRequest dataRequest){
+        return teacherService.selectTeacherVOList();
+    }
+
     @PostMapping("/insertTeacher")
     public DataResponse insertTeacher(@RequestBody DataRequest dataRequest){
         return teacherService.insertTeacher(dataRequest);

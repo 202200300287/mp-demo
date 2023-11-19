@@ -15,9 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentVO {
-    private Integer studentId;
-
-    private User user;
+    private String username;
 
     private Student student;
 

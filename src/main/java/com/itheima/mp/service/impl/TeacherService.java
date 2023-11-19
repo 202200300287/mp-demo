@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.po.Teacher;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.vo.TeacherVO;
 import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.UserType;
 import com.itheima.mp.mapper.StudentMapper;
@@ -22,6 +23,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -46,6 +49,15 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         return userMapper.findMaxUserId() + 1;
     }
 
+
+    public DataResponse selectTeacherVOList(){
+        List<Teacher> teacherList= teacherMapper.selectTeacherList();
+        List<TeacherVO> teacherVOList=new ArrayList<>();
+        for(Teacher teacher:teacherList){
+            teacherVOList.add(new TeacherVO(userMapper.selectById(teacher.getUserId()).getUsername(),teacher));
+        }
+        return CommomMethod.getReturnData(teacherVOList);
+    }
 
     public DataResponse insertTeacher(DataRequest dataRequest){
         Map map=dataRequest.getData();

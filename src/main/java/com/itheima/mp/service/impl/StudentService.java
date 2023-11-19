@@ -66,6 +66,19 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         return studentMapper.selectByUserIdList(userIdListStr);
     }
 
+
+    public DataResponse selectStudentVOList(){
+        List<Student> studentList=getStudentListAll();
+        if(studentList.isEmpty())return CommomMethod.getReturnMessageError("这里空空如野");
+        List<StudentVO> studentVOList=new ArrayList<>();
+        for(Student student:studentList){
+            Integer studentId=student.getStudentId();
+            User user=userMapper.selectById(student.getUserId());
+            studentVOList.add(new StudentVO(user.getUsername(),student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId)));
+        }
+        return CommomMethod.getReturnData(studentVOList);
+    }
+
     public DataResponse selectStudentByNameOrNum(String string){
 
         List<Integer> userIdList=userMapper.getUserIdListLikeUsername(string);
@@ -77,8 +90,9 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         if(studentList.isEmpty())return CommomMethod.getReturnMessageError("这里空空如也");
         List<StudentVO> studentVOList = new ArrayList<StudentVO>();
         for(Student student:studentList){
+            User user=userMapper.selectById(student.getUserId());
             Integer studentId=student.getStudentId();
-            studentVOList.add(new StudentVO(studentId,userMapper.selectById(student.getUserId()),student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId)));
+            studentVOList.add(new StudentVO(user.getUsername(),student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId)));
         }
         return CommomMethod.getReturnData(studentVOList);
     }
@@ -173,7 +187,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
 
         Student student=studentMapper.selectById(studentId);
         User user=userMapper.selectById(student.getUserId());
-        StudentVO studentVO=new StudentVO(studentId,user,student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId));
+        StudentVO studentVO=new StudentVO(user.getUsername(),student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId));
         return CommomMethod.getReturnData(studentVO);
     }
 
