@@ -14,6 +14,7 @@ import com.itheima.mp.mapper.*;
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.BaseService;
+import com.itheima.mp.service.VOService;
 import com.itheima.mp.service.iservice.IStudentService;
 import com.itheima.mp.util.CommomMethod;
 import com.itheima.mp.util.UpdateUtil;
@@ -55,6 +56,9 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private VOService voService;
+
     public List<Student> getStudentListAll(){
         QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<Student>()
                 .select("*");
@@ -73,8 +77,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         List<StudentVO> studentVOList=new ArrayList<>();
         for(Student student:studentList){
             Integer studentId=student.getStudentId();
-            User user=userMapper.selectById(student.getUserId());
-            studentVOList.add(new StudentVO(user.getUsername(),student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId)));
+            studentVOList.add(voService.getStudentVO(studentId));
         }
         return CommomMethod.getReturnData(studentVOList);
     }
@@ -90,9 +93,8 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         if(studentList.isEmpty())return CommomMethod.getReturnMessageError("这里空空如也");
         List<StudentVO> studentVOList = new ArrayList<StudentVO>();
         for(Student student:studentList){
-            User user=userMapper.selectById(student.getUserId());
             Integer studentId=student.getStudentId();
-            studentVOList.add(new StudentVO(user.getUsername(),student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId)));
+            studentVOList.add(voService.getStudentVO(studentId));
         }
         return CommomMethod.getReturnData(studentVOList);
     }
@@ -184,10 +186,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         if(studentMapper.checkStudentId(studentId)==0){
             return CommomMethod.getReturnMessageError("该学生不存在");
         }
-
-        Student student=studentMapper.selectById(studentId);
-        User user=userMapper.selectById(student.getUserId());
-        StudentVO studentVO=new StudentVO(user.getUsername(),student,studentBasicMapper.selectById(studentId),studentAdvancedMapper.selectById(studentId));
+        StudentVO studentVO=voService.getStudentVO(studentId);
         return CommomMethod.getReturnData(studentVO);
     }
 

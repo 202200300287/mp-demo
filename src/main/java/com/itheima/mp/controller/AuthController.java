@@ -2,9 +2,11 @@ package com.itheima.mp.controller;
 
 
 
+import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.request.LoginRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.payload.response.LoginResponse;
+import com.itheima.mp.service.AuthService;
 import com.itheima.mp.service.BaseService;
 import com.itheima.mp.service.impl.UserService;
 import com.itheima.mp.service.iservice.MailService;
@@ -30,6 +32,8 @@ public class AuthController {
 
   @Autowired
   private BaseService baseService;
+  @Autowired
+  private AuthService authService;
 
     @PostMapping("/login")
     public DataResponse login(@RequestBody LoginRequest loginRequest) {
@@ -39,8 +43,8 @@ public class AuthController {
 
 
     @PostMapping("/sendEmail")
-    public DataResponse sendEmail(){
-        return baseService.sendEmail();
+    public DataResponse sendEmail(@RequestBody DataRequest dataRequest){
+        return authService.sendEmail(dataRequest);
     }
 
 

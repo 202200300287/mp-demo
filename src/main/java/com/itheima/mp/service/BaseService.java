@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Configuration
@@ -61,13 +62,6 @@ public class BaseService {
         return courseList;
     }
 
-    public DataResponse sendEmail(){
-        String to="2776959538@qq.com";
-        String title="标题：简单的文本发送测试";
-        String content="<html><body><h1>欢迎来到 Spring boot 的世界</h1></body></html>";
-        mailService.sendSimpleText(to,title,content);
-        return CommomMethod.getReturnMessageOK("成功发送邮件！");
-    }
 
     @ApiModelProperty("判断是否已存在所给学号，不存在返回true")
     public boolean judgeNewUsername(String username) {

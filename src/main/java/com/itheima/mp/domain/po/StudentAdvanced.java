@@ -16,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 public class StudentAdvanced {
 
     @TableId(type = IdType.AUTO,value = "student_advanced_id")
-    @NotBlank
     private Integer student_advanced_id;
 
     @ApiModelProperty("个人荣誉")
