@@ -1,23 +1,51 @@
 package com.itheima.mp.domain.vo;
 
-import com.itheima.mp.domain.po.Teacher;
+
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.itheima.mp.enums.*;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseVO {
-    private Integer courseId;
+//    private Student student;
+//    private User user;
+//    private Course course;
+//    private StudentCourse studentCourse;
+
     private Integer studentId;
-    private String num;
     private String name;
-    private double credit;
-    private Teacher teacher;
+    @EnumValue
+    private Major major;
+    private Grade grade;
+    private Double gpa;
+    private Integer studentClass;
+    private Integer rankClassGPA;
+    private Integer rankCollegeGPA;
+
+    private String username;
+    private String photo;
+    @EnumValue
+    private UserType userType;
+
+
+    private Integer courseId;
+    private String num;
+    private String courseName;
+    private Double credit;
+    @EnumValue
+    private CourseType courseType;
+
     private double score;
-    private Integer rankClass;
-    private Integer rankCollege;
+    @ApiModelProperty("单科班级排名")
+    private Integer rankClassCourse;
+    @ApiModelProperty("单科学院成绩排名")
+    private Integer rankCollegeCourse;
+    @ApiModelProperty("学生成绩状态")
+    @EnumValue
+    private ScoreStatus scoreStatus;
 }

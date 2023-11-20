@@ -1,17 +1,15 @@
 package com.itheima.mp.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mp.domain.po.*;
 import com.itheima.mp.domain.vo.CourseVO;
-import com.itheima.mp.domain.vo.ScoreVO;
-import com.itheima.mp.domain.vo.StudentVO;
 import com.itheima.mp.enums.CourseType;
 import com.itheima.mp.enums.ScoreStatus;
 import com.itheima.mp.mapper.*;
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.BaseService;
+import com.itheima.mp.service.VOService;
 import com.itheima.mp.service.iservice.IStudentCourseService;
 import com.itheima.mp.util.CommomMethod;
 import com.itheima.mp.util.FormatMethod;
@@ -43,21 +41,8 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
     private BaseService baseService;
     @Autowired
     private UserMapper userMapper;
-
-    public CourseVO getCourseVO(Integer studentId,Integer courseId){
-        CourseVO courseVO=new CourseVO();
-        if(studentMapper.checkStudentId(studentId)==0||courseMapper.checkCourseId(courseId)==0)return courseVO;
-        Course course=courseMapper.selectById(courseId);
-        Student student=studentMapper.selectById(studentId);
-        List<Integer> teacherIdList=teacherCourseMapper.findTeacherIdByCourseIdAndStudentClass(courseId,student.getStudentClass());
-        Teacher teacher = teacherMapper.selectById(teacherIdList.get(0));
-        StudentCourse studentCourse=studentCourseMapper.findByStudentIdAndCourseId(studentId,courseId);
-        Double score= (double) 0;
-        if(studentCourse.getScoreStatus()== ScoreStatus.Visible)score=studentCourse.getScore();
-        courseVO=new CourseVO(courseId,studentId,course.getNum(),course.getName(),course.getCredit(),teacher,score,studentCourse.getRankClass(),studentCourse.getRankCollege());
-        return courseVO;
-    }
-
+    @Autowired
+    private VOService voService;
 
     //获取学生所选的所有课程信息，包括老师，成绩，排名,学生用
     public DataResponse getCourseVOListByStudentId(Integer studentId){
@@ -65,7 +50,7 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
         List<Course> courseList=baseService.getCourseListByStudentId(studentId);
         if(courseList.isEmpty())return CommomMethod.getReturnMessageError("该学生没有选课呦");
         for (Course course: courseList){
-            courseVOList.add(getCourseVO(studentId,course.getCourseId()));
+            courseVOList.add(voService.getCourseVO(course,studentMapper.selectById(studentId)));
         }
         return CommomMethod.getReturnData(courseVOList);
     }
@@ -144,26 +129,26 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
         return CommomMethod.getReturnMessageOK("成功修改了一组学生的"+courseMapper.selectById(courseId).getName()+"成绩状态");
     }
 
-    public DataResponse selectAllScoreVOListUnmarked(DataRequest dataRequest){
+    public DataResponse selectAllCourseVOListUnmarked(DataRequest dataRequest){
         Integer courseId=dataRequest.getInteger("courseId");
         if(courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("不存在该课程");
         List<Student> studentList=getStudentListByCourseIdByScoreStatus(courseId,ScoreStatus.Unmarked);
-        return CommomMethod.getReturnData(getScoreVOList(studentList,courseMapper.selectById(courseId)));
+        return CommomMethod.getReturnData(getCourseVOList(studentList,courseMapper.selectById(courseId)));
     }
-    public DataResponse selectAllScoreVOListMarked(DataRequest dataRequest){
+    public DataResponse selectAllCourseVOListMarked(DataRequest dataRequest){
         Integer courseId=dataRequest.getInteger("courseId");
         if(courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("不存在该课程");
         List<Student> studentList=getStudentListByCourseIdByScoreStatus(courseId,ScoreStatus.Marked);
-        return CommomMethod.getReturnData(getScoreVOList(studentList,courseMapper.selectById(courseId)));
+        return CommomMethod.getReturnData(getCourseVOList(studentList,courseMapper.selectById(courseId)));
     }
-    public DataResponse selectAllScoreVOListVisible(DataRequest dataRequest){
+    public DataResponse selectAllCourseVOListVisible(DataRequest dataRequest){
         Integer courseId=dataRequest.getInteger("courseId");
         if(courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("不存在该课程");
         List<Student> studentList=getStudentListByCourseIdByScoreStatus(courseId,ScoreStatus.Visible);
-        return CommomMethod.getReturnData(getScoreVOList(studentList,courseMapper.selectById(courseId)));
+        return CommomMethod.getReturnData(getCourseVOList(studentList,courseMapper.selectById(courseId)));
     }
 
-    public DataResponse selectAllScoreVOListByCourseId(DataRequest dataRequest){
+    public DataResponse selectAllCourseVOListByCourseId(DataRequest dataRequest){
         Integer courseId=dataRequest.getInteger("courseId");
         if(courseMapper.checkCourseId(courseId)==0)return CommomMethod.getReturnMessageError("不存在该课程");
         List<StudentCourse> studentCourseList=studentCourseMapper.findByCourseId(courseId);
@@ -171,12 +156,9 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
         for(StudentCourse studentCourse:studentCourseList){
                 studentList.add(studentMapper.selectById(studentCourse.getStudentId()));
         }
-        List<ScoreVO> scoreVOList=getScoreVOList(studentList,courseMapper.selectById(courseId));
+        List<CourseVO> scoreVOList=getCourseVOList(studentList,courseMapper.selectById(courseId));
         return CommomMethod.getReturnData(scoreVOList);
     }
-
-
-
 
     //根据不同的课程状态选择学生列表
     public List<Student> getStudentListByCourseIdByScoreStatus(Integer courseId,ScoreStatus scoreStatus){
@@ -189,20 +171,10 @@ public class ScoreService extends ServiceImpl<StudentCourseMapper, StudentCourse
         }
         return studentList;
     }
-    public ScoreVO getScoreVO(Student student,Course course){
-        ScoreVO scoreVO=new ScoreVO();
-
-        scoreVO.setStudent(student);
-        scoreVO.setCourse(course);
-        scoreVO.setUser(userMapper.selectById(student.getUserId()));
-        scoreVO.setStudentCourse(studentCourseMapper.findByStudentIdAndCourseId(student.getStudentId(),course.getCourseId()));
-        return scoreVO;
-    }
-
-    public List<ScoreVO> getScoreVOList(List<Student> studentList,Course course){
-        List<ScoreVO> scoreVOList=new ArrayList<>();
+    public List<CourseVO> getCourseVOList(List<Student> studentList, Course course){
+        List<CourseVO> scoreVOList=new ArrayList<>();
         for(Student student:studentList){
-            scoreVOList.add(getScoreVO(student,course));
+            scoreVOList.add(voService.getCourseVO(course,student));
         }
         return scoreVOList;
     }

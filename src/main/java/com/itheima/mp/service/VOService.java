@@ -2,6 +2,7 @@ package com.itheima.mp.service;
 
 
 import com.itheima.mp.domain.po.*;
+import com.itheima.mp.domain.vo.CourseVO;
 import com.itheima.mp.domain.vo.StudentVO;
 import com.itheima.mp.domain.vo.TeacherVO;
 import com.itheima.mp.mapper.*;
@@ -24,6 +25,10 @@ public class VOService {
     private StudentAdvancedMapper studentAdvancedMapper;
     @Autowired
     private TeacherMapper teacherMapper;
+    @Autowired
+    private CourseMapper courseMapper;
+    @Autowired
+    private StudentCourseMapper studentCourseMapper;
 
     public StudentVO getStudentVO(Student student){
         Integer studentId=student.getStudentId();
@@ -60,6 +65,21 @@ public class VOService {
         TeacherVO teacherVO=getTeacherVO(teacherMapper.selectById(teacherId));
         if(teacherVO==null)return new TeacherVO();
         return teacherVO;
+    }
+
+    public CourseVO getCourseVO(Course course, Student student){
+        Integer courseId=course.getCourseId();
+        Integer studentId=student.getStudentId();
+        User user=userMapper.selectById(student.getUserId());
+        StudentCourse studentCourse=studentCourseMapper.findByStudentIdAndCourseId(studentId,courseId);
+        return new CourseVO(studentId,student.getName(),student.getMajor(),student.getGrade(),student.getGpa(),student.getStudentClass(),student.getRankClass(),student.getRankCollege(),
+                user.getUsername(),user.getPhoto(),user.getUserType(),
+                courseId,course.getNum(),course.getName(),course.getCredit(),course.getCourseType(),
+                studentCourse.getScore(),studentCourse.getRankClass(),studentCourse.getRankCollege(),studentCourse.getScoreStatus());
+    }
+
+    public CourseVO getCourseVO(Integer courseId, Integer studentId) {
+        return getCourseVO(courseMapper.selectById(courseId), studentMapper.selectById(studentId));
     }
 
 }

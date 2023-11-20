@@ -37,21 +37,21 @@ public class ScoreController {
     public DataResponse updateScoreStatusOfStudentList(@RequestBody DataRequest dataRequest){
         return scoreService.updateScoreStatusOfStudentList(dataRequest);
     }
-    @PostMapping("/selectAllScoreVOListUnmarked")
-    public DataResponse selectAllScoreVOListUnmarked(@RequestBody DataRequest dataRequest){
-        return scoreService.selectAllScoreVOListUnmarked(dataRequest);
+    @PostMapping("/selectAllCourseVOListUnmarked")
+    public DataResponse selectAllCourseVOListUnmarked(@RequestBody DataRequest dataRequest){
+        return scoreService.selectAllCourseVOListUnmarked(dataRequest);
     }
-    @PostMapping("/selectAllScoreVOListMarked")
-    public DataResponse selectAllScoreVOListMarked(@RequestBody DataRequest dataRequest){
-        return scoreService.selectAllScoreVOListMarked(dataRequest);
+    @PostMapping("/selectAllCourseVOListMarked")
+    public DataResponse selectAllCourseVOListMarked(@RequestBody DataRequest dataRequest){
+        return scoreService.selectAllCourseVOListMarked(dataRequest);
     }
-    @PostMapping("/selectAllScoreVOListVisible")
-    public DataResponse selectAllScoreVOListVisible(@RequestBody DataRequest dataRequest){
-        return scoreService.selectAllScoreVOListVisible(dataRequest);
+    @PostMapping("/selectAllCourseVOListVisible")
+    public DataResponse selectAllCourseVOListVisible(@RequestBody DataRequest dataRequest){
+        return scoreService.selectAllCourseVOListVisible(dataRequest);
     }
-    @PostMapping("/selectAllScoreVOListByCourseId")
-    public DataResponse selectAllScoreVOListByCourseId(@RequestBody DataRequest dataRequest){
-        return scoreService.selectAllScoreVOListByCourseId(dataRequest);
+    @PostMapping("/selectAllCourseVOListByCourseId")
+    public DataResponse selectAllCourseVOListByCourseId(@RequestBody DataRequest dataRequest){
+        return scoreService.selectAllCourseVOListByCourseId(dataRequest);
     }
     @PostMapping("/updateGPAAll")
     public DataResponse updateGPAAll(@RequestBody DataRequest dataRequest){
