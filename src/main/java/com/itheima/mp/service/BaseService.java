@@ -38,8 +38,6 @@ public class BaseService {
     @Autowired
     private TeacherCourseMapper teacherCourseMapper;
 
-    @Autowired(required = false)
-    private MailService mailService;
     public List<StudentCourse> getStudentCourseListByStudentId(Integer studentId){
         QueryWrapper<StudentCourse> studentCourseQueryWrapper=new QueryWrapper<StudentCourse>()
                 .select("*")
@@ -47,9 +45,6 @@ public class BaseService {
 
         return studentCourseMapper.selectList(studentCourseQueryWrapper);
     }
-
-
-
     @ApiOperation(value = "用学生id查询课程列表")
     public  List<Course> getCourseListByStudentId(Integer studentId){
 
@@ -61,8 +56,6 @@ public class BaseService {
         }
         return courseList;
     }
-
-
     @ApiModelProperty("判断是否已存在所给学号，不存在返回true")
     public boolean judgeNewUsername(String username) {
         List<String> usernames = userMapper.findAllUsername();
@@ -84,8 +77,9 @@ public class BaseService {
         Grade grade =student.getGrade();
         Integer studentClass=student.getStudentClass();
         String email=studentBasic.getEmail();
-        if(username.isBlank()||password.isBlank()||name.isBlank()||grade.getCode()<1||studentClass<1|| email.isBlank()){
-            return CommomMethod.getReturnMessageError("用户名，密码，姓名，年级班级，邮箱不可为空");
+        if(password.isBlank())user.setPassword("123");
+        if(username.isBlank()||name.isBlank()||grade.getCode()<1||studentClass<1|| email.isBlank()){
+            return CommomMethod.getReturnMessageError("用户名，姓名，年级班级，邮箱不可为空");
         }
         if(!judgeNewUsername(username))return CommomMethod.getReturnMessageError("学号已存在");
 
@@ -103,7 +97,7 @@ public class BaseService {
         Integer studentClass=student.getStudentClass();
         String email=studentBasic.getEmail();
         if(usernameNew.isBlank()||password.isBlank()||name.isBlank()||grade.getCode()<1||studentClass<1|| email.isBlank()){
-            return CommomMethod.getReturnMessageError("用户名，密码，姓名，年级班级，邮箱不可为空");
+            return CommomMethod.getReturnMessageError("用户名，姓名，年级班级，邮箱不可为空");
         }
         if(!FormatMethod.validateEmail(email))return CommomMethod.getReturnMessageError("邮箱格式错误");
         if(!judgeNewUserNameExcept(usernameNew,usernameOld))return CommomMethod.getReturnMessageError("学号冲突");

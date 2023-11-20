@@ -1,15 +1,10 @@
 package com.itheima.mp.service;
 
 
-import com.itheima.mp.domain.po.Student;
-import com.itheima.mp.domain.po.StudentAdvanced;
-import com.itheima.mp.domain.po.StudentBasic;
-import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.po.*;
 import com.itheima.mp.domain.vo.StudentVO;
-import com.itheima.mp.mapper.StudentAdvancedMapper;
-import com.itheima.mp.mapper.StudentBasicMapper;
-import com.itheima.mp.mapper.StudentMapper;
-import com.itheima.mp.mapper.UserMapper;
+import com.itheima.mp.domain.vo.TeacherVO;
+import com.itheima.mp.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +22,8 @@ public class VOService {
     private StudentBasicMapper studentBasicMapper;
     @Autowired
     private StudentAdvancedMapper studentAdvancedMapper;
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     public StudentVO getStudentVO(Student student){
         Integer studentId=student.getStudentId();
@@ -50,6 +47,19 @@ public class VOService {
         return new StudentVO(studentId,student.getName(),student.getMajor(),student.getGrade(),student.getGpa(),student.getStudentClass(),student.getRankClass(),student.getRankCollege(),
                 user.getUsername(),user.getPhoto(),user.getUserType(),studentBasic.getGender(),studentBasic.getBirthday(),studentBasic.getEthnicity(),studentBasic.getBirthplace(),studentBasic.getAddress(),studentBasic.getPhone(),studentBasic.getEmail(),
                 studentAdvanced.getHonors(),studentAdvanced.getCompetitions(),studentAdvanced.getDisciplinary(),studentAdvanced.getClubs(),studentAdvanced.getVolunteer(),studentAdvanced.getInternship());
+    }
+
+    public TeacherVO getTeacherVO(Teacher teacher){
+        Integer userId=teacher.getUserId();
+        User user=userMapper.selectById(userId);
+        if(user==null)user=new User();
+        return new TeacherVO(teacher.getTeacherId(),teacher.getName(),teacher.getPhone(),teacher.getEmail(),teacher.getGender(),teacher.getPosition(),teacher.getDegree(),teacher.getCollege(),teacher.getResearch(),teacher.getPaper(),teacher.getResume(),
+                user.getUsername(),user.getPhoto(),user.getUserType());
+    }
+    public TeacherVO getTeacherVO(Integer teacherId){
+        TeacherVO teacherVO=getTeacherVO(teacherMapper.selectById(teacherId));
+        if(teacherVO==null)return new TeacherVO();
+        return teacherVO;
     }
 
 }

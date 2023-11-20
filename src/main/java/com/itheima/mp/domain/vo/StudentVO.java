@@ -26,26 +26,18 @@ public class StudentVO {
 
 
     private Integer studentId;
-
     private String name;
-
     @EnumValue
     private Major major;
-
+    @EnumValue
     private Grade grade;
-
     private Double gpa;
-
     private Integer studentClass;
-
     private Integer rankClass;
-
     private Integer rankCollege;
 
     private String username;
-
     private String photo;
-
     @EnumValue
     private UserType userType;
 

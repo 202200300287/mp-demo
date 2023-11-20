@@ -13,6 +13,7 @@ import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.BaseService;
+import com.itheima.mp.service.VOService;
 import com.itheima.mp.service.iservice.IStudentService;
 import com.itheima.mp.service.iservice.ITeacherService;
 import com.itheima.mp.util.CommomMethod;
@@ -41,6 +42,9 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
     @Autowired
     private BaseService  baseService;
 
+    @Autowired
+    private VOService voService;
+
     public Integer getNewTeacherId(){
         return teacherMapper.findMaxTeacherId() + 1;
     }
@@ -54,7 +58,7 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         List<Teacher> teacherList= teacherMapper.selectTeacherList();
         List<TeacherVO> teacherVOList=new ArrayList<>();
         for(Teacher teacher:teacherList){
-            teacherVOList.add(new TeacherVO(userMapper.selectById(teacher.getUserId()).getUsername(),teacher));
+            teacherVOList.add(voService.getTeacherVO(teacher));
         }
         return CommomMethod.getReturnData(teacherVOList);
     }
@@ -63,11 +67,8 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         Map map=dataRequest.getData();
         Integer userId=getNewUserId();
         Integer teacherId=getNewTeacherId();
-        Map teacherMap=CommomMethod.getMap(map,"teacher");
-        Map userMap=CommomMethod.getMap(map,"user");
-        Teacher teacher=getTeacherFromMap(teacherMap,teacherId,userId);
-        User user=getUserFromMap(userMap,userId);
-
+        Teacher teacher=getTeacherFromMap(map,teacherId,userId);
+        User user=getUserFromMap(map,userId);
         DataResponse dataResponse=baseService.judgeTeacherDataInsert(user,teacher);
 
         if(dataResponse.getCode()==1)return dataResponse;
@@ -80,11 +81,12 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
     public DataResponse updateTeacher(DataRequest dataRequest){
         Integer teacherId=dataRequest.getInteger("teacherId");
         if(teacherMapper.checkTeacherId(teacherId)==0)return CommomMethod.getReturnMessageError("没有该老师");
+        Map map=dataRequest.getData();
         Teacher teacher=teacherMapper.selectById(teacherId);
         User user=userMapper.selectById(teacher.getUserId());
         String usernameOld=user.getUsername();
-        Teacher teacherSource=getTeacherFromMap(dataRequest.getMap("teacher"));
-        User userSource=getUserFromMap(dataRequest.getMap("user"));
+        Teacher teacherSource=getTeacherFromMap(map);
+        User userSource=getUserFromMap(map);
         UpdateUtil.copyNullProperties(teacherSource,teacher);
         UpdateUtil.copyNullProperties(userSource,user);
         DataResponse dataResponse=baseService.judgeTeacherDataUpdate(user,teacher,usernameOld);
@@ -123,7 +125,8 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         teacher.setName(CommomMethod.getString(map, "name"));
         teacher.setPhone(CommomMethod.getString(map, "phone"));
         teacher.setEmail(CommomMethod.getString(map, "email"));
-        teacher.setGender(Gender.getByCode(CommomMethod.getInteger0(map, "gender")));
+        Integer gender=CommomMethod.getInteger0(map, "gender");
+        if(gender==1||gender==2)teacher.setGender(Gender.getByCode(gender));
         teacher.setPosition(CommomMethod.getString(map, "position"));
         teacher.setDegree(CommomMethod.getString(map, "degree"));
         teacher.setCollege(CommomMethod.getString(map, "college"));

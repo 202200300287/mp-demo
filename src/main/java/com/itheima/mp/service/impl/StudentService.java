@@ -102,12 +102,13 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     @ApiModelProperty("添加一个学生，对其中username，姓名，班级，年级，邮箱格式进行判断")
     public DataResponse insertStudent(DataRequest dataRequest){
         Map map=dataRequest.getData();
-        Integer userId=getNewUserId();
+        Integer userId=getNewUserId();//新的id
         Integer studentId =getNewStudentId();
-        User user=getUserFromMap(CommomMethod.getMap(map,"user"),userId);
-        Student student=getStudentFromMap(CommomMethod.getMap(map,"student"),studentId,userId);
-        StudentBasic studentBasic=getStudentBasicFromMap(CommomMethod.getMap(map,"studentBasic"),studentId);
-        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(CommomMethod.getMap(map,"studentAdvanced"),studentId);
+
+        User user=getUserFromMap(map,userId);
+        Student student=getStudentFromMap(map,studentId,userId);
+        StudentBasic studentBasic=getStudentBasicFromMap(map,studentId);
+        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(map,studentId);
 
         DataResponse dataResponse=baseService.judgeStudentDataInsert(user,student,studentBasic);
         if(dataResponse.getCode()==1)return dataResponse;
@@ -122,6 +123,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     public DataResponse updateStudent(DataRequest dataRequest){
         //对学生是否存在的判断
         Integer studentId=dataRequest.getInteger("studentId");
+        Map map=dataRequest.getData();
         if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
         if(studentMapper.checkStudentId(studentId)==0){
             return CommomMethod.getReturnMessageError("该学生不存在");
@@ -134,10 +136,10 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         User user=userMapper.selectById(userId);
         String usernameOld=user.getUsername();
         //将前端所给的需要更新的数据存为实体类
-        Student studentSource=getStudentFromMap(dataRequest.getMap("student"));
-        User userSource=getUserFromMap(dataRequest.getMap("user"));
-        StudentBasic studentBasicSource=getStudentBasicFromMap(dataRequest.getMap("studentBasic"),studentId);
-        StudentAdvanced studentAdvancedSource=getStudentAdvancedFromMap(dataRequest.getMap("studentAdvanced"),studentId);
+        Student studentSource=getStudentFromMap(map);
+        User userSource=getUserFromMap(map);
+        StudentBasic studentBasicSource=getStudentBasicFromMap(map,studentId);
+        StudentAdvanced studentAdvancedSource=getStudentAdvancedFromMap(map,studentId);
         //核心方法copyNullProperties，对于不为null或blank的属性更新到实体类中
         UpdateUtil.copyNullProperties(studentSource,student);//目标为student
         UpdateUtil.copyNullProperties(userSource,user);
@@ -208,9 +210,11 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
 
     public Student getStudentFromMap(Map map){
         Student student=new Student();
+        Integer major=CommomMethod.getInteger0(map,"major");
+        Integer grade=CommomMethod.getInteger0(map,"grade");
         student.setName(CommomMethod.getString(map,"name"));
-        student.setMajor(Major.getByCode(CommomMethod.getInteger0(map,"major")));
-        student.setGrade(Grade.getByCode(CommomMethod.getInteger0(map,"grade")));
+        if(major>=1&&major<=3)student.setMajor(Major.getByCode(major));
+        if(grade>=1&&grade<=4)student.setGrade(Grade.getByCode(grade));
         student.setStudentClass(CommomMethod.getInteger0(map,"studentClass"));
         return student;
     }
@@ -225,7 +229,8 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
 
     public StudentBasic getStudentBasicFromMap(Map map){
         StudentBasic s=new StudentBasic();
-        s.setGender(Gender.getByCode(CommomMethod.getInteger0(map,"gender")));
+        Integer gender=CommomMethod.getInteger0(map,"gender");
+        if(gender==1||gender==2) s.setGender(Gender.getByCode(gender));
         s.setBirthday(CommomMethod.getString(map,"birthday"));
         s.setEthnicity(CommomMethod.getString(map,"ethnicity"));
         s.setBirthplace(CommomMethod.getString(map,"birthplace"));
