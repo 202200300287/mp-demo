@@ -16,7 +16,7 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping("/selectTeacherVOList")
-    public DataResponse selectTeacherVOList(@RequestBody DataRequest dataRequest){
+    public DataResponse selectTeacherVOList(){
         return teacherService.selectTeacherVOList();
     }
 

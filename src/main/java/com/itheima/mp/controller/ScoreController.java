@@ -54,7 +54,7 @@ public class ScoreController {
         return scoreService.selectAllCourseVOListByCourseId(dataRequest);
     }
     @PostMapping("/updateGPAAll")
-    public DataResponse updateGPAAll(@RequestBody DataRequest dataRequest){
+    public DataResponse updateGPAAll(){
         scoreService.updateGPAAll();
         return CommomMethod.getReturnMessageOK();
     }

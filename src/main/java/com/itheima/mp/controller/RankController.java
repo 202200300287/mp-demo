@@ -15,22 +15,22 @@ public class RankController {
     @Autowired
     private RankService rankService;
     @PostMapping("/updateScoreRankClassAll")
-    public DataResponse updateScoreRankClassAll(@RequestBody DataRequest dataRequest){
+    public DataResponse updateScoreRankClassAll(){
         rankService.updateScoreRankClassAll();
         return CommomMethod.getReturnMessageOK();
     }
     @PostMapping("/updateScoreRankCollegeAll")
-    public DataResponse updateScoreRankCollegeAll(@RequestBody DataRequest dataRequest){
+    public DataResponse updateScoreRankCollegeAll(){
         rankService.updateScoreRankCollegeAll();
         return CommomMethod.getReturnMessageOK();
     }
     @PostMapping("/updateGPARankClassAll")
-    public DataResponse updateGPARankClassAll(@RequestBody DataRequest dataRequest){
+    public DataResponse updateGPARankClassAll(){
         rankService.updateGPARankClassAll();
         return CommomMethod.getReturnMessageOK();
     }
     @PostMapping("updateGPARankCollege")
-    public DataResponse updateGPARankCollege(@RequestBody DataRequest dataRequest){
+    public DataResponse updateGPARankCollege(){
         rankService.updateGPARankCollege();
         return CommomMethod.getReturnMessageOK();
     }

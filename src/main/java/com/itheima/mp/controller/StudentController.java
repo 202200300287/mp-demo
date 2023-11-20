@@ -33,7 +33,7 @@ public class StudentController {
     TokenUtil tokenUtil;
 
     @PostMapping("/selectStudentVOList")
-    public DataResponse selectStudentVOList(@RequestBody DataRequest dataRequest){
+    public DataResponse selectStudentVOList(){
         return studentService.selectStudentVOList();
     }
 

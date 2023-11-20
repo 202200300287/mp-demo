@@ -52,7 +52,7 @@ public class CourseConroller {
 
 
     @PostMapping("/getCourseListAll")
-    public DataResponse getCourseListAll(@RequestBody(required = false) DataRequest dataRequest) {
+    public DataResponse getCourseListAll() {
         return courseService.getCourseList();
 
     }
