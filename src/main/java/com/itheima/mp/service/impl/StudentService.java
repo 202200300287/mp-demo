@@ -108,7 +108,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         User user=getUserFromMap(map,userId);
         Student student=getStudentFromMap(map,studentId,userId);
         StudentBasic studentBasic=getStudentBasicFromMap(map,studentId);
-        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(map,studentId);
 
         DataResponse dataResponse=baseService.judgeStudentDataInsert(user,student,studentBasic);
         if(dataResponse.getCode()==1)return dataResponse;
@@ -116,7 +115,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         userMapper.insert(user);
         studentMapper.insert(student);
         studentBasicMapper.insert(studentBasic);
-        studentAdvancedMapper.insert(studentAdvanced);
         return CommomMethod.getReturnMessageOK("成功添加了一名学生");
     }
 
@@ -131,20 +129,20 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         //将数据库中的相应行取出存为实体类
         Student student=studentMapper.selectById(studentId);
         StudentBasic studentBasic=studentBasicMapper.selectById(studentId);
-        StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
         Integer userId=student.getUserId();
         User user=userMapper.selectById(userId);
         String usernameOld=user.getUsername();
+
         //将前端所给的需要更新的数据存为实体类
         Student studentSource=getStudentFromMap(map);
         User userSource=getUserFromMap(map);
         StudentBasic studentBasicSource=getStudentBasicFromMap(map,studentId);
-        StudentAdvanced studentAdvancedSource=getStudentAdvancedFromMap(map,studentId);
+
         //核心方法copyNullProperties，对于不为null或blank的属性更新到实体类中
         UpdateUtil.copyNullProperties(studentSource,student);//目标为student
         UpdateUtil.copyNullProperties(userSource,user);
-        UpdateUtil.copyNullProperties(studentAdvancedSource,studentAdvanced);
         UpdateUtil.copyNullProperties(studentBasicSource,studentBasic);
+
         //定义好的格式判断
         DataResponse dataResponse=baseService.judgeStudentDataUpdate(user,student,studentBasic,usernameOld);
         if(dataResponse.getCode()==1)return dataResponse;
@@ -152,8 +150,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         userMapper.updateById(user);
         studentMapper.updateById(student);
         studentBasicMapper.updateById(studentBasic);
-        studentAdvancedMapper.updateById(studentAdvanced);
-
         return CommomMethod.getReturnMessageOK("成功修改了学生信息");
     }
 
@@ -176,7 +172,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
 
         userMapper.deleteById(user);
         studentBasicMapper.deleteById(studentId);
-        studentAdvancedMapper.deleteById(studentId);
         studentMapper.deleteById(studentId);
         return CommomMethod.getReturnMessageOK("正确删除了一名学生");
     }
@@ -245,24 +240,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         studentBasic.setStudent_basic_id(studentBasicId);
         return studentBasic;
     }
-
-    public StudentAdvanced getStudentAdvancedFromMap(Map map){
-        StudentAdvanced s=new StudentAdvanced();
-        s.setHonors(CommomMethod.getString(map,"honors"));
-        s.setCompetitions(CommomMethod.getString(map,"competitions"));
-        s.setDisciplinary(CommomMethod.getString(map,"disciplinary"));
-        s.setClubs(CommomMethod.getString(map,"clubs"));
-        s.setVolunteer(CommomMethod.getString(map,"volunteer"));
-        s.setInternship(CommomMethod.getString(map,"internship"));
-        return s;
-    }
-
-    public StudentAdvanced getStudentAdvancedFromMap(Map map,Integer studentAdvancedId){
-        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(map);
-        studentAdvanced.setStudent_advanced_id(studentAdvancedId);
-        return studentAdvanced;
-    }
-
 
     public Integer getNewStudentId(){
        return studentMapper.findMaxStudentId()+1;

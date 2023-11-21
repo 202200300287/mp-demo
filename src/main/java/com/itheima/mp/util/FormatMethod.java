@@ -13,4 +13,10 @@ public class FormatMethod {
         gpa = Double.parseDouble(str);
         return gpa;
     }
+
+    public static Double DurationFormat(Double gpa){
+        String  str = String.format("%.1f",gpa);
+        gpa = Double.parseDouble(str);
+        return gpa;
+    }
 }

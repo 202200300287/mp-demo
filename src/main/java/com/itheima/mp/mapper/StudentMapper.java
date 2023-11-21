@@ -31,6 +31,9 @@ public interface StudentMapper extends BaseMapper<Student> {
     @Select("SELECT student_id FROM student")
     List<Integer> getStudentIdListAll();
 
+    @Select("SELECT * FROM student")
+    List<Student> getStudentListAll();
+
     @Select("SELECT * FROM student WHERE name LIKE CONCAT('%', #{name}, '%')")
     List<Student> getStudentListLikeName(String name);
 

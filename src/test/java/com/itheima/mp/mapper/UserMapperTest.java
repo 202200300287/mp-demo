@@ -178,6 +178,6 @@ class UserMapperTest {
     }
     @Test
     void Test2(){
-        System.out.println(studentMapper.findOrderByGPADESC());
+        System.out.println(studentAdvancedMapper.selectById(1));
     }
 }

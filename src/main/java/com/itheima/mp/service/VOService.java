@@ -2,9 +2,7 @@ package com.itheima.mp.service;
 
 
 import com.itheima.mp.domain.po.*;
-import com.itheima.mp.domain.vo.CourseVO;
-import com.itheima.mp.domain.vo.StudentVO;
-import com.itheima.mp.domain.vo.TeacherVO;
+import com.itheima.mp.domain.vo.*;
 import com.itheima.mp.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -38,8 +36,7 @@ public class VOService {
         StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
         if(studentAdvanced==null)studentAdvanced=new StudentAdvanced();
         return new StudentVO(studentId,student.getName(),student.getMajor(),student.getGrade(),student.getGpa(),student.getStudentClass(),student.getRankClass(),student.getRankCollege(),
-                user.getUsername(),user.getPhoto(),user.getUserType(),studentBasic.getGender(),studentBasic.getBirthday(),studentBasic.getEthnicity(),studentBasic.getBirthplace(),studentBasic.getAddress(),studentBasic.getPhone(),studentBasic.getEmail(),
-                studentAdvanced.getHonors(),studentAdvanced.getCompetitions(),studentAdvanced.getDisciplinary(),studentAdvanced.getClubs(),studentAdvanced.getVolunteer(),studentAdvanced.getInternship());
+                user.getUsername(),user.getPhoto(),user.getUserType(),studentBasic.getGender(),studentBasic.getBirthday(),studentBasic.getEthnicity(),studentBasic.getBirthplace(),studentBasic.getAddress(),studentBasic.getPhone(),studentBasic.getEmail());
     }
 
     public StudentVO getStudentVO(Integer studentId){
@@ -50,8 +47,7 @@ public class VOService {
         StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
         if(studentAdvanced==null)studentAdvanced=new StudentAdvanced();
         return new StudentVO(studentId,student.getName(),student.getMajor(),student.getGrade(),student.getGpa(),student.getStudentClass(),student.getRankClass(),student.getRankCollege(),
-                user.getUsername(),user.getPhoto(),user.getUserType(),studentBasic.getGender(),studentBasic.getBirthday(),studentBasic.getEthnicity(),studentBasic.getBirthplace(),studentBasic.getAddress(),studentBasic.getPhone(),studentBasic.getEmail(),
-                studentAdvanced.getHonors(),studentAdvanced.getCompetitions(),studentAdvanced.getDisciplinary(),studentAdvanced.getClubs(),studentAdvanced.getVolunteer(),studentAdvanced.getInternship());
+                user.getUsername(),user.getPhoto(),user.getUserType(),studentBasic.getGender(),studentBasic.getBirthday(),studentBasic.getEthnicity(),studentBasic.getBirthplace(),studentBasic.getAddress(),studentBasic.getPhone(),studentBasic.getEmail());
     }
 
     public TeacherVO getTeacherVO(Teacher teacher){
@@ -82,4 +78,36 @@ public class VOService {
         return getCourseVO(courseMapper.selectById(courseId), studentMapper.selectById(studentId));
     }
 
+    public StudentAdvancedVO getStudentAdvancedVO(Student student){
+        Integer studentId=student.getStudentId();
+        if(studentMapper.checkStudentId(studentId)==0)return new StudentAdvancedVO();
+        User user=userMapper.selectById(student.getUserId());
+        return new StudentAdvancedVO(studentId,student.getName(),student.getMajor(),student.getGrade(),
+                user.getUsername(),user.getUserType(),
+                studentAdvancedMapper.getListByStudentIdAndAdvanceType(studentId,1),
+                studentAdvancedMapper.getListByStudentIdAndAdvanceType(studentId,2),
+                studentAdvancedMapper.getListByStudentIdAndAdvanceType(studentId,3),
+                studentAdvancedMapper.getListByStudentIdAndAdvanceType(studentId,4),
+                studentAdvancedMapper.getListByStudentIdAndAdvanceType(studentId,5),
+                studentAdvancedMapper.getListByStudentIdAndAdvanceType(studentId,6));
+    }
+
+    public StudentAdvancedVO getStudentAdvancedVO(Integer studentId){
+        return getStudentAdvancedVO(studentMapper.selectById(studentId));
+    }
+
+    public StudentSingleAdvancedVO getStudentSingleAdvancedVO(StudentAdvanced studentAdvanced){
+        Integer studentId=studentAdvanced.getStudentId();
+        if(studentMapper.checkStudentId(studentId)==0)return new StudentSingleAdvancedVO();
+        Student student=studentMapper.selectById(studentId);
+        User user=userMapper.selectById(student.getUserId());
+        return new StudentSingleAdvancedVO(studentId,student.getName(),student.getMajor(),student.getGrade(),
+                user.getUsername(),user.getUserType(),
+                studentAdvanced.getStudentAdvancedId(),studentAdvanced.getAdvancedType(),studentAdvanced.getContent(),studentAdvanced.getDuration(),studentAdvanced.getUpdateTime());
+
+    }
+
+    public StudentSingleAdvancedVO getStudentSingleAdvancedVO(Integer studentAdvancedId){
+        return getStudentSingleAdvancedVO(studentAdvancedMapper.selectById(studentAdvancedId));
+    }
 }
