@@ -178,6 +178,6 @@ class UserMapperTest {
     }
     @Test
     void Test2(){
-        System.out.println(studentAdvancedMapper.selectById(1));
+        System.out.println(studentBasicMapper.selectById(1));
     }
 }

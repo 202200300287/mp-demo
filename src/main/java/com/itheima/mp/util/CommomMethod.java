@@ -6,6 +6,7 @@ import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.impl.StudentCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class CommomMethod {
@@ -157,6 +158,17 @@ public class CommomMethod {
         String str = obj.toString();
         return DateTimeTool.formatDateTime(str,"yyyy-MM-dd");
     }
+
+    public static LocalDate getLocalDate(Map data,String key){
+        Object obj = data.get(key);
+        if(obj == null)
+            return null;
+        if(obj instanceof LocalDate)
+            return (LocalDate) obj;
+        String str = obj.toString();
+        return DateTimeTool.formatLocalDate(str,"yyyy-MM-dd");
+    }
+
     public static Date getTime(Map data,String key) {
         Object obj = data.get(key);
         if(obj == null)

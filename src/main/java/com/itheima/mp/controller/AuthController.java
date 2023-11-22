@@ -47,6 +47,10 @@ public class AuthController {
         return authService.sendEmail(dataRequest);
     }
 
+    @PostMapping("/forgetPassword")
+    public DataResponse forgetPassword(@RequestBody DataRequest dataRequest){
+        return authService.forgetPassword(dataRequest);
+    }
 
 
 }

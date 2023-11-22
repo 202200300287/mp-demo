@@ -2,6 +2,9 @@ package com.itheima.mp.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,6 +30,22 @@ public class DateTimeTool {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
 //			e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static LocalDate formatLocalDate(String dateSrc, String pattern) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        try {
+            if (dateSrc == null || dateSrc.trim().equals("")) {
+                return null;
+            }
+
+            LocalDate parsedDate = LocalDate.parse(dateSrc, formatter);
+            return parsedDate;
+        } catch (DateTimeParseException e) {
+            // 处理日期解析异常
+            // e.printStackTrace();
             return null;
         }
     }
