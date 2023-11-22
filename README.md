@@ -20,6 +20,9 @@
 使用ApiFox PC端(与we端同步)，***遥遥领先！！！***<br/>
 **传送门**  <https://app.apifox.com/project/3552035> 
 
+### JDK版本
+> version 11.0.12
+
 ## getStart
 
 ### 打开项目
@@ -224,7 +227,8 @@ public class Student {
 - 属性名与student表列名
 
 studentId与数据库中student_id相对应<br/>
-这是mybatisPlus的特性之一：属性名小驼峰，类名与标明均下划线命名
+这是mybatisPlus的特性之一：属性名小驼峰，类名与标明均下划线命名<br/>
+否则，很可能出现返回值为null的情况(被狠狠的折磨过)
 
 - 属性类型<br/>
   - 主键，最好是Integer类型(Don't ask why)
@@ -332,21 +336,19 @@ private StudentMapper studentMapper;
 @ApiModelProperty("添加一个学生，对其中username，姓名，班级，年级，邮箱格式进行判断")
     public DataResponse insertStudent(DataRequest dataRequest){
         Map map=dataRequest.getData();
-        Integer userId=getNewUserId();
+        Integer userId=getNewUserId();//新的id
         Integer studentId =getNewStudentId();
-        
-        User user=getUserFromMap(CommomMethod.getMap(map,"user"),userId);
-        Student student=getStudentFromMap(CommomMethod.getMap(map,"student"),studentId,userId);
-        StudentBasic studentBasic=getStudentBasicFromMap(CommomMethod.getMap(map,"studentBasic"),studentId);
-        StudentAdvanced studentAdvanced=getStudentAdvancedFromMap(CommomMethod.getMap(map,"studentAdvanced"),studentId);
 
-        DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
+        User user=getUserFromMap(map,userId);
+        Student student=getStudentFromMap(map,studentId,userId);
+        StudentBasic studentBasic=getStudentBasicFromMap(map,studentId);
+
+        DataResponse dataResponse=baseService.judgeStudentDataInsert(user,student,studentBasic);
         if(dataResponse.getCode()==1)return dataResponse;
 
         userMapper.insert(user);
         studentMapper.insert(student);
         studentBasicMapper.insert(studentBasic);
-        studentAdvancedMapper.insert(studentAdvanced);
         return CommomMethod.getReturnMessageOK("成功添加了一名学生");
     }
 ```
@@ -361,9 +363,10 @@ private StudentMapper studentMapper;
 (有些方法类的细节先不赘述)
 
 ```
-public DataResponse updateStudent(DataRequest dataRequest){
+ public DataResponse updateStudent(DataRequest dataRequest){
         //对学生是否存在的判断
         Integer studentId=dataRequest.getInteger("studentId");
+        Map map=dataRequest.getData();
         if(studentId==null)return CommomMethod.getReturnMessageError("数据传输格式错误");
         if(studentMapper.checkStudentId(studentId)==0){
             return CommomMethod.getReturnMessageError("该学生不存在");
@@ -371,30 +374,29 @@ public DataResponse updateStudent(DataRequest dataRequest){
         //将数据库中的相应行取出存为实体类
         Student student=studentMapper.selectById(studentId);
         StudentBasic studentBasic=studentBasicMapper.selectById(studentId);
-        StudentAdvanced studentAdvanced=studentAdvancedMapper.selectById(studentId);
         Integer userId=student.getUserId();
         User user=userMapper.selectById(userId);
+        String usernameOld=user.getUsername();
+
         //将前端所给的需要更新的数据存为实体类
-        Student studentSource=getStudentFromMap(dataRequest.getMap("student"));
-        User userSource=getUserFromMap(dataRequest.getMap("user"));
-        StudentBasic studentBasicSource=getStudentBasicFromMap(dataRequest.getMap("studentBasic"),studentId);
-        StudentAdvanced studentAdvancedSource=getStudentAdvancedFromMap(dataRequest.getMap("studentAdvanced"),studentId);
+        Student studentSource=getStudentFromMap(map);
+        User userSource=getUserFromMap(map);
+        StudentBasic studentBasicSource=getStudentBasicFromMap(map,studentId);
+
         //核心方法copyNullProperties，对于不为null或blank的属性更新到实体类中
         UpdateUtil.copyNullProperties(studentSource,student);//目标为student
         UpdateUtil.copyNullProperties(userSource,user);
-        UpdateUtil.copyNullProperties(studentAdvancedSource,studentAdvanced);
         UpdateUtil.copyNullProperties(studentBasicSource,studentBasic);
+
         //定义好的格式判断
-        DataResponse dataResponse=baseService.judgeStudentData(user,student,studentBasic);
+        DataResponse dataResponse=baseService.judgeStudentDataUpdate(user,student,studentBasic,usernameOld);
         if(dataResponse.getCode()==1)return dataResponse;
         //存入
         userMapper.updateById(user);
         studentMapper.updateById(student);
         studentBasicMapper.updateById(studentBasic);
-        studentAdvancedMapper.updateById(studentAdvanced);
-        
         return CommomMethod.getReturnMessageOK("成功修改了学生信息");
-    }
+ }
 ```
 - 目前来说实现最复杂的业务逻辑方法，更新一个学生的有关数据
 >对于更新学生信息的效率思考<br/>
@@ -412,7 +414,7 @@ public DataResponse updateStudent(DataRequest dataRequest){
 >用于定义一些实用的util方法
 >
 
-**CommomMethod.java**
+**CommonMethod.java**
 *****
 
 **FormatMethod**
@@ -460,7 +462,7 @@ public class StudentController {
     //.....省略其他接口
 }
 ```
-我评价是，没什么可说的......
+@Autowired注解是必须要写的，不然会出现空指针异常
 
 ### payload.response
 
@@ -480,6 +482,9 @@ public class DataResponse {
 
 
 ## 数据库设计
+
+
+
 
 
 ## 代码细节

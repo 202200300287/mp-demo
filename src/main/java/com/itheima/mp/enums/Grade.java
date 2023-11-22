@@ -13,7 +13,7 @@ import java.util.Arrays;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Grade {
-    All(0,"所有时间可选"),
+    All(5,"所有时间可选"),
     One(1,"大一"),
     Two(2,"大二"),
     Three(3,"大三"),
@@ -30,6 +30,9 @@ public enum Grade {
 
     @JsonCreator
     public static Grade getByCode(@JsonProperty("code") int code) {
-        return Arrays.stream(Grade.values()).filter(item -> item.getCode() == code).findFirst().get();
+        return Arrays.stream(Grade.values())
+                .filter(item -> item.getCode() == code)
+                .findFirst()
+                .get();
     }
 }

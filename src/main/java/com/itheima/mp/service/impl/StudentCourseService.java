@@ -6,6 +6,8 @@ import com.itheima.mp.domain.po.Course;
 import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.po.StudentCourse;
 import com.itheima.mp.enums.CourseStatus;
+import com.itheima.mp.enums.Grade;
+import com.itheima.mp.enums.ScoreStatus;
 import com.itheima.mp.mapper.CourseMapper;
 import com.itheima.mp.mapper.StudentCourseMapper;
 import com.itheima.mp.mapper.StudentMapper;
@@ -95,6 +97,7 @@ public class StudentCourseService extends ServiceImpl<StudentCourseMapper, Stude
         studentCourse.setStudentCourseId(studentCourseId);
         studentCourse.setCourseId(courseId);
         studentCourse.setStudentId(studentId);
+        studentCourse.setScoreStatus(ScoreStatus.Unmarked);
         studentCourseMapper.insert(studentCourse);
         return CommomMethod.getReturnMessageOK("成功选择了一门课程");
     }
@@ -119,7 +122,7 @@ public class StudentCourseService extends ServiceImpl<StudentCourseMapper, Stude
         if(student==null)return CommomMethod.getReturnMessageError("没有该学生");
         if(studentCourseMapper.getCountByStudentIdAndCourseId(student.getStudentId(),course.getCourseId())>0)return CommomMethod.getReturnMessageError("已经选择该课程");
         if(course.getCourseStatus().getCode()<=2)return CommomMethod.getReturnMessageError("课程处于不可选状态");
-        if(course.getGrade()!=student.getGrade())return CommomMethod.getReturnMessageError("您的年级与课程不匹配");
+        if(course.getGrade()!=student.getGrade()&&course.getGrade()!= Grade.All)return CommomMethod.getReturnMessageError("您的年级与课程不匹配");
         return CommomMethod.getReturnMessageOK();
     }
 

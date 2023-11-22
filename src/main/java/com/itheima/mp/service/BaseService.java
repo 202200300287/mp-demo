@@ -78,7 +78,8 @@ public class BaseService {
         Integer studentClass=student.getStudentClass();
         String email=studentBasic.getEmail();
         if(password.isBlank())user.setPassword("123");
-        if(username.isBlank()||name.isBlank()||grade.getCode()<1||studentClass<1|| email.isBlank()){
+        if(grade.getCode()>4||grade.getCode()<1)return CommomMethod.getReturnMessageError("年级错误");
+        if(username.isBlank()||name.isBlank()||studentClass<1|| email.isBlank()){
             return CommomMethod.getReturnMessageError("用户名，姓名，年级班级，邮箱不可为空");
         }
         if(!judgeNewUsername(username))return CommomMethod.getReturnMessageError("学号已存在");

@@ -6,10 +6,8 @@ import com.itheima.mp.service.impl.StudentCourseService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -19,12 +17,12 @@ public class StudentCourseController {
     private StudentCourseService studentCourseService;
 
     @PostMapping("/insertStudentCourseByStudent")
-    public DataResponse insertStudentCourseByStudent(DataRequest dataRequest){
+    public DataResponse insertStudentCourseByStudent(@RequestBody DataRequest dataRequest){
         return  studentCourseService.insertCourseByStudent(dataRequest);
     }
 
     @PostMapping("/deleteStudentCourseByStudent")
-    public DataResponse deleteStudentCourseByStudent(DataRequest dataRequest){
+    public DataResponse deleteStudentCourseByStudent(@RequestBody DataRequest dataRequest){
         return  studentCourseService.deleteStudentCourseByStudent(dataRequest);
     }
 }
