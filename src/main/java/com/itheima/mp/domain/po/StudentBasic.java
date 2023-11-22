@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 //基本信息：包括学生姓名、学生学号、性别、出生日期、民族、籍贯等个人身份信息。
 //name, student ID, gender, date of birth, ethnicity, birthplace
 
@@ -35,7 +37,7 @@ public class StudentBasic {
     private Gender gender;
 
     @ApiModelProperty("生日")
-    private String birthday;
+    private Date birthday;
 
     @ApiModelProperty("民族")
     private String ethnicity;

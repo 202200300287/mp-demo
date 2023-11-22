@@ -226,7 +226,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
         StudentBasic s=new StudentBasic();
         Integer gender=CommomMethod.getInteger0(map,"gender");
         if(gender==1||gender==2) s.setGender(Gender.getByCode(gender));
-        s.setBirthday(CommomMethod.getString(map,"birthday"));
+        s.setBirthday(CommomMethod.getDate(map,"birthday"));
         s.setEthnicity(CommomMethod.getString(map,"ethnicity"));
         s.setBirthplace(CommomMethod.getString(map,"birthplace"));
         s.setAddress(CommomMethod.getString(map,"address"));

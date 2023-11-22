@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -46,7 +47,7 @@ public class StudentVO {
     private Gender gender;
 
     @ApiModelProperty("生日")
-    private String birthday;
+    private Date birthday;
 
     @ApiModelProperty("民族")
     private String ethnicity;
