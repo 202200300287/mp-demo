@@ -37,7 +37,7 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
         log.info("=============token:" + token);
         Map<String,String> map = new HashMap<>();
         try{
-            TokenUtil.verify(token);
+            tokenUtil.verify(token);
             return true;
         }catch (SignatureVerificationException e) {
             e.printStackTrace();

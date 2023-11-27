@@ -8,6 +8,7 @@ import com.itheima.mp.mapper.BlogEvaluateMapper;
 import com.itheima.mp.mapper.BlogMapper;
 import com.itheima.mp.service.iservice.IBlogEvaluateService;
 import com.itheima.mp.service.iservice.IBlogService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
@@ -16,4 +17,7 @@ import org.springframework.stereotype.Service;
 @Configuration
 @ComponentScan(basePackages = "com.itheima.mp")
 public class BlogEvaluateService extends ServiceImpl<BlogEvaluateMapper, BlogEvaluate> implements IBlogEvaluateService {
+    @Autowired
+    BlogEvaluateMapper mapper;
+
 }

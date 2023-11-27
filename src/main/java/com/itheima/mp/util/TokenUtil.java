@@ -20,7 +20,7 @@ import java.util.Map;
 @Component
 public class TokenUtil {
     @Value("${token.privateKey}")
-    static String privateKey;
+    String privateKey;
 
     //通过用户Id和用户名创建Token
     public String getToken(Integer userId,String username,Integer role) {
@@ -34,7 +34,7 @@ public class TokenUtil {
                 .sign(Algorithm.HMAC256(privateKey));
     }
 
-    public static void verify (String token) {
+    public void verify (String token) {
         JWTVerifier verify = JWT.require(Algorithm.HMAC256(privateKey)).build();
         verify.verify(token);
     }
