@@ -55,4 +55,7 @@ public interface StudentMapper extends BaseMapper<Student> {
 
     @Select("SELECT * FROM student ORDER BY gpa DESC")
     List<Student> findOrderByGPADESC();
+
+    @Select("SELECT * FROM student WHERE student_id = #{studentIdList}")
+    Student selectStudentByUserId(Integer userId);
 }

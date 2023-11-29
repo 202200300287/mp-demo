@@ -22,4 +22,7 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
 
     @Select("SELECT * FROM teacher WHERE teacher_id IN (${teacherIdList})")
     List<Teacher> selectByTeacherIdList(@Param("teacherIdList") String teacherIdList);
+
+    @Select("SELECT * FROM teacher WHERE user_id = #{userId}")
+    Teacher selectTeacherByUserId(Integer userId);
 }

@@ -51,7 +51,7 @@ public class StudentController {
     }
 
 
-    @PostMapping("/selecctStudent")
+    @PostMapping("/selectStudent")
     public DataResponse selectStudent(@RequestBody DataRequest dataRequest){
         return studentService.selectStudent(dataRequest);
     }
