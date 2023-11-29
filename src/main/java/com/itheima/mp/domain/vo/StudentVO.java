@@ -46,7 +46,6 @@ public class StudentVO {
 
     @EnumValue
     private Gender gender;
-
     @ApiModelProperty("生日")
     private LocalDate birthday;
 

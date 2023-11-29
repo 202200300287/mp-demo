@@ -18,6 +18,23 @@ import java.util.Arrays;
 import java.util.Base64;
 
 public class ImageMethod {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @SneakyThrows
     public  static void changePathTest(){
         String imagePath="D://photo//xiaoma.png";

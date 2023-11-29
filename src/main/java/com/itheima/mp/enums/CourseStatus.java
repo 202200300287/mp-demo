@@ -16,9 +16,10 @@ public enum CourseStatus {
     Unavailable(1,"无效课程"),
     AvailableUnselectable(2,"有效但不可选课程"),
     Selectable(3,"可选课程");
+    @JsonValue
     @EnumValue
     private Integer code;
-    @JsonValue
+
     private String status;
     CourseStatus(Integer code,String status){
         this.code=code;

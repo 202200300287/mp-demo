@@ -18,9 +18,11 @@ public enum AdvancedType {
     Clubs(4,"社团"),
     Volunteer(5,"志愿活动"),
     Internship(6,"实习经历");
+
+    @JsonValue
     @EnumValue
     private Integer code;
-    @JsonValue
+
     private String type;
     AdvancedType(Integer code, String type){
         this.code=code;

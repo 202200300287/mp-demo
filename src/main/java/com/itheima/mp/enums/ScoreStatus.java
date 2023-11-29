@@ -16,10 +16,10 @@ public enum ScoreStatus {
     Unmarked(1,"未进行考试"),
     Marked(2,"打出分数但学生不可见"),
     Visible(3,"学生可见分数");
-
+    @JsonValue
     @EnumValue
     private Integer code;
-    @JsonValue
+
     private String type;
 
     ScoreStatus(Integer code,String type){

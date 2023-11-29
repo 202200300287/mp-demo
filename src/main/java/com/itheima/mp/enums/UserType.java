@@ -16,10 +16,10 @@ public enum UserType {
     STUDENT(2,"STUDENT"),
     TEACHER(3,"TEACHER");
 
-
+    @JsonValue
     @EnumValue
     private Integer code;
-    @JsonValue
+
     private String type;
 
     UserType(Integer code, String type){

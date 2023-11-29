@@ -29,13 +29,13 @@ public class TeacherVO {
     @ApiModelProperty("研究方向")
     private String research;
     @ApiModelProperty("论文著作")
-    private String paper;
+    private String paper;//
     @ApiModelProperty("个人简历")
-    private String resume;
+    private String resume;//
 
     private String username;
-    private String photo;
+    private String photo;//
     @EnumValue
-    private UserType userType;
+    private UserType userType;//
 
 }

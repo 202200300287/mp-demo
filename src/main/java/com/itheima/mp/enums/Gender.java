@@ -15,10 +15,10 @@ import java.util.Arrays;
 public enum Gender {
     Male(1,"男"),
     Female(2,"女");
-
+    @JsonValue
     @EnumValue
     private Integer code;
-    @JsonValue
+
     private String gender;
 
     Gender(Integer code, String gender){

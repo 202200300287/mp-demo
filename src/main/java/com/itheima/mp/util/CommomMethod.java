@@ -4,7 +4,14 @@ import com.itheima.mp.domain.po.Student;
 import com.itheima.mp.domain.vo.StudentVO;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.impl.StudentCourseService;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -12,6 +19,7 @@ import java.util.*;
 public class CommomMethod {
 
 
+    public static final MediaType exelType = new MediaType("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     private static StudentCourseService studentCourseService;
 
     public static DataResponse getReturnData(Object obj, String msg){
@@ -177,6 +185,25 @@ public class CommomMethod {
             return (Date)obj;
         String str = obj.toString();
         return DateTimeTool.formatDateTime(str,"yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static XSSFCellStyle createCellStyle(XSSFWorkbook workbook, int fontSize) {
+        XSSFFont font = workbook.createFont();
+        //在对应的workbook中新建字体
+        font.setFontName("微软雅黑");
+        //字体微软雅黑
+        font.setFontHeightInPoints((short) fontSize);
+        //设置字体大小
+        XSSFCellStyle style = workbook.createCellStyle();
+        //新建Cell字体
+        style.setFont(font);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        return style;
     }
 
 

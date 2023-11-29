@@ -17,10 +17,10 @@ public enum CourseType {
     OptionalLimited(2,"限选课"),
     OptionalLimitless(3,"任选课"),
     RequiredUngraded(4,"必修但不计入绩点");
-
+    @JsonValue
     @EnumValue
     private Integer code;
-    @JsonValue
+
     private String type;
     CourseType(Integer code,String type){
         this.code=code;

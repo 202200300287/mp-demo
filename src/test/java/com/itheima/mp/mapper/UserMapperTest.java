@@ -9,6 +9,7 @@ import com.itheima.mp.enums.CourseType;
 import com.itheima.mp.enums.Grade;
 import com.itheima.mp.enums.UserType;
 import com.itheima.mp.payload.request.DataRequest;
+import com.itheima.mp.service.ExcelService;
 import com.itheima.mp.service.impl.CourseService;
 import com.itheima.mp.service.impl.TeacherCourseService;
 import com.itheima.mp.util.CommomMethod;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -176,8 +178,10 @@ class UserMapperTest {
         Course course=new Course(99,"1111","6",2.2, CourseStatus.AvailableUnselectable, Grade.One, CourseType.Required);
         courseMapper.insert(course);
     }
+    @Autowired
+    private ExcelService excelService;
     @Test
     void Test2(){
-        System.out.println(studentBasicMapper.selectById(1));
+        System.out.println(excelService.getStudentVOListExcl(new DataRequest()).toString());
     }
 }

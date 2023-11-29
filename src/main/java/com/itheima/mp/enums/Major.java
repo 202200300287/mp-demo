@@ -13,10 +13,10 @@ public enum Major {
     SoftwareEngineer(1,"软件工程"),
     DigitalMedia(2,"数字媒体技术"),
     DataScience(3,"数据科学与大数据技术");
-
+    @JsonValue
     @EnumValue
     private Integer code;
-    @JsonValue
+
     private String type;
 
     Major(Integer code, String type){

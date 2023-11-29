@@ -18,10 +18,10 @@ public enum Grade {
     Two(2,"大二"),
     Three(3,"大三"),
     Four(4,"大四");
-
+    @JsonValue
     @EnumValue
     private Integer code;
-    @JsonValue
+
     private String grade;
     Grade(Integer code, String grade){
         this.code=code;
