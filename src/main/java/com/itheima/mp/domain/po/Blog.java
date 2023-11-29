@@ -23,6 +23,6 @@ public class Blog {
     private String text;
     private String title;
     private Integer praise;
-    LocalDateTime createTime;
+    private LocalDateTime createTime;
     private LocalDateTime updateTime;//设定是作者可以在任意时间修改
 }
