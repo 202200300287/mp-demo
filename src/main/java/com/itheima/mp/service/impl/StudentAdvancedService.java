@@ -46,10 +46,13 @@ public class StudentAdvancedService extends ServiceImpl<StudentAdvancedMapper, S
         Integer studentId= CommomMethod.getInteger(map,"studentId");
         Integer advancedType=CommomMethod.getInteger(map,"advancedType");
         String content=CommomMethod.getString(map,"content");
+        String title=CommomMethod.getString(map,"title");//加的标题
+        if(title.isBlank()||title==null)title="没有标题呦";
         Double duration= FormatMethod.DurationFormat(CommomMethod.getDouble(map,"duration"));
         StudentAdvanced studentAdvanced=new StudentAdvanced();
         if(advancedType!=null&&advancedType>=1&&advancedType<=6)studentAdvanced.setAdvancedType(AdvancedType.getByCode(advancedType));
         studentAdvanced.setStudentId(studentId);
+        studentAdvanced.setTitle(title);
         studentAdvanced.setContent(content);
         studentAdvanced.setDuration(duration);
         return studentAdvanced;

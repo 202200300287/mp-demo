@@ -29,6 +29,8 @@ public class StudentAdvanced {
     @EnumValue
     private AdvancedType advancedType;
 
+    @ApiModelProperty("加一个标题")
+    private String title;
     @ApiModelProperty("这一条里干了什么事")
     private String content;
 
