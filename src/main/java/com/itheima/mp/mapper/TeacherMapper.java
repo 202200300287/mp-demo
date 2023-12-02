@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TeacherMapper extends BaseMapper<Teacher> {
 
@@ -26,6 +27,9 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
     @Select("SELECT * FROM teacher WHERE user_id = #{userId}")
     Teacher selectTeacherByUserId(Integer userId);
 
-    @Select("select * from teacher t, user u where t.teacher_id = u.user_id")
+    @Select("select u.*, teacher_id, name, phone, email, gender, position, degree, college from teacher t, user u where t.teacher_id = u.user_id")
     List<TeacherVO> selectTeacherVOList();
+
+    @Select("select research, paper, resume from teacher where teacher_id = #{teacherId}")
+    Map<String, String> getTeacherInfoByTeacherId(Integer teacherId);
 }

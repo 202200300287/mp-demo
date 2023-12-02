@@ -17,12 +17,12 @@ public class TeacherController {
 
     @PostMapping("/selectTeacherVOList")
     public DataResponse selectTeacherVOList() {
-        return teacherService.selectTeacherVOList();
+        return teacherService.selectTeacherVOList1();
     }
 
-    @PostMapping("/selectTeacherVOList1")
-    public DataResponse selectTeacherVOList1() {
-        return teacherService.selectTeacherVOList1();
+    @PostMapping("/selectTeacherInfo")
+    public DataResponse selectTeacherInfo(@RequestBody DataRequest dataRequest) {
+        return teacherService.selectTeacherInfo(dataRequest);
     }
 
     @PostMapping("/insertTeacher")

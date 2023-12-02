@@ -25,12 +25,12 @@ public class TeacherVO {
     private String degree;
     @ApiModelProperty("所在学院")
     private String college;
-    @ApiModelProperty("研究方向")
-    private String research;
-    @ApiModelProperty("论文著作")
-    private String paper;//
-    @ApiModelProperty("个人简历")
-    private String resume;//
+    // @ApiModelProperty("研究方向")
+    // private String research;
+    // @ApiModelProperty("论文著作")
+    // private String paper;
+    // @ApiModelProperty("个人简历")
+    // private String resume;
 
     private String username;
     private String photo;//

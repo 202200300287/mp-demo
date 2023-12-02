@@ -15,6 +15,7 @@ import com.itheima.mp.service.VOService;
 import com.itheima.mp.service.iservice.ITeacherService;
 import com.itheima.mp.util.CommomMethod;
 import com.itheima.mp.util.UpdateUtil;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -160,4 +161,12 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
         return user;
     }
 
+    public DataResponse selectTeacherInfo(DataRequest dataRequest) {
+        Integer teacherId = dataRequest.getInteger("teacherId");
+        Map<String, String> teacherInfo = teacherMapper.getTeacherInfoByTeacherId(teacherId);
+        if (teacherInfo == null) {
+            return CommomMethod.getReturnMessageError("不存在该教师");
+        }
+        return CommomMethod.getReturnData(teacherInfo);
+    }
 }

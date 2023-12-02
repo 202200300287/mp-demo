@@ -54,7 +54,7 @@ public class VOService {
         Integer userId = teacher.getUserId();
         User user = userMapper.selectById(userId);
         if (user == null) user = new User();
-        return new TeacherVO(teacher.getTeacherId(), teacher.getName(), teacher.getPhone(), teacher.getEmail(), teacher.getGender(), teacher.getPosition(), teacher.getDegree(), teacher.getCollege(), teacher.getResearch(), teacher.getPaper(), teacher.getResume(),
+        return new TeacherVO(teacher.getTeacherId(), teacher.getName(), teacher.getPhone(), teacher.getEmail(), teacher.getGender(), teacher.getPosition(), teacher.getDegree(), teacher.getCollege(),
                 user.getUsername(), user.getPhoto(), user.getUserType());
     }
 
