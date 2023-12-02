@@ -111,9 +111,10 @@ public class BaseService {
     public DataResponse judgeTeacherDataInsert(User user, Teacher teacher) {
         String username = user.getUsername();
         String password = user.getPassword();
+        if (password.isBlank()) user.setPassword("123");
         String name = teacher.getName();
         String email = teacher.getEmail();
-        if (username.isBlank() || password.isBlank() || name.isBlank() || email.isBlank()) {
+        if (username.isBlank()  || name.isBlank() || email.isBlank()) {
             return CommomMethod.getReturnMessageError("用户名、密码、姓名、邮箱不可为空");
         }
         if (!judgeNewUsername(username)) return CommomMethod.getReturnMessageError("工号已存在");

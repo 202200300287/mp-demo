@@ -170,6 +170,8 @@ class UserMapperTest {
 
     @Test
     void Test2() {
-        System.out.println(excelService.getStudentVOListExcl(new DataRequest()).toString());
+        Student student=new Student();
+        student.setUserId(1000);
+        studentMapper.insert(student);
     }
 }
