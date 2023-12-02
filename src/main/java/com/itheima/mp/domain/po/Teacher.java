@@ -51,6 +51,4 @@ public class Teacher {
 
     @ApiModelProperty("个人简历")
     private String resume;
-
-
 }

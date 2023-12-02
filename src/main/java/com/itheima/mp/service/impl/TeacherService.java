@@ -116,7 +116,8 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
     public DataResponse selectTeacher(DataRequest dataRequest) {
         Integer teacherId = dataRequest.getInteger("teacherId");
         if (teacherMapper.checkTeacherId(teacherId) == 0) return CommomMethod.getReturnMessageError("不存在该老师");
-        return CommomMethod.getReturnData(teacherMapper.selectById(teacherId));
+
+        return CommomMethod.getReturnData(voService.getTeacherVO(teacherId));
     }
 
 
