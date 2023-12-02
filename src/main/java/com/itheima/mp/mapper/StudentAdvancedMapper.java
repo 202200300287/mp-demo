@@ -12,15 +12,15 @@ public interface StudentAdvancedMapper extends BaseMapper<StudentAdvanced> {
 
     @Select("SELECT * FROM student_advanced")
     List<StudentAdvanced> findAll();
+
     @Select("SELECT * FROM student_advanced ORDER BY student_id,advanced_type,update_time")
     List<StudentAdvanced> findAllOrderByStudentIdAndAdvancedType();
 
-
     @Select("SELECT MAX(student_advanced_id) FROM student_advanced")
     Integer findMaxStudentAdvancedId();
+
     @Select("SELECT COUNT(*) FROM student_advanced WHERE student_advanced_id = #{studentAdvancedId}")
     int checkStudentAdvancedId(Integer studentAdvancedId);
-
 
     @Select("SELECT * FROM student_advanced WHERE student_id=#{studentId} ORDER BY update_time")
     List<StudentAdvanced> getListByStudentId(Integer studentId);
@@ -32,5 +32,5 @@ public interface StudentAdvancedMapper extends BaseMapper<StudentAdvanced> {
     List<StudentAdvanced> getListByAdvancedTypeOrderByStudentId(Integer AdvancedType);
 
     @Select("SELECT * FROM student_advanced WHERE student_id=#{studentId} AND advanced_type=#{AdvanceType} ORDER BY update_time")
-    List<StudentAdvanced> getListByStudentIdAndAdvanceType(Integer studentId,Integer AdvanceType);
+    List<StudentAdvanced> getListByStudentIdAndAdvanceType(Integer studentId, Integer AdvanceType);
 }

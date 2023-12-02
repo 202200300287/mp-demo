@@ -22,36 +22,36 @@ public class TokenUtil {
     @Value("${token.privateKey}")
     String privateKey;
 
-    //通过用户Id和用户名创建Token
-    public String getToken(Integer userId,String username,Integer role) {
+    // 通过用户Id和用户名创建Token
+    public String getToken(Integer userId, String username, Integer role) {
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DATE,3);
+        instance.add(Calendar.DATE, 3);
         System.out.println("privateKey===================" + privateKey);
         return JWT.create()
-                .withClaim("userId",userId)
-                .withClaim("username",username)
-                .withClaim("role",role)
+                .withClaim("userId", userId)
+                .withClaim("username", username)
+                .withClaim("role", role)
                 .withExpiresAt(instance.getTime())
                 .sign(Algorithm.HMAC256(privateKey));
     }
 
-    public void verify (String token) {
+    public void verify(String token) {
         JWTVerifier verify = JWT.require(Algorithm.HMAC256(privateKey)).build();
         verify.verify(token);
     }
 
 
-    //解析Token工具方法
-    public Map<String,Object> parseToken(String token) throws JWTVerificationException {
-        HashMap<String,Object> map = new HashMap<>();
+    // 解析Token工具方法
+    public Map<String, Object> parseToken(String token) throws JWTVerificationException {
+        HashMap<String, Object> map = new HashMap<>();
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(privateKey)).build();
         DecodedJWT decodedJWT = verifier.verify(token);
         Claim userId = decodedJWT.getClaim("userId");
         Claim username = decodedJWT.getClaim("username");
         Claim role = decodedJWT.getClaim("role");
-        map.put("userId",userId.asInt());
-        map.put("username",username.asString());
-        map.put("role",role.asInt());
+        map.put("userId", userId.asInt());
+        map.put("username", username.asString());
+        map.put("role", role.asInt());
         return map;
     }
 

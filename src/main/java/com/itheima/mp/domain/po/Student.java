@@ -6,7 +6,6 @@ import com.itheima.mp.enums.Major;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.type.EnumTypeHandler;
 
 import javax.validation.constraints.NotBlank;
 
@@ -41,7 +40,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @TableName(value = "student")
 public class Student {
-    @TableId(type = IdType.AUTO,value = "student_id")
+    @TableId(type = IdType.AUTO, value = "student_id")
     @NotBlank
     private Integer studentId;
 

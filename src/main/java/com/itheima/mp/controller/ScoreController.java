@@ -16,56 +16,62 @@ public class ScoreController {
     private ScoreService scoreService;
 
 
-
     @PostMapping("/getCourseVOListByStudentId")
-    public DataResponse getCourseVOListByStudentId(@RequestBody DataRequest dataRequest){
+    public DataResponse getCourseVOListByStudentId(@RequestBody DataRequest dataRequest) {
         return scoreService.getCourseVOListByStudentId(dataRequest.getInteger("studentId"));
     }
+
     @PostMapping("/updateScore")
-    public DataResponse updateScore(@RequestBody DataRequest dataRequest){
+    public DataResponse updateScore(@RequestBody DataRequest dataRequest) {
         return scoreService.updateScore(dataRequest);
     }
+
     @PostMapping("/updateScoreOfStudentList")
-    public DataResponse updateScoreOfStudentList(@RequestBody DataRequest dataRequest){
+    public DataResponse updateScoreOfStudentList(@RequestBody DataRequest dataRequest) {
         return scoreService.updateScoreOfStudentList(dataRequest);
     }
+
     @PostMapping("/updateScoreStatus")
-    public DataResponse updateScoreStatus(@RequestBody DataRequest dataRequest){
+    public DataResponse updateScoreStatus(@RequestBody DataRequest dataRequest) {
         return scoreService.updateScoreStatus(dataRequest);
     }
+
     @PostMapping("/updateScoreStatusOfStudentList")
-    public DataResponse updateScoreStatusOfStudentList(@RequestBody DataRequest dataRequest){
+    public DataResponse updateScoreStatusOfStudentList(@RequestBody DataRequest dataRequest) {
         return scoreService.updateScoreStatusOfStudentList(dataRequest);
     }
+
     @PostMapping("/selectAllCourseVOListUnmarked")
-    public DataResponse selectAllCourseVOListUnmarked(@RequestBody DataRequest dataRequest){
+    public DataResponse selectAllCourseVOListUnmarked(@RequestBody DataRequest dataRequest) {
         return scoreService.selectAllCourseVOListUnmarked(dataRequest);
     }
+
     @PostMapping("/selectAllCourseVOListMarked")
-    public DataResponse selectAllCourseVOListMarked(@RequestBody DataRequest dataRequest){
+    public DataResponse selectAllCourseVOListMarked(@RequestBody DataRequest dataRequest) {
         return scoreService.selectAllCourseVOListMarked(dataRequest);
     }
+
     @PostMapping("/selectAllCourseVOListVisible")
-    public DataResponse selectAllCourseVOListVisible(@RequestBody DataRequest dataRequest){
+    public DataResponse selectAllCourseVOListVisible(@RequestBody DataRequest dataRequest) {
         return scoreService.selectAllCourseVOListVisible(dataRequest);
     }
+
     @PostMapping("/selectAllCourseVOListByCourseId")
-    public DataResponse selectAllCourseVOListByCourseId(@RequestBody DataRequest dataRequest){
+    public DataResponse selectAllCourseVOListByCourseId(@RequestBody DataRequest dataRequest) {
         return scoreService.selectAllCourseVOListByCourseId(dataRequest);
     }
+
     @PostMapping("/updateGPAAll")
-    public DataResponse updateGPAAll(){
+    public DataResponse updateGPAAll() {
         scoreService.updateGPAAll();
         return CommomMethod.getReturnMessageOK();
     }
+
     @PostMapping("/updateGPAByStudentId")
-    public DataResponse updateGPAByStudentId(@RequestBody DataRequest dataRequest){
+    public DataResponse updateGPAByStudentId(@RequestBody DataRequest dataRequest) {
         scoreService.updateGPAByStudentId(dataRequest.getInteger("studentId"));
         return CommomMethod.getReturnMessageOK();
     }
-
-
-
 
 
 }

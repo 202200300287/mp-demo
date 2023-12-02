@@ -13,19 +13,20 @@ import java.util.Arrays;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Grade {
-    All(5,"所有时间可选"),
-    One(1,"大一"),
-    Two(2,"大二"),
-    Three(3,"大三"),
-    Four(4,"大四");
+    All(5, "所有时间可选"),
+    One(1, "大一"),
+    Two(2, "大二"),
+    Three(3, "大三"),
+    Four(4, "大四");
     @JsonValue
     @EnumValue
-    private Integer code;
+    private final Integer code;
 
-    private String grade;
-    Grade(Integer code, String grade){
-        this.code=code;
-        this.grade=grade;
+    private final String grade;
+
+    Grade(Integer code, String grade) {
+        this.code = code;
+        this.grade = grade;
     }
 
     @JsonCreator

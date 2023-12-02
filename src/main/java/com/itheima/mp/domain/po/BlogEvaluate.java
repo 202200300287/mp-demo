@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @TableName(value = "blog_evaluate")
 public class BlogEvaluate {
+    LocalDateTime createTime;
     @TableId(type = IdType.AUTO, value = "blog_evaluate_id")
     private Integer blogEvaluateId;
     private Integer blogId;
     private Integer userId;
     private String text;
-    LocalDateTime createTime;
 }

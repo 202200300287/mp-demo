@@ -11,10 +11,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
-//基本信息：包括学生姓名、学生学号、性别、出生日期、民族、籍贯等个人身份信息。
-//name, student ID, gender, date of birth, ethnicity, birthplace
+// 基本信息：包括学生姓名、学生学号、性别、出生日期、民族、籍贯等个人身份信息。
+// name, student ID, gender, date of birth, ethnicity, birthplace
 
 /*
 基本信息：包括学生姓名、学生学号、性别、出生日期、民族、籍贯等个人身份信息。
@@ -30,7 +29,7 @@ import java.util.Date;
 @TableName(value = "student_basic")
 public class StudentBasic {
 
-    @TableId(type = IdType.AUTO,value = "student_basic_id")
+    @TableId(type = IdType.AUTO, value = "student_basic_id")
     private Integer student_basic_id;
 
     @ApiModelProperty("性别")

@@ -8,14 +8,14 @@ public class FormatMethod {
         return email.matches(EMAIL_REGEX);
     }
 
-    public static Double GPAFormat(Double gpa){
-        String  str = String.format("%.2f",gpa);
+    public static Double GPAFormat(Double gpa) {
+        String str = String.format("%.2f", gpa);
         gpa = Double.parseDouble(str);
         return gpa;
     }
 
-    public static Double DurationFormat(Double gpa){
-        String  str = String.format("%.1f",gpa);
+    public static Double DurationFormat(Double gpa) {
+        String str = String.format("%.1f", gpa);
         gpa = Double.parseDouble(str);
         return gpa;
     }

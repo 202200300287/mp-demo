@@ -14,32 +14,37 @@ public class StudentAdvancedController {
     private StudentAdvancedService studentAdvancedService;
 
     @PostMapping("/insertStudentAdvanced")
-    public DataResponse insertStudentAdvanced(@RequestBody DataRequest dataRequest){
+    public DataResponse insertStudentAdvanced(@RequestBody DataRequest dataRequest) {
         return studentAdvancedService.insertStudentAdvanced(dataRequest);
     }
+
     @PostMapping("/updateStudentAdvanced")
-    public DataResponse updateStudentAdvanced(@RequestBody DataRequest dataRequest){
+    public DataResponse updateStudentAdvanced(@RequestBody DataRequest dataRequest) {
         return studentAdvancedService.updateStudentAdvanced(dataRequest);
     }
+
     @PostMapping("/deleteStudentAdvanced")
-    public DataResponse deleteStudentAdvanced(@RequestBody DataRequest dataRequest){
+    public DataResponse deleteStudentAdvanced(@RequestBody DataRequest dataRequest) {
         return studentAdvancedService.deleteStudentAdvanced(dataRequest);
     }
+
     @PostMapping("/selectStudentAdvanceVOAll")
-    public DataResponse selectStudentAdvanceVOAll(){
+    public DataResponse selectStudentAdvanceVOAll() {
         return studentAdvancedService.selectStudentAdvanceVOAll();
     }
+
     @PostMapping("/selectStudentAdvancedVOListByStudentId")
-    public DataResponse selectStudentAdvancedVOListByStudentId(@RequestBody DataRequest dataRequest){
+    public DataResponse selectStudentAdvancedVOListByStudentId(@RequestBody DataRequest dataRequest) {
         return studentAdvancedService.selectStudentAdvancedVOListByStudentId(dataRequest);
     }
+
     @PostMapping("/selectStudentSingleAdvancedVOListByStudentIdAndAdvancedType")
-    public DataResponse selectStudentSingleAdvancedVOListByStudentIdAndAdvancedType(@RequestBody DataRequest dataRequest){
+    public DataResponse selectStudentSingleAdvancedVOListByStudentIdAndAdvancedType(@RequestBody DataRequest dataRequest) {
         return studentAdvancedService.selectStudentSingleAdvancedVOSingleListByStudentIdAndAdvancedType(dataRequest);
     }
 
     @PostMapping("/selectStudentSingleAdvancedVOListByAdvancedType")
-    public DataResponse selectStudentSingleAdvancedVOListByAdvancedType(@RequestBody DataRequest dataRequest){
+    public DataResponse selectStudentSingleAdvancedVOListByAdvancedType(@RequestBody DataRequest dataRequest) {
         return studentAdvancedService.selectStudentSingleAdvancedVOListByAdvancedType(dataRequest);
     }
 }

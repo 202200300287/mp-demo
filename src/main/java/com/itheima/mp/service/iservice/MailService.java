@@ -8,6 +8,7 @@ package com.itheima.mp.service.iservice;
 public interface MailService {
     /**
      * 发送简单文本的邮件
+     *
      * @param to
      * @param subject
      * @param content
@@ -17,6 +18,7 @@ public interface MailService {
 
     /**
      * 发送 html 的邮件
+     *
      * @param to
      * @param subject
      * @param html
@@ -26,6 +28,7 @@ public interface MailService {
 
     /**
      * 发送带有图片的 html 的邮件
+     *
      * @param to
      * @param subject
      * @param html
@@ -38,6 +41,7 @@ public interface MailService {
 
     /**
      * 发送带有附件的邮件
+     *
      * @param to
      * @param subject
      * @param content

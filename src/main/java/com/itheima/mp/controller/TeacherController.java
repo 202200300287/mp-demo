@@ -16,27 +16,32 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping("/selectTeacherVOList")
-    public DataResponse selectTeacherVOList(){
+    public DataResponse selectTeacherVOList() {
         return teacherService.selectTeacherVOList();
     }
 
+    @PostMapping("/selectTeacherVOList1")
+    public DataResponse selectTeacherVOList1() {
+        return teacherService.selectTeacherVOList1();
+    }
+
     @PostMapping("/insertTeacher")
-    public DataResponse insertTeacher(@RequestBody DataRequest dataRequest){
+    public DataResponse insertTeacher(@RequestBody DataRequest dataRequest) {
         return teacherService.insertTeacher(dataRequest);
     }
 
     @PostMapping("/updateStudent")
-    public DataResponse updateStudent(@RequestBody DataRequest dataRequest){
-        return  teacherService.updateTeacher(dataRequest);
+    public DataResponse updateStudent(@RequestBody DataRequest dataRequest) {
+        return teacherService.updateTeacher(dataRequest);
     }
 
     @PostMapping("/deleteTeacher")
-    public  DataResponse deleteTeacher(@RequestBody DataRequest dataRequest){
+    public DataResponse deleteTeacher(@RequestBody DataRequest dataRequest) {
         return teacherService.deleteTeacher(dataRequest);
     }
 
     @PostMapping("/selectTeacher")
-    public DataResponse selectTeacher(@RequestBody DataRequest dataRequest){
+    public DataResponse selectTeacher(@RequestBody DataRequest dataRequest) {
         return teacherService.selectTeacher(dataRequest);
     }
 

@@ -2,7 +2,6 @@ package com.itheima.mp.domain.po;
 
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.itheima.mp.enums.AdvancedType;

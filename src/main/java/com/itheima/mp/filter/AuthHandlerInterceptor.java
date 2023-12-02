@@ -28,7 +28,7 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse response,Object handler) throws IOException {
         log.info("============进入拦截器=============");
-        System.out.println(httpServletRequest.getHeader("User-Agent"));
+        // System.out.println(httpServletRequest.getHeader("User-Agent"));
         if(!(handler instanceof HandlerMethod)) {
             response.setStatus(401);
             return false;

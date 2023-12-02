@@ -38,10 +38,10 @@ public class AuthService {
     @Autowired
     private StudentBasicMapper studentBasicMapper;
 
-    public String getCodeVer(){
+    public String getCodeVer() {
         Random random = new Random();
-        StringBuilder s= new StringBuilder();
-        for(int i=0;i<6;i++){
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
             s.append(random.nextInt(10));
         }
         return s.toString();
@@ -92,28 +92,28 @@ public class AuthService {
         return CommomMethod.getReturnData(code);
     }
 
-    public DataResponse forgetPassword(DataRequest dataRequest){
-        String username=dataRequest.getString("username");
-        QueryWrapper<User> userQueryWrapper=new QueryWrapper<User>()
+    public DataResponse forgetPassword(DataRequest dataRequest) {
+        String username = dataRequest.getString("username");
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<User>()
                 .select("*")
-                .eq("username",username);
-        List<User> userList=userMapper.selectList(userQueryWrapper);
-        if(userList.isEmpty())return CommomMethod.getReturnMessageError("不存在该用户名");
-        User user=userList.get(0);
-        Integer userId=user.getUserId();
+                .eq("username", username);
+        List<User> userList = userMapper.selectList(userQueryWrapper);
+        if (userList.isEmpty()) return CommomMethod.getReturnMessageError("不存在该用户名");
+        User user = userList.get(0);
+        Integer userId = user.getUserId();
 
-        QueryWrapper<Teacher> teacherQueryWrapper=new QueryWrapper<Teacher>()
+        QueryWrapper<Teacher> teacherQueryWrapper = new QueryWrapper<Teacher>()
                 .select("*")
-                .eq("user_id",userId);
-        QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<Student>()
+                .eq("user_id", userId);
+        QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<Student>()
                 .select("*")
-                .eq("user_id",userId);
-        String email="";
-        if(user.getUserType()== UserType.TEACHER){
-            email=teacherMapper.selectList(teacherQueryWrapper).get(0).getEmail();
+                .eq("user_id", userId);
+        String email = "";
+        if (user.getUserType() == UserType.TEACHER) {
+            email = teacherMapper.selectList(teacherQueryWrapper).get(0).getEmail();
         }
-        if(user.getUserType()==UserType.STUDENT){
-            email=studentBasicMapper.selectById(studentMapper.selectList(studentQueryWrapper).get(0).getStudentId()).getEmail();
+        if (user.getUserType() == UserType.STUDENT) {
+            email = studentBasicMapper.selectById(studentMapper.selectList(studentQueryWrapper).get(0).getStudentId()).getEmail();
         }
 
         String to = email;

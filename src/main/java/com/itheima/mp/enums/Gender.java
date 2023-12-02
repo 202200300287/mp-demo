@@ -13,17 +13,17 @@ import java.util.Arrays;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Gender {
-    Male(1,"男"),
-    Female(2,"女");
+    Male(1, "男"),
+    Female(2, "女");
     @JsonValue
     @EnumValue
-    private Integer code;
+    private final Integer code;
 
-    private String gender;
+    private final String gender;
 
-    Gender(Integer code, String gender){
-        this.code=code;
-        this.gender=gender;
+    Gender(Integer code, String gender) {
+        this.code = code;
+        this.gender = gender;
     }
 
     @JsonCreator

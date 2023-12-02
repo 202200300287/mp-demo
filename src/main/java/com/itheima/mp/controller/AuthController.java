@@ -1,7 +1,6 @@
 package com.itheima.mp.controller;
 
 
-
 import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.request.LoginRequest;
 import com.itheima.mp.payload.response.DataResponse;
@@ -28,12 +27,12 @@ import javax.annotation.Resource;
 public class AuthController {
 
 
-   private final UserService userService;
+    private final UserService userService;
 
-  @Autowired
-  private BaseService baseService;
-  @Autowired
-  private AuthService authService;
+    @Autowired
+    private BaseService baseService;
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/login")
     public DataResponse login(@RequestBody LoginRequest loginRequest) {
@@ -43,12 +42,12 @@ public class AuthController {
 
 
     @PostMapping("/sendEmail")
-    public DataResponse sendEmail(@RequestBody DataRequest dataRequest){
+    public DataResponse sendEmail(@RequestBody DataRequest dataRequest) {
         return authService.sendEmail(dataRequest);
     }
 
     @PostMapping("/forgetPassword")
-    public DataResponse forgetPassword(@RequestBody DataRequest dataRequest){
+    public DataResponse forgetPassword(@RequestBody DataRequest dataRequest) {
         return authService.forgetPassword(dataRequest);
     }
 

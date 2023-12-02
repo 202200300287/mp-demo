@@ -1,7 +1,6 @@
 package com.itheima.mp.domain.vo;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.itheima.mp.domain.po.Teacher;
 import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.UserType;
 import io.swagger.annotations.ApiModelProperty;
