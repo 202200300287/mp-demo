@@ -51,6 +51,11 @@ public class AuthController {
         return authService.forgetPassword(dataRequest);
     }
 
+    @PostMapping("/changePassword")
+    public DataResponse changePassword(@RequestBody DataRequest dataRequest){
+        return userService.changePassword(dataRequest);
+    }
+
 
 }
 

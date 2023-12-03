@@ -15,7 +15,6 @@ import com.itheima.mp.service.VOService;
 import com.itheima.mp.service.iservice.ITeacherService;
 import com.itheima.mp.util.CommomMethod;
 import com.itheima.mp.util.UpdateUtil;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

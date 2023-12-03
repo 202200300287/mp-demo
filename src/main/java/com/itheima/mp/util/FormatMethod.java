@@ -19,4 +19,10 @@ public class FormatMethod {
         gpa = Double.parseDouble(str);
         return gpa;
     }
+
+    public static boolean containsLetterOrDigit(String str) {
+        // 使用正则表达式匹配字母或数字
+        String regex = ".*[a-zA-Z0-9].*";
+        return str.matches(regex);
+    }
 }
