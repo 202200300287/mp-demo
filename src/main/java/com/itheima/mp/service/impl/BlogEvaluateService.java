@@ -2,14 +2,10 @@ package com.itheima.mp.service.impl;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.itheima.mp.domain.po.Blog;
 import com.itheima.mp.domain.po.BlogEvaluate;
 import com.itheima.mp.mapper.BlogEvaluateMapper;
-import com.itheima.mp.mapper.BlogMapper;
-import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.payload.response.DataResponse;
 import com.itheima.mp.service.iservice.IBlogEvaluateService;
-import com.itheima.mp.service.iservice.IBlogService;
 import com.itheima.mp.util.CommomMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
