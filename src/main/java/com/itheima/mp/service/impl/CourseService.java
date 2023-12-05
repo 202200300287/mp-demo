@@ -61,6 +61,8 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
         course.setNum(CommomMethod.getString(map, "num"));
         course.setName(CommomMethod.getString(map, "name"));
         course.setCredit(CommomMethod.getDouble(map, "credit"));
+        Integer courseStatusCode=CommomMethod.getInteger(map,"courseStatus");
+        if(courseStatusCode!=null&&courseStatusCode>=1&&courseStatusCode<=3) course.setCourseStatus(CourseStatus.getByCode(courseStatusCode));
         course.setCourseStatus(CourseStatus.AvailableUnselectable);
         course.setGrade(Grade.getByCode(CommomMethod.getInteger0(map, "grade")));
         course.setCourseType(CourseType.getByCode(CommomMethod.getInteger0(map, "courseType")));
