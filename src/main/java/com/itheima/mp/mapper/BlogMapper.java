@@ -11,8 +11,6 @@ import java.util.List;
 
 @Mapper
 public interface BlogMapper extends BaseMapper<Blog> {
-    @Select("SELECT * FROM blog WHERE user_id = #{userId}")
-    List<Blog> selectBlogsByUserId (@Param("userId") Integer userId);
     @Select("SELECT blog_id , user_id , title , praise , create_time , update_time FROM blog WHERE user_id = #{userId}")
     List<BlogTag> selectBlogTagByUserId (@Param("userId") Integer userId);
 

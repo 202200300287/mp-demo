@@ -30,9 +30,6 @@ public class BlogService extends ServiceImpl<BlogMapper, Blog> implements IBlogS
         return blogMapper.selectBlogTagByUserId(userId);
     }
 
-    public List<Blog> getBlogs(Integer userId) {
-        return blogMapper.selectBlogsByUserId(userId);
-    }
 
     public Blog getBlog(Integer blogId) {
         return blogMapper.selectById(blogId);
