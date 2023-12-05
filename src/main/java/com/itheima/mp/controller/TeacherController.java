@@ -30,7 +30,7 @@ public class TeacherController {
         return teacherService.insertTeacher(dataRequest);
     }
 
-    @PostMapping("/updateStudent")
+    @PostMapping("/updateTeacher")
     public DataResponse updateStudent(@RequestBody DataRequest dataRequest) {
         return teacherService.updateTeacher(dataRequest);
     }

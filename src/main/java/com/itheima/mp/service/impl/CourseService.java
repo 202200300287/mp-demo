@@ -98,6 +98,10 @@ public class CourseService extends ServiceImpl<CourseMapper, Course> implements 
         UpdateWrapper<Course> courseUpdateWrapper = new UpdateWrapper<Course>()
                 .eq("course_id", courseId)
                 .set("course_status", 1);
+        int affected = courseMapper.update(null, courseUpdateWrapper);
+        if (affected == 0) {
+            return CommomMethod.getReturnMessageError("删除课程失败");
+        }
         return CommomMethod.getReturnMessageOK("成功删除了课程");
     }
 
