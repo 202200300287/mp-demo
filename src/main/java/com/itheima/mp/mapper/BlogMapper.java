@@ -19,4 +19,7 @@ public interface BlogMapper extends BaseMapper<Blog> {
 
     @Select("SELECT blog_id , user_id , title , praise , create_time , update_time FROM blog")
     List<BlogTag> selectALLBlogTag ();
+
+    @Select("SELECT blog_id , user_id , title , praise , create_time , update_time FROM blog WHERE user_id = #{userId} AND create_time LIKE CONCAT(#{date}, '%')")
+    List<BlogTag> selectBlogTagByUserIdDate (@Param("userId") Integer userId,@Param("date") String date);
 }

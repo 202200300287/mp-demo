@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -45,6 +46,14 @@ public class BlogController {
         }
     }
 
+    @PostMapping("/getBlogsByCreateDate")
+    public DataResponse getBlogByCreateDate (@RequestBody DataRequest dataRequest) {
+        String date = dataRequest.getString("date");
+        Map<String,Object> payload = getPayLoad();
+        Integer userId = (Integer) payload.get("userId");
+        return CommomMethod.getReturnData(blogService.getBlogByCreateDate(userId,date));
+    }
+
     @PostMapping("/getBlogByBlogId")
     public DataResponse getBlogByBlogId (@RequestBody DataRequest dataRequest) {
         Integer blogId = dataRequest.getInteger("blogId");
@@ -60,6 +69,14 @@ public class BlogController {
     @PostMapping("/saveBlog")
     public DataResponse saveBlog (@RequestBody DataRequest dataRequest) {
         return CommomMethod.getReturnMessageOK(blogService.saveBlog(dataRequest));
+    }
+    @PostMapping("/deleteBlog")
+    public DataResponse deleteBlog (@RequestBody DataRequest dataRequest) {
+        Map<String,Object> payload = getPayLoad();
+        Integer blogId = dataRequest.getInteger("blogId");
+        Integer userId = (Integer) payload.get("userId");
+        Integer userType = (Integer) payload.get("role");
+        return CommomMethod.getReturnMessageOK(blogService.deleteBlog(blogId,userId,userType));
     }
 
     private Map<String,Object> getPayLoad () {
