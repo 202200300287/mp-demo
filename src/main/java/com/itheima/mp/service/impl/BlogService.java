@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author huaisui
@@ -29,9 +30,6 @@ public class BlogService extends ServiceImpl<BlogMapper, Blog> implements IBlogS
         return blogMapper.selectBlogTagByUserId(userId);
     }
 
-    public List<Blog> getBlogs(Integer userId) {
-        return blogMapper.selectBlogsByUserId(userId);
-    }
 
     public Blog getBlog(Integer blogId) {
         return blogMapper.selectById(blogId);
@@ -90,4 +88,22 @@ public class BlogService extends ServiceImpl<BlogMapper, Blog> implements IBlogS
         blog.setUpdateTime(updateTime);
     }
 
+    public List<BlogTag> getBlogByCreateDate (Integer userId,String date) {
+        return blogMapper.selectBlogTagByUserIdDate(userId,date);
+    }
+
+    public String deleteBlog (Integer blogId,Integer userId,Integer userType) {
+        if(blogId == null) return "格式错误";
+        if(userType == 1) {
+            blogMapper.deleteById(blogId);
+        }else {
+            Blog blog = blogMapper.selectById(blogId);
+            if (Objects.equals(blog.getUserId(), userId)) {
+                blogMapper.deleteById(blogId);
+            }else {
+                return "无权限";
+            }
+        }
+        return "删除成功";
+    }
 }

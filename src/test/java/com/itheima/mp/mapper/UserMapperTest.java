@@ -11,8 +11,10 @@ import com.itheima.mp.payload.request.DataRequest;
 import com.itheima.mp.service.ExcelService;
 import com.itheima.mp.service.impl.CourseService;
 import com.itheima.mp.service.impl.TeacherCourseService;
+import com.itheima.mp.util.CommomMethod;
 import com.itheima.mp.util.ImageMethod;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +23,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -170,8 +173,9 @@ class UserMapperTest {
 
     @Test
     void Test2() {
-        Student student=new Student();
-        student.setUserId(1000);
-        studentMapper.insert(student);
+        List<Integer> list=new ArrayList<>();
+        list.add(1);
+        String s= StringUtils.join(list,",");
+        System.out.println(CommomMethod.getReturnData(teacherMapper.selectTeacherVOListByTeacherIdList(s)));
     }
 }

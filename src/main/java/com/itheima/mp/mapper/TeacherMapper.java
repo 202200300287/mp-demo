@@ -32,4 +32,7 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
 
     @Select("select research, paper, resume from teacher where teacher_id = #{teacherId}")
     Map<String, String> getTeacherInfoByTeacherId(Integer teacherId);
+
+    @Select("select u.*, teacher_id, name, phone, email, gender, position, degree, college from teacher t, user u where t.user_id = u.user_id and teacher_id in (${teacherIdList})")
+    List<TeacherVO> selectTeacherVOListByTeacherIdList(String teacherIdList);
 }
