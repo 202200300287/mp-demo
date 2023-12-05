@@ -1,7 +1,6 @@
 package com.itheima.mp.payload.response;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +14,7 @@ public class JwtResponse {
     private String perName;
     private String role;
 
-    public JwtResponse(String accessToken, Integer id, String username, String perName,String role) {
+    public JwtResponse(String accessToken, Integer id, String username, String perName, String role) {
         this.token = accessToken;
         this.id = id;
         this.username = username;

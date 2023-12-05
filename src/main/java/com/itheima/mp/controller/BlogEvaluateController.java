@@ -14,7 +14,6 @@ import java.util.Map;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/blogEvaluate")
 public class BlogEvaluateController {
-
     @Autowired
     BlogEvaluateService service;
 

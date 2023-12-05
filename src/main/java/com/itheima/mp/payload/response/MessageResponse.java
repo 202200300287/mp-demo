@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
  * String message 返回的消息
  */
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

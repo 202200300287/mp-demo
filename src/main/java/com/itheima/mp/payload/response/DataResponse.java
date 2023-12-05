@@ -19,5 +19,4 @@ public class DataResponse {
     private Integer code;
     private Object data;
     private String msg;
-
 }

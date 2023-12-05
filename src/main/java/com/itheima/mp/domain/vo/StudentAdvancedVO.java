@@ -9,10 +9,11 @@ import com.itheima.mp.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.*;
+
+import java.util.List;
 
 
-//一个学生的advanced信息
+// 一个学生的advanced信息
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

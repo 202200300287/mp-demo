@@ -1,7 +1,6 @@
 package com.itheima.mp.domain.vo;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.itheima.mp.domain.po.Teacher;
 import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.UserType;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,16 +25,16 @@ public class TeacherVO {
     private String degree;
     @ApiModelProperty("所在学院")
     private String college;
-    @ApiModelProperty("研究方向")
-    private String research;
-    @ApiModelProperty("论文著作")
-    private String paper;
-    @ApiModelProperty("个人简历")
-    private String resume;
+    // @ApiModelProperty("研究方向")
+    // private String research;
+    // @ApiModelProperty("论文著作")
+    // private String paper;
+    // @ApiModelProperty("个人简历")
+    // private String resume;
 
     private String username;
-    private String photo;
+    private String photo;//
     @EnumValue
-    private UserType userType;
+    private UserType userType;//
 
 }

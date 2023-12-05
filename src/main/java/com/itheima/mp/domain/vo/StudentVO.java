@@ -1,11 +1,6 @@
 package com.itheima.mp.domain.vo;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.itheima.mp.domain.po.Student;
-import com.itheima.mp.domain.po.StudentAdvanced;
-import com.itheima.mp.domain.po.StudentBasic;
-import com.itheima.mp.domain.po.User;
 import com.itheima.mp.enums.Gender;
 import com.itheima.mp.enums.Grade;
 import com.itheima.mp.enums.Major;
@@ -16,15 +11,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentVO {
-
 
 
     private Integer studentId;
@@ -46,7 +38,6 @@ public class StudentVO {
 
     @EnumValue
     private Gender gender;
-
     @ApiModelProperty("生日")
     private LocalDate birthday;
 

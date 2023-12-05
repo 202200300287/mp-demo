@@ -1,6 +1,9 @@
 package com.itheima.mp.domain.po;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.itheima.mp.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +19,7 @@ import java.time.LocalDateTime;
 public class User {
 
 
-    @TableId(type = IdType.AUTO,value = "user_id")
+    @TableId(type = IdType.AUTO, value = "user_id")
     @NotBlank
     private Integer userId;
 

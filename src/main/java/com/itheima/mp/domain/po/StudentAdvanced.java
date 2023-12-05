@@ -2,7 +2,6 @@ package com.itheima.mp.domain.po;
 
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.itheima.mp.enums.AdvancedType;
@@ -29,6 +28,8 @@ public class StudentAdvanced {
     @EnumValue
     private AdvancedType advancedType;
 
+    @ApiModelProperty("加一个标题")
+    private String title;
     @ApiModelProperty("这一条里干了什么事")
     private String content;
 

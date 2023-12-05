@@ -9,7 +9,6 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-
     @Select("SELECT MAX(user_id) FROM user")
     Integer findMaxUserId();
 
@@ -18,6 +17,4 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("SELECT user_id FROM user WHERE username LIKE CONCAT('%', #{username}, '%')")
     List<Integer> getUserIdListLikeUsername(String username);
-
-
 }

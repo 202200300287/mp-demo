@@ -15,5 +15,4 @@ public class StudentCourseVO {
     private List<Course> courseList;
 
 
-
 }

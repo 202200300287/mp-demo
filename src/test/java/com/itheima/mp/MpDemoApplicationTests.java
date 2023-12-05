@@ -1,15 +1,22 @@
 package com.itheima.mp;
 
+import com.itheima.mp.domain.vo.StudentVO;
+import com.itheima.mp.mapper.StudentMapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
+@SpringBootTest
 class MpDemoApplicationTests {
+
+    @Autowired
+    StudentMapper studentMapper;
 
     @Test
     void contextLoads() {
-     boolean a = false;
-        System.out.println(111);
-     assert a;
-    System.out.println(222);
+        List<StudentVO> students = studentMapper.selectStudentVOList();
+        System.out.println("students = " + students);
     }
-
 }

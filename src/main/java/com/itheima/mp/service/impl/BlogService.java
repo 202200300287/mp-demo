@@ -39,7 +39,7 @@ public class BlogService extends ServiceImpl<BlogMapper, Blog> implements IBlogS
         return blogMapper.selectALLBlogTag();
     }
 
-    public String createBlog (DataRequest dataRequest,Integer userId) {
+    public String createBlog(DataRequest dataRequest, Integer userId) {
         String text = dataRequest.getString("text");
         LocalDateTime createTime = LocalDateTime.now();
         String title = dataRequest.getString("title");
@@ -54,34 +54,34 @@ public class BlogService extends ServiceImpl<BlogMapper, Blog> implements IBlogS
         blogMapper.insert(newBlog);
         return "创建成功";
     }
-    
-    public String saveBlog (DataRequest dataRequest) {
+
+    public String saveBlog(DataRequest dataRequest) {
         Integer blogId = dataRequest.getInteger("blogId");
         String title = dataRequest.getString("title");
         String text = dataRequest.getString("text");
         if (text == null && title != null) {
-            editTitle(title,blogId);
+            editTitle(title, blogId);
             return "标题修改成功";
-        }else if (text != null && title == null) {
-            editText(text,blogId);
+        } else if (text != null && title == null) {
+            editText(text, blogId);
             return "内容修改成功";
         } else if (text == null) {
             return "错误提交";
-        }else {
-            editTitle(title,blogId);
-            editText(title,blogId);
+        } else {
+            editTitle(title, blogId);
+            editText(title, blogId);
             return "标题与内容修改成功";
         }
     }
-    
-    private void editTitle (String title,Integer blogId) {
+
+    private void editTitle(String title, Integer blogId) {
         Blog blog = blogMapper.selectById(blogId);
         LocalDateTime updateTime = LocalDateTime.now();
         blog.setTitle(title);
         blog.setUpdateTime(updateTime);
     }
-    
-    private void editText (String text,Integer blogId) {
+
+    private void editText(String text, Integer blogId) {
         Blog blog = blogMapper.selectById(blogId);
         LocalDateTime updateTime = LocalDateTime.now();
         blog.setText(text);

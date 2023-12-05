@@ -26,21 +26,21 @@ public class BlogController {
     HttpServletRequest servletRequest;
 
     @GetMapping("/getBlogTagByUserId")
-    public DataResponse getBlogTagByUserId () {
+    public DataResponse getBlogTagByUserId() {
         String token = servletRequest.getHeader("Authorization");
-        Map<String,Object> payLoad = tokenUtil.parseToken(token);
+        Map<String, Object> payLoad = tokenUtil.parseToken(token);
         Integer userId = (Integer) payLoad.get("userId");
         return CommomMethod.getReturnData(blogService.getBlogTag(userId));
     }
 
     @GetMapping("/getAllBlogTag")
-    public DataResponse getAllBlogTag () {
+    public DataResponse getAllBlogTag() {
         String token = servletRequest.getHeader("Authorization");
-        Map<String,Object> payLoad = tokenUtil.parseToken(token);
-        Integer role = (Integer)payLoad.get("role");
-        if(role == 1) {
+        Map<String, Object> payLoad = tokenUtil.parseToken(token);
+        Integer role = (Integer) payLoad.get("role");
+        if (role == 1) {
             return CommomMethod.getReturnData(blogService.getAllBlogTag());
-        }else{
+        } else {
             return CommomMethod.getReturnMessageError("无权限");
         }
     }
@@ -54,19 +54,19 @@ public class BlogController {
     }
 
     @PostMapping("/getBlogByBlogId")
-    public DataResponse getBlogByBlogId (@RequestBody DataRequest dataRequest) {
+    public DataResponse getBlogByBlogId(@RequestBody DataRequest dataRequest) {
         Integer blogId = dataRequest.getInteger("blogId");
         return CommomMethod.getReturnData(blogService.getBlog(blogId));
     }
 
     @PostMapping("/createBlog")
-    public DataResponse createBlog (@RequestBody DataRequest dataRequest) {
-        Map<String,Object> payload = getPayLoad();
-        return CommomMethod.getReturnMessageOK(blogService.createBlog(dataRequest,(Integer) payload.get("userId")));
+    public DataResponse createBlog(@RequestBody DataRequest dataRequest) {
+        Map<String, Object> payload = getPayLoad();
+        return CommomMethod.getReturnMessageOK(blogService.createBlog(dataRequest, (Integer) payload.get("userId")));
     }
 
     @PostMapping("/saveBlog")
-    public DataResponse saveBlog (@RequestBody DataRequest dataRequest) {
+    public DataResponse saveBlog(@RequestBody DataRequest dataRequest) {
         return CommomMethod.getReturnMessageOK(blogService.saveBlog(dataRequest));
     }
     @PostMapping("/deleteBlog")
@@ -78,7 +78,7 @@ public class BlogController {
         return CommomMethod.getReturnMessageOK(blogService.deleteBlog(blogId,userId,userType));
     }
 
-    private Map<String,Object> getPayLoad () {
+    private Map<String, Object> getPayLoad() {
         String token = servletRequest.getHeader("Authorization");
         return tokenUtil.parseToken(token);
     }

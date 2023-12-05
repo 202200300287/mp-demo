@@ -13,18 +13,18 @@ import java.util.Arrays;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ScoreStatus {
-    Unmarked(1,"未进行考试"),
-    Marked(2,"打出分数但学生不可见"),
-    Visible(3,"学生可见分数");
-
-    @EnumValue
-    private Integer code;
+    Unmarked(1, "未进行考试"),
+    Marked(2, "打出分数但学生不可见"),
+    Visible(3, "学生可见分数");
     @JsonValue
-    private String type;
+    @EnumValue
+    private final Integer code;
 
-    ScoreStatus(Integer code,String type){
-        this.code=code;
-        this.type=type;
+    private final String type;
+
+    ScoreStatus(Integer code, String type) {
+        this.code = code;
+        this.type = type;
     }
 
     @JsonCreator

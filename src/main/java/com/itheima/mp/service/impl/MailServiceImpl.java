@@ -18,7 +18,7 @@ import javax.mail.internet.MimeMessage;
  * @create 2022-10-07 13:01
  * @describe
  */
-@Component //没有这个注解，发送邮件时可能会引发空指针异常
+@Component // 没有这个注解，发送邮件时可能会引发空指针异常
 public class MailServiceImpl implements MailService {
 
     private final static Logger logger = LoggerFactory.getLogger(MailServiceImpl.class);
@@ -139,7 +139,7 @@ public class MailServiceImpl implements MailService {
             // 添加附件
             for (int i = 0; i < filePaths.length; i++) {
                 FileSystemResource file = new FileSystemResource(filePaths[i]);
-                String attachementFileName = "附件" + (i + 1)+"_"+ file.getFilename();
+                String attachementFileName = "附件" + (i + 1) + "_" + file.getFilename();
                 mimeMessageHelper.addAttachment(attachementFileName, file);
             }
 

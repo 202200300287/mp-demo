@@ -5,9 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
 /**
- OptionItemList 发挥前端的OptionItemList集合对象
- Integer code 返回代码 0 正确 1 错误
+ * OptionItemList 发挥前端的OptionItemList集合对象
+ * Integer code 返回代码 0 正确 1 错误
  */
 
 @AllArgsConstructor

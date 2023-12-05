@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BlogTag {
+    LocalDateTime createTime;
     @NotBlank
     private Integer blogId;
     private String title;
     private Integer userId;
     private Integer praise;
-    LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

@@ -16,6 +16,7 @@ public class UpdateUtil {
 
     /**
      * 所有为空值的属性都不copy
+     *
      * @param source
      * @param target
      */
@@ -25,7 +26,8 @@ public class UpdateUtil {
 
     /**
      * 获取属性中为空的字段
-     *666
+     * 666
+     *
      * @param target
      * @return
      */
@@ -33,13 +35,11 @@ public class UpdateUtil {
         BeanWrapper beanWrapper = new BeanWrapperImpl(target);
         PropertyDescriptor[] propertyDescriptors = beanWrapper.getPropertyDescriptors();
         Set<String> notNullFieldSet = new HashSet<>();
-        if (propertyDescriptors.length > 0) {
-            for (PropertyDescriptor p : propertyDescriptors) {
-                String name = p.getName();
-                Object value = beanWrapper.getPropertyValue(name);
-                if (judgeValue(value)) {
-                    notNullFieldSet.add(name);
-                }
+        for (PropertyDescriptor p : propertyDescriptors) {
+            String name = p.getName();
+            Object value = beanWrapper.getPropertyValue(name);
+            if (judgeValue(value)) {
+                notNullFieldSet.add(name);
             }
         }
         String[] notNullField = new String[notNullFieldSet.size()];
@@ -47,18 +47,18 @@ public class UpdateUtil {
     }
 
 
-    public static boolean judgeValue(Object value){
-        if(Objects.isNull(value))return true;
-        if(value instanceof String) {
-            String re=(String) value;
-            return re.isBlank()||re.isEmpty();
+    public static boolean judgeValue(Object value) {
+        if (Objects.isNull(value)) return true;
+        if (value instanceof String) {
+            String re = (String) value;
+            return re.isBlank() || re.isEmpty();
         } else if (value instanceof Integer) {
-            Integer re=(Integer) value;
+            Integer re = (Integer) value;
             return re == 0;
-        } else if (value instanceof  Double) {
-            Double re=(Double) value;
+        } else if (value instanceof Double) {
+            Double re = (Double) value;
             return re == 0;
-        }else {
+        } else {
             return false;
         }
     }

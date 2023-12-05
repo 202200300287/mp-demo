@@ -12,23 +12,24 @@ import java.util.Arrays;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum UserType {
-    ADMIN(1,"ADMIN"),
-    STUDENT(2,"STUDENT"),
-    TEACHER(3,"TEACHER");
+    ADMIN(1, "ADMIN"),
+    STUDENT(2, "STUDENT"),
+    TEACHER(3, "TEACHER");
 
-
-    @EnumValue
-    private Integer code;
     @JsonValue
-    private String type;
+    @EnumValue
+    private final Integer code;
 
-    UserType(Integer code, String type){
-        this.code=code;
-        this.type=type;
+    private final String type;
+
+    UserType(Integer code, String type) {
+        this.code = code;
+        this.type = type;
     }
 
     /**
      * 反序列化
+     *
      * @param code 数据库对应的值
      * @return 枚举对象
      */

@@ -10,22 +10,23 @@ import java.util.Arrays;
 
 @Getter
 public enum Major {
-    SoftwareEngineer(1,"软件工程"),
-    DigitalMedia(2,"数字媒体技术"),
-    DataScience(3,"数据科学与大数据技术");
-
-    @EnumValue
-    private Integer code;
+    SoftwareEngineer(1, "软件工程"),
+    DigitalMedia(2, "数字媒体技术"),
+    DataScience(3, "数据科学与大数据技术");
     @JsonValue
-    private String type;
+    @EnumValue
+    private final Integer code;
 
-    Major(Integer code, String type){
-        this.code=code;
-        this.type=type;
+    private final String type;
+
+    Major(Integer code, String type) {
+        this.code = code;
+        this.type = type;
     }
 
     /**
      * 反序列化
+     *
      * @param code 数据库对应的值
      * @return 枚举对象
      */
@@ -34,4 +35,4 @@ public enum Major {
         return Arrays.stream(Major.values()).filter(item -> item.getCode() == code).findFirst().get();
     }
 
-    }
+}
