@@ -48,6 +48,8 @@ public class Student {
 
     private String name;
 
+    private Integer likes;
+
     @EnumValue
     private Major major;
 
