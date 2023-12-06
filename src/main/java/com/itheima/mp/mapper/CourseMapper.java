@@ -2,6 +2,7 @@ package com.itheima.mp.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.itheima.mp.domain.po.Course;
+import com.itheima.mp.domain.vo.TeacherVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -18,4 +19,7 @@ public interface CourseMapper extends BaseMapper<Course> {
 
     @Select("SELECT course_id FROM course")
     List<Integer> getCourseIdAll();
+
+    @Select("select * from course where course_id in (${courseIdList})")
+    List<Course> selectCourseListByCourseIdList(String courseIdList);
 }
