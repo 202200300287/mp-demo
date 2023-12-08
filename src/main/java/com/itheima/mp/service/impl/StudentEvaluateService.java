@@ -45,4 +45,23 @@ public class StudentEvaluateService  extends ServiceImpl<StudentEvaluateMapper, 
         studentEvaluateMapper.insert(studentEvaluate);
         return CommomMethod.getReturnMessageOK("评论成功");
     }
+
+    public DataResponse deleteEvaluateById (Integer evaluateId) {
+        try {
+            studentEvaluateMapper.deleteById(evaluateId);
+            return CommomMethod.getReturnMessageOK("删除成功");
+        }catch (Exception e) {
+            return CommomMethod.getReturnMessageError("ID不存在");
+        }
+    }
+
+    public DataResponse selectEvaluateByEvaluatedStudent (Integer userId) {
+        Student evaluatedStudent = studentMapper.selectStudentByUserId(userId);
+        return CommomMethod.getReturnData(studentEvaluateMapper.selectEvaluateByEvaluatedStudent(evaluatedStudent.getStudentId()));
+    }
+
+    public DataResponse selectEvaluateByEvaluateStudent (Integer userId) {
+        Student evaluatedStudent = studentMapper.selectStudentByUserId(userId);
+        return CommomMethod.getReturnData(studentEvaluateMapper.selectEvaluateByEvaluateStudent(evaluatedStudent.getStudentId()));
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -34,6 +35,25 @@ public class StudentEvaluateController {
         return studentEvaluateService.createEvaluate(evaluateStudent,evaluatedStudent,text,like);
     }
 
+    @PostMapping("/deleteEvaluate")
+    public DataResponse deleteEvaluate (@RequestBody DataRequest dataRequest) {
+        Integer evaluateId = dataRequest.getInteger("evaluateId");
+        return studentEvaluateService.deleteEvaluateById(evaluateId);
+    }
+
+    @GetMapping("/getEvaluateForMe")
+    public DataResponse getEvaluateForMe () {
+        Map<String,Object> payload = getPayload();
+        Integer userId = (Integer) payload.get("userId");
+        return studentEvaluateService.selectEvaluateByEvaluatedStudent(userId);
+    }
+
+    @GetMapping("/getEvaluateByMe")
+    public DataResponse getEvaluateByMe () {
+        Map<String,Object> payload = getPayload();
+        Integer userId = (Integer) payload.get("userId");
+        return studentEvaluateService.selectEvaluateByEvaluateStudent(userId);
+    }
     private Map<String,Object> getPayload () {
         String token = servletRequest.getHeader("Authorization");
         return tokenUtil.parseToken(token);
