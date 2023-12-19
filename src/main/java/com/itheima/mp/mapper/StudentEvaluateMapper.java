@@ -15,4 +15,10 @@ public interface StudentEvaluateMapper extends BaseMapper<StudentEvaluate> {
 
     @Select("SELECT * FROM student_evaluate WHERE evaluate_student = #{studentId}")
     List<StudentEvaluate> selectEvaluateByEvaluateStudent (@Param("studentId") Integer studentId);
+
+    @Select("SELECT count(student_evaluate_id) FROM student_evaluate WHERE evaluated_student = #{studentId} AND likes = 1")
+    Integer selectLikesCountByStudentId (@Param("studentId") Integer studentId);
+
+    @Select("SELECT * FROM student_evaluate")
+    List<StudentEvaluate> selectAllEvaluate ();
 }

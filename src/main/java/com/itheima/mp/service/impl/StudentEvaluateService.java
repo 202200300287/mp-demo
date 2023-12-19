@@ -35,12 +35,12 @@ public class StudentEvaluateService  extends ServiceImpl<StudentEvaluateMapper, 
         studentEvaluate.setText(text);
         studentEvaluate.setCreateTime(LocalDateTime.now());
         if (like) {
-            studentEvaluate.setLike(1);
+            studentEvaluate.setLikes(1);
             Student evaluatedStudent = studentMapper.selectById(studentId);
             if (evaluatedStudent == null) return CommomMethod.getReturnMessageError("被评价学生不存在");
             evaluatedStudent.setLikes(evaluatedStudent.getLikes() + 1);
         }else{
-            studentEvaluate.setLike(0);
+            studentEvaluate.setLikes(0);
         }
         studentEvaluateMapper.insert(studentEvaluate);
         return CommomMethod.getReturnMessageOK("评论成功");
@@ -63,5 +63,27 @@ public class StudentEvaluateService  extends ServiceImpl<StudentEvaluateMapper, 
     public DataResponse selectEvaluateByEvaluateStudent (Integer userId) {
         Student evaluatedStudent = studentMapper.selectStudentByUserId(userId);
         return CommomMethod.getReturnData(studentEvaluateMapper.selectEvaluateByEvaluateStudent(evaluatedStudent.getStudentId()));
+    }
+
+    public DataResponse selectAllEvaluate () {
+        return CommomMethod.getReturnData(studentEvaluateMapper.selectAllEvaluate(),"管理员查询所有评论");
+    }
+
+    public DataResponse updateEvaluate (Integer evaluateId,String text) {
+        StudentEvaluate studentEvaluate = studentEvaluateMapper.selectById(evaluateId);
+        if (text == null) {
+            return CommomMethod.getReturnMessageError("修改内容不能为空");
+        }
+        studentEvaluate.setText(text);
+        studentEvaluateMapper.updateById(studentEvaluate);
+        return CommomMethod.getReturnMessageOK("修改成功");
+    }
+    public void updateLikes () {
+        int n = 1;
+        Student student = studentMapper.selectById(n);
+        while (student != null) {
+            student.setLikes(studentEvaluateMapper.selectLikesCountByStudentId(n));
+            student = studentMapper.selectById(++n);
+        }
     }
 }

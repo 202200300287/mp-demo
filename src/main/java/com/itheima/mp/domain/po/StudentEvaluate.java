@@ -22,5 +22,5 @@ public class StudentEvaluate {
     private LocalDateTime createTime;
     private Integer evaluateStudent;
     private Integer evaluatedStudent;
-    private Integer like;
+    private Integer likes;
 }
