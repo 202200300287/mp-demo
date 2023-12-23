@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface StudentAdvancedMapper extends BaseMapper<StudentAdvanced> {
@@ -33,4 +34,7 @@ public interface StudentAdvancedMapper extends BaseMapper<StudentAdvanced> {
 
     @Select("SELECT * FROM student_advanced WHERE student_id=#{studentId} AND advanced_type=#{AdvanceType} ORDER BY update_time")
     List<StudentAdvanced> getListByStudentIdAndAdvanceType(Integer studentId, Integer AdvanceType);
+
+    @Select("select count(*) 'count', advanced_type from student_advanced where student_id = #{studentId} group by advanced_type;")
+    List<Map<Integer, Integer>> getStudentAdvancedTypeCount(Integer studentId);
 }

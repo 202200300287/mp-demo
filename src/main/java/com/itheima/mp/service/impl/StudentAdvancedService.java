@@ -62,7 +62,6 @@ public class StudentAdvancedService extends ServiceImpl<StudentAdvancedMapper, S
         return studentAdvanced;
     }
 
-
     public DataResponse judgeStudentAdvancedData(StudentAdvanced studentAdvanced) {
         if (studentMapper.checkStudentId(studentAdvanced.getStudentId()) == 0)
             return CommomMethod.getReturnMessageError("不存在该学生");
@@ -148,4 +147,11 @@ public class StudentAdvancedService extends ServiceImpl<StudentAdvancedMapper, S
     }
 
 
+    public DataResponse selectStudentAdvancedTypeCount(DataRequest dataRequest) {
+        Integer studentId = dataRequest.getInteger("studentId");
+        if (studentMapper.checkStudentId(studentId) == 0) return CommomMethod.getReturnMessageError("不存在该学生");
+        List<Map<Integer, Integer>> maps = studentAdvancedMapper.getStudentAdvancedTypeCount(studentId);
+        System.out.println("maps = " + maps);
+        return CommomMethod.getReturnData(maps);
+    }
 }

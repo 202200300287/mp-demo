@@ -35,14 +35,7 @@ public class BlogController {
 
     @GetMapping("/getAllBlogTag")
     public DataResponse getAllBlogTag() {
-        String token = servletRequest.getHeader("Authorization");
-        Map<String, Object> payLoad = tokenUtil.parseToken(token);
-        Integer role = (Integer) payLoad.get("role");
-        if (role == 1) {
-            return CommomMethod.getReturnData(blogService.getAllBlogTag());
-        } else {
-            return CommomMethod.getReturnMessageError("无权限");
-        }
+        return CommomMethod.getReturnData(blogService.getAllBlogTag());
     }
 
     @PostMapping("/getBlogsByCreateDate")
@@ -51,6 +44,12 @@ public class BlogController {
         Map<String,Object> payload = getPayLoad();
         Integer userId = (Integer) payload.get("userId");
         return CommomMethod.getReturnData(blogService.getBlogByCreateDate(userId,date));
+    }
+
+    @PostMapping("/praiseBlog")
+    public DataResponse praiseBlog (@RequestBody DataRequest dataRequest) {
+        Integer blogId = dataRequest.getInteger("blogId");
+        return CommomMethod.getReturnMessageOK(blogService.praiseBlog(blogId));
     }
 
     @PostMapping("/getBlogByBlogId")

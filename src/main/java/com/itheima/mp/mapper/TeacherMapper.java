@@ -27,6 +27,9 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
     @Select("SELECT * FROM teacher WHERE user_id = #{userId}")
     Teacher selectTeacherByUserId(Integer userId);
 
+    @Select("select u.*, teacher_id, name, phone, email, gender, position, degree, college from teacher t, user u where t.user_id = #{userId} and t.user_id = u.user_id")
+    TeacherVO selectTeacherVOByUserId(Integer userId);
+
     @Select("select u.*, teacher_id, name, phone, email, gender, position, degree, college from teacher t, user u where t.user_id = u.user_id")
     List<TeacherVO> selectTeacherVOList();
 

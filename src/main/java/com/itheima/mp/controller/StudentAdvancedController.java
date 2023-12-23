@@ -47,4 +47,9 @@ public class StudentAdvancedController {
     public DataResponse selectStudentSingleAdvancedVOListByAdvancedType(@RequestBody DataRequest dataRequest) {
         return studentAdvancedService.selectStudentSingleAdvancedVOListByAdvancedType(dataRequest);
     }
+
+    @PostMapping("/selectStudentAdvancedTypeCount")
+    public DataResponse selectStudentAdvancedTypeCount(@RequestBody DataRequest dataRequest) {
+        return studentAdvancedService.selectStudentAdvancedTypeCount(dataRequest);
+    }
 }

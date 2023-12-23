@@ -16,10 +16,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @TableName(value = "blog")
 public class Blog {
-    @TableId(type = IdType.AUTO, value = "course_id")
+    @TableId(type = IdType.AUTO, value = "blog_id")
     @NotBlank
     private Integer blogId;
     private Integer userId;
+    private String author;
     private String text;
     private String title;
     private Integer praise;

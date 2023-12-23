@@ -180,13 +180,26 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> implemen
     }
 
     public DataResponse selectStudent(DataRequest dataRequest) {
+        // 优先根据studentId来查询
         Integer studentId = dataRequest.getInteger("studentId");
-        if (studentId == null) return CommomMethod.getReturnMessageError("数据传输格式错误");
+        StudentVO studentVO;
+        if (studentId == null) {
+            // 也可以根据userId来查询
+            Integer userId = dataRequest.getInteger("userId");
+            if (userId == null) {
+                return CommomMethod.getReturnMessageError("参数错误");
+            }
+            studentVO = studentMapper.selectStudentVOByUserId(userId);
+            if (studentVO == null) {
+                return CommomMethod.getReturnMessageError("该学生不存在");
+            }
+            return CommomMethod.getReturnData(studentVO);
+        }
 
         if (studentMapper.checkStudentId(studentId) == 0) {
             return CommomMethod.getReturnMessageError("该学生不存在");
         }
-        StudentVO studentVO = voService.getStudentVO(studentId);
+        studentVO = voService.getStudentVO(studentId);
         return CommomMethod.getReturnData(studentVO);
     }
 

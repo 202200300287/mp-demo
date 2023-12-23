@@ -63,6 +63,9 @@ public interface StudentMapper extends BaseMapper<Student> {
     @Select("select * from student s, student_basic sb, user u where s.student_id = sb.student_basic_id and s.user_id = u.user_id")
     List<StudentVO> selectStudentVOList();
 
+    @Select("select * from student s, student_basic sb, user u where s.user_id = #{userId} and u.user_id = #{userId} and s.student_id = sb.student_basic_id ")
+    StudentVO selectStudentVOByUserId(Integer userId);
+
     @Select("select * from student s, student_basic sb, user u where s.student_id = sb.student_basic_id and s.user_id = u.user_id and student_id in (${studentIdList})")
     List<StudentVO> selectStudentVOListByStudentIdList(@Param("studentIdList")String studentIdList);
 }

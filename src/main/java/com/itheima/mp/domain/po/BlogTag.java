@@ -16,6 +16,8 @@ public class BlogTag {
     private Integer blogId;
     private String title;
     private Integer userId;
+    private String author;
     private Integer praise;
     private LocalDateTime updateTime;
+    private String digest; // 博客的摘要
 }

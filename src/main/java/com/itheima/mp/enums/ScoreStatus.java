@@ -13,9 +13,9 @@ import java.util.Arrays;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ScoreStatus {
-    Unmarked(1, "未进行考试"),
-    Marked(2, "打出分数但学生不可见"),
-    Visible(3, "学生可见分数");
+    Unmarked(1, "未进行批改"),
+    Marked(2, "已批改但学生不可见"),
+    Visible(3, "已批改且学生可见");
     @JsonValue
     @EnumValue
     private final Integer code;

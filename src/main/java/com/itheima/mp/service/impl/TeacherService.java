@@ -113,8 +113,26 @@ public class TeacherService extends ServiceImpl<TeacherMapper, Teacher> implemen
     }
 
     public DataResponse selectTeacher(DataRequest dataRequest) {
+        // 优先根据teacherId查询
         Integer teacherId = dataRequest.getInteger("teacherId");
-        if (teacherMapper.checkTeacherId(teacherId) == 0) return CommomMethod.getReturnMessageError("不存在该老师");
+        TeacherVO teacherVO;
+        // 也可以根据userId查询
+        if (teacherId == null) {
+            Integer userId = dataRequest.getInteger("userId");
+            System.out.println("根据userId查询老师. userId = " + userId);
+            if (userId == null) {
+                return CommomMethod.getReturnMessageError("参数错误");
+            }
+            teacherVO = teacherMapper.selectTeacherVOByUserId(userId);
+            if (teacherVO == null) {
+                return CommomMethod.getReturnMessageError("不存在该老师");
+            }
+            return CommomMethod.getReturnData(teacherVO);
+        }
+
+        if (teacherMapper.checkTeacherId(teacherId) == 0) {
+            return CommomMethod.getReturnMessageError("不存在该老师");
+        }
 
         return CommomMethod.getReturnData(voService.getTeacherVO(teacherId));
     }
